@@ -1,175 +1,125 @@
-import React, { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import React from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+
+const freelancerSchema = yup.object().shape({
+    first_name: yup.string().required("*required"),
+    last_name: yup.string().required("*required"),
+    
+    date_of_birth: yup
+        .string()
+        .required("*required")
+        .test("age", "You must be 18 years or older", function (value) {
+            const today = new Date();
+            const minDate = new Date(today);
+            minDate.setFullYear(today.getFullYear() - 18); // 18 years ago
+
+            const selectedDate = new Date(value);
+
+            // Check if the selected date is within the allowed range (between 18 and 65)
+            return selectedDate <= minDate;
+        }),
+
+    mobile_no: yup.string().matches(/^9[678]\d{8}$/, "Invalid mobile number").required("*required"),
+    address: yup.string().required("*required"),
+    city: yup.string().required("*required"),
+    email: yup.string().email("Invalid email").required("*required"),
+    password: yup
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .max(16, "Password cannot exceed 16 characters")
+        .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+        .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+        .matches(/[0-9]/, "Password must contain at least one number")
+        .matches(/[@$!%*?&#]/, "Password must contain at least one special character")
+        .required("Password is required"),
+});
 
 function FreelancerRegistration() {
-    const [formData, setFormData] = useState({
-            first_name: "",
-            last_name: "",
-            date_of_birth: "",
-            mobile_no: "",
-            address: "",
-            city: "",
-            email: "",
-            password: "",
-        });
-    
-        const [responseMessage, setResponseMessage] = useState("");
-        const [errors, setErrors] = useState({});
-    
-        const handleChange = (e) => {
-            const { name, value } = e.target;
-            setFormData({
-                ...formData,
-                [name]: value,
-            });
-            validateFields(name, value);
-        };
-    
-        const validateField = (name, value) => {
-            let error = "";
-    
-            switch (name) {
-                case "mobile_no":
-                    if (!/^\d{10}$/.test(value)) {
-                        error = "Enter a valid 10-digit mobile number.";
-                    }
-                    break;
-    
-                case "email":
-                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-                        error = "Enter a valid email address.";
-                    }
-                    break;
-    
-                case "password":
-                    if (value.length < 6) {
-                        error = "Password must be at least 6 characters.";
-                    }
-                    break;
-    
-                default:
-                    break;
-            }
-    
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                [name]: error,
-            }));
-        };
-    
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-    
-            // Validate all fields before submitting
-            const newErrors = {};
-            for (const field in formData) {
-                validateField(field, formData[field]);
-                if (!formData[field]) {
-                    newErrors[field] = "*required";
-                }
-            }
-    
-            setErrors(newErrors);
-    
-            // Check if there are any validation errors
-            if (Object.keys(newErrors).length > 0) {
-                setResponseMessage("Please fix the errors above.");
-                return;
-            }
-            
-            setResponseMessage("Sending...");
-    
-            try {
-                const response = await fetch("http://localhost:3000/api/freelancer", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-                });
-    
-                const result = await response.json();
-                if (response.ok) {
-                    setResponseMessage("Registration successful!");
-                } else {
-                    setResponseMessage(`Error: ${result.message || "Something went wrong."}`);
-                }
-            } catch (error) {
-                setResponseMessage(`Error: ${error.message}`);
-            }
-        };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(freelancerSchema),
+        mode: "all"
+    });
 
-    return(
-        <div className="m-5">
+    console.log(errors)
+
+    const saveFreelancerData = useMutation({
+        mutationKey: "SAVEDATA",
+        mutationFn: (requestData) => {
+            console.log(requestData)
+            return axios.post("http://localhost:3000/api/freelancer", requestData)
+        }
+    })
+
+    const onSubmit = (values) => {
+        saveFreelancerData.mutate(values)
+    };
+
+    const today = new Date();
+
+    // Calculate the date 18 years ago
+    const minDate = new Date(today);
+    minDate.setFullYear(today.getFullYear() - 18);
+
+    // Calculate the date 65 years ago
+    const maxDate = new Date(today);
+    maxDate.setFullYear(today.getFullYear() - 65);
+
+    return (
+        <>
             <h2 className="text-2xl font-bold mb-4">Freelancer Registration</h2>
-            <form onSubmit={handleSubmit} className="flex flex-col max-w-md">
-                <label className="mb-2">
-                    First name:
-                    <input
-                        type="text"
-                        name="first_name"
-                        value={formData.first_name}
-                        onChange={handleChange}
-                        required
-                        className="border p-2 rounded mb-4"
-                    />
-                    {errors.first_name && <span className="text-red-500">{errors.first_name}</span>}
-                </label>
-                <label className="mb-2">
-                    Last name:
-                    <input
-                        type="text"
-                        name="last_name"
-                        value={formData.last_name}
-                        onChange={handleChange}
-                        required
-                        className="border p-2 rounded mb-4"
-                    />
-                    {errors.last_name && <span className="text-red-500">{errors.last_name}</span>}
-                </label>
-                <label className="mb-2">
-                    Date of birth:
-                    <input
-                        type="text"
-                        name="date_of_birth"
-                        value={formData.date_of_birth}
-                        onChange={handleChange}
-                        required
-                        className="border p-2 rounded mb-4"
-                    />
-                    {errors.date_of_birth && <span className="text-red-500">{errors.date_of_birth}</span>}
-                </label>
-                <label className="mb-2">
-                    Mobile number:
-                    <input
-                        type="text"
-                        name="mobile_no"
-                        value={formData.mobile_no}
-                        onChange={handleChange}
-                        required
-                        className="border p-2 rounded mb-4"
-                    />
-                    {errors.mobile_no && <span className="text-red-500">{errors.mobile_no}</span>}
-                </label>
-                <label className="mb-2">
-                    Mobile number:
-                    <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        required
-                        className="border p-2 rounded mb-4"
-                    />
-                    {errors.address && <span className="text-red-500">{errors.address}</span>}
-                </label>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                    <label>First name: </label>
+                    <input className="border p-2 rounded mb-4" {...register("first_name")} />
+
+                    <p style={{ color: "red" }}>{errors?.first_name?.message}</p>
+
+                </div>
+
+                <div>
+                    <label>Last name: </label>
+                    <input className="border p-2 rounded mb-4" {...register("last_name")} />
+
+                    <p style={{ color: "red" }}>{errors?.last_name?.message}</p>
+
+                </div>
+
+                <div>
+                    <label>Date of birth: </label>
+                    <input type="date" className="border p-2 rounded mb-4" {...register("date_of_birth")}/>
+
+                    <p style={{ color: "red" }}>{errors?.date_of_birth?.message}</p>
+                </div>
+
+                <div>
+                    <label>Mobile number: </label>
+                    <input className="border p-2 rounded mb-4" {...register("mobile_no")} />
+
+                    <p style={{ color: "red" }}>{errors?.mobile_no?.message}</p>
+
+                </div>
+
+                <div>
+                    <label>Address: </label>
+                    <input className="border p-2 rounded mb-4" {...register("address")} />
+
+                    <p style={{ color: "red" }}>{errors?.address?.message}</p>
+
+                </div>
+
                 <label className="mb-2">
                     City:
                     <select
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange} // Handle selection changes
-                        required
                         className="border p-2 rounded mb-4"
+                        {...register("city")}
                     >
                         <option value="">Select a city</option>
                         <option value="Kathmandu">Kathmandu</option>
@@ -183,38 +133,28 @@ function FreelancerRegistration() {
                         <option value="Dharan">Dharan</option>
                         <option value="Butwal">Butwal</option>
                     </select>
-                    {errors.city && <span className="text-red-500">{errors.city}</span>}
+                    <p style={{ color: "red" }}>{errors?.city?.message}</p>
                 </label>
-                <label className="mb-2">
-                    Email:
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="border p-2 rounded mb-4"
-                    />
-                    {errors.email && <span className="text-red-500">{errors.email}</span>}
-                </label>
-                <label className="mb-2">
-                    Password:
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        className="border p-2 rounded mb-4"
-                    />
-                    {errors.password && <span className="text-red-500">{errors.password}</span>}
-                </label>
-                <button type="submit" className="bg-blue-500 text-white py-2 rounded">
-                    Register
-                </button>
+
+                <div>
+                    <label>Email: </label>
+                    <input className="border p-2 rounded mb-4" {...register("email")} />
+
+                    <p style={{ color: "red" }}>{errors?.email?.message}</p>
+
+                </div>
+
+                <div>
+                    <label>Password: </label>
+                    <input type="password" className="border p-2 rounded mb-4" {...register("password")} />
+
+                    <p style={{ color: "red" }}>{errors?.password?.message}</p>
+
+                </div>
+
+                <button className="bg-blue-500 text-white py-2 px-4 rounded" type="submit">Submit</button>
             </form>
-            {responseMessage && <p className="mt-4 text-green-500">{responseMessage}</p>}
-        </div>
+        </>
     );
 }
 

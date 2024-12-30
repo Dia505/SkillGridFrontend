@@ -6,7 +6,7 @@ import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
 
 // Define Yup validation schema
-const userSchema = yup.object().shape({
+const clientSchema = yup.object().shape({
     first_name: yup.string().required("*required"),
     last_name: yup.string().required("*required"),
     mobile_no: yup.string().matches(/^9[678]\d{8}$/, "Invalid mobile number").required("*required"),
@@ -23,14 +23,14 @@ const userSchema = yup.object().shape({
         .required("Password is required"),
 });
 
-function App() {
+function ClientRegistration() {
     // Use React Hook Form with Yup resolver
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(userSchema),
+        resolver: yupResolver(clientSchema),
         mode: "all"
     });
 
@@ -53,7 +53,7 @@ function App() {
             <h2 className="text-2xl font-bold mb-4">Client Registration</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                    <label>First Name: </label>
+                    <label>First name: </label>
                     <input className="border p-2 rounded mb-4" {...register("first_name")} />
 
                     <p style={{ color: "red" }}>{errors?.first_name?.message}</p>
@@ -61,7 +61,7 @@ function App() {
                 </div>
 
                 <div>
-                    <label>Last Name: </label>
+                    <label>Last name: </label>
                     <input className="border p-2 rounded mb-4" {...register("last_name")} />
 
                     <p style={{ color: "red" }}>{errors?.last_name?.message}</p>
@@ -119,4 +119,4 @@ function App() {
     );
 }
 
-export default App;
+export default ClientRegistration;
