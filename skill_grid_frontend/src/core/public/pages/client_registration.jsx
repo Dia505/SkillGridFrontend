@@ -2,12 +2,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import {useMutation} from "@tanstack/react-query";
+import axios from "axios";
 
 // Define Yup validation schema
 const userSchema = yup.object().shape({
     first_name: yup.string().required("*required"),
     last_name: yup.string().required("*required"),
     mobile_no: yup.string().matches(/^9[678]\d{8}$/, "Invalid mobile number").required("*required"),
+    city: yup.string().required("*required"),
     email: yup.string().email("Invalid email").required("*required"),
     password: yup
         .string()
@@ -33,8 +36,16 @@ function App() {
 
     console.log(errors)
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const saveClientData = useMutation({
+        mutationKey: "SAVEDATA",
+        mutationFn: (requestData) => {
+            console.log(requestData)
+            return axios.post("http://localhost:3000/api/client", requestData)
+        }
+    })
+
+    const onSubmit = (values) => {
+        saveClientData.mutate(values)
     };
 
     return (
@@ -65,6 +76,27 @@ function App() {
 
                 </div>
 
+                <label className="mb-2">
+                    City:
+                    <select
+                        className="border p-2 rounded mb-4"
+                        {...register("city")}
+                    >
+                        <option value="">Select a city</option>
+                        <option value="Kathmandu">Kathmandu</option>
+                        <option value="Lalitpur">Lalitpur</option>
+                        <option value="Bhaktapur">Bhaktapur</option>
+                        <option value="Pokhara">Pokhara</option>
+                        <option value="Chitwan">Chitwan</option>
+                        <option value="Lumbini">Lumbini</option>
+                        <option value="Janakpur">Janakpur</option>
+                        <option value="Biratnagar">Biratnagar</option>
+                        <option value="Dharan">Dharan</option>
+                        <option value="Butwal">Butwal</option>
+                    </select>
+                    <p style={{ color: "red" }}>{errors?.city?.message}</p>
+                </label>
+
                 <div>
                     <label>Email: </label>
                     <input className="border p-2 rounded mb-4" {...register("email")} />
@@ -75,13 +107,13 @@ function App() {
 
                 <div>
                     <label>Password: </label>
-                    <input className="border p-2 rounded mb-4" {...register("password")} />
+                    <input type="password" className="border p-2 rounded mb-4" {...register("password")} />
               
                     <p style={{ color: "red" }}>{errors?.password?.message}</p>
               
                 </div>
 
-                <button type="submit">Submit</button>
+                <button className="bg-blue-500 text-white py-2 px-4 rounded" type="submit">Submit</button>
             </form>
         </>
     );

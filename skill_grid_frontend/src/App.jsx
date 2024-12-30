@@ -1,10 +1,13 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense } from "react";
-import { InfoContext, InfoProvider } from "./context/info_context";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { InfoProvider } from "./context/info_context";
 import FreelancerRegistration from "./core/public/pages/freelancer_registration";
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client_registration"))
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"))
+
+const queryClient = new QueryClient();
 
 function App() {
   const token = false;
@@ -14,7 +17,7 @@ function App() {
       path: "/admin-dashboard",
       element: (
         <Suspense>
-          <AdminDashboard/>
+          <AdminDashboard />
         </Suspense>
       )
     }
@@ -25,7 +28,7 @@ function App() {
       path: "/client-registration",
       element: (
         <Suspense>
-          <ClientRegistration/>
+          <ClientRegistration />
         </Suspense>
       ),
       errorElement: <>error</>
@@ -34,7 +37,7 @@ function App() {
       path: "/freelancer-registration",
       element: (
         <Suspense>
-          <FreelancerRegistration/>
+          <FreelancerRegistration />
         </Suspense>
       ),
       errorElement: <>error</>
@@ -46,13 +49,15 @@ function App() {
       errorElement: <>error</>,
     },
   ];
-  const router = token? privateRouter : publicRouter;
+  const router = token ? privateRouter : publicRouter;
 
-  return(
+  return (
     <>
-      <InfoProvider>
-        <RouterProvider router = {createBrowserRouter(router)}/>
-      </InfoProvider>
+      <QueryClientProvider client={queryClient}>
+        <InfoProvider>
+          <RouterProvider router={createBrowserRouter(router)} />
+        </InfoProvider>
+      </QueryClientProvider>
     </>
   );
 }
