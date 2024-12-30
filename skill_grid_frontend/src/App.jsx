@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { InfoContext, InfoProvider } from "./context/info_context";
+import FreelancerRegistration from "./core/public/pages/freelancer_registration";
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client_registration"))
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"))
@@ -25,6 +26,15 @@ function App() {
       element: (
         <Suspense>
           <ClientRegistration/>
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+    {
+      path: "/freelancer-registration",
+      element: (
+        <Suspense>
+          <FreelancerRegistration/>
         </Suspense>
       ),
       errorElement: <>error</>
