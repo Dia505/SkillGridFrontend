@@ -3,13 +3,14 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { InfoProvider } from "./context/info_context";
 import AuthRoute from './components/auth_route';
+import BuildYourProfile from './core/private/freelancer/build_your_profile_pages/build_your_profile';
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"));
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
 const FreelancerRegistration = lazy(() => import("./core/public/pages/freelancer/freelancer_registration"));
 const Login = lazy(() => import("./core/public/pages/login"));
 const ClientDashboard = lazy(() => import("./core/public/pages/client/client_dashboard"));
-const FreelancerDashboard = lazy(() => import("./core/public/pages/freelancer/freelancer_dashboard"));
+const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelancer_dashboard"));
 
 const queryClient = new QueryClient();
 
@@ -58,17 +59,20 @@ function App() {
     {
       path: "/freelancer-dashboard",
       element: (
-        <Suspense>
-          <FreelancerDashboard />
-        </Suspense>
-      ),
-      errorElement: <>error</>
+        <AuthRoute requiredRole="freelancer" element={<Suspense><FreelancerDashboard /></Suspense>} />
+      )
     },
     // Private Routes (with AuthRoute)
     {
       path: "/admin-dashboard",
       element: (
         <AuthRoute requiredRole="admin" element={<Suspense><AdminDashboard /></Suspense>} />
+      )
+    },
+    {
+      path: "/build-your-profile",
+      element: (
+        <AuthRoute requiredRole="freelancer" element={<Suspense><BuildYourProfile /></Suspense>} />
       )
     },
     // Fallback route for unauthorized access
