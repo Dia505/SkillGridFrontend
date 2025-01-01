@@ -2,10 +2,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { InfoProvider } from "./context/info_context";
-import FreelancerRegistration from "./core/public/pages/freelancer_registration";
 
-const ClientRegistration = lazy(() => import("./core/public/pages/client_registration"))
+const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"))
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"))
+const FreelancerRegistration = lazy(() => import("./core/public/pages/freelancer/freelancer_registration"))
+const Login = lazy(() => import("./core/public/pages/login"))
+const ClientDashboard = lazy(() => import("./core/public/pages/client/client_dashboard"))
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,24 @@ function App() {
       element: (
         <Suspense>
           <FreelancerRegistration />
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+    {
+      path: "/login",
+      element: (
+        <Suspense>
+          <Login />
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+    {
+      path: "/client-dashboard",
+      element: (
+        <Suspense>
+          <ClientDashboard />
         </Suspense>
       ),
       errorElement: <>error</>
