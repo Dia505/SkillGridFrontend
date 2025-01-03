@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Define Yup validation schema
 const clientSchema = yup.object().shape({
@@ -34,19 +35,32 @@ function ClientRegistration() {
         mode: "all"
     });
 
+    const navigate = useNavigate();
+
     console.log(errors)
 
     const saveClientData = useMutation({
         mutationKey: "SAVEDATA",
         mutationFn: (requestData) => {
-            console.log(requestData)
-            return axios.post("http://localhost:3000/api/client", requestData)
-        }
-    })
-
+            console.log(requestData);
+            return axios.post("http://localhost:3000/api/client", requestData);
+        },
+        onSuccess: (data) => {
+            // Assuming the token is in data.token
+            const token = data.data.token; // Access the token from the response
+            localStorage.setItem("authToken", token);
+            navigate("/client-dashboard"); // Navigate to the dashboard
+        },
+        onError: (error) => {
+            console.error("Error saving client data:", error);
+            alert("Failed to save client data. Please try again.");
+        },
+    });
+    
     const onSubmit = (values) => {
-        saveClientData.mutate(values)
+        saveClientData.mutate(values);
     };
+    
 
     return (
         <>

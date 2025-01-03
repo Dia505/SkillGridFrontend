@@ -5,15 +5,13 @@ import JobDetails from "./job_details";
 import ServiceDetails from "./service_details";
 import BioDetails from "./bio_details";
 
-const queryClient = new QueryClient();
-
 const BuildYourProfile = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
-    jobCategory: null,
-    jobDetails: null,
-    serviceDetails: null,
-    bioDetails: null
+    job_category: null,
+    job_details: null,
+    service_details: null,
+    bio: null,
   });
 
   const steps = [
@@ -25,24 +23,22 @@ const BuildYourProfile = () => {
 
   const CurrentComponent = steps[currentStep].component;
 
-  const handleNext = (data) => {
-    setFormData((prev) => ({ ...prev, ...data }));
-    setCurrentStep((prev) => prev + 1);
+  const updateData = (newData) => {
+    setFormData((prev) => ({ ...prev, ...newData }));
+  };
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      // Submit data
+      handleSubmit();
+    }
   };
 
   const handlePrevious = () => {
-    setCurrentStep((prev) => prev - 1);
+    setCurrentStep((prev) => Math.max(0, prev - 1));
   };
-
-  const isLastStep = currentStep === steps.length - 1;
-
-  const submitProfile = useMutation((data) =>
-    fetch("/api/profile", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    })
-  );
 
   const handleSubmit = async () => {
     try {
@@ -56,34 +52,43 @@ const BuildYourProfile = () => {
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="max-w-lg mx-auto py-10 px-5 space-y-8">
-        {/* Progress Bar */}
-        <div className="w-full">
-          <div className="relative w-full bg-gray-200 rounded-full h-2.5">
-            <div
-              className="absolute bg-green-500 h-2.5 rounded-full transition-all"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-          <p className="text-center text-sm mt-2">
-            Step {currentStep + 1} of {steps.length}
-          </p>
+    <div>
+      {/* Progress Bar */}
+      <div className="w-full">
+        <div className="relative w-full bg-gray-200 rounded-full h-2.5">
+          <div
+            className="absolute bg-green-500 h-2.5 rounded-full transition-all"
+            style={{ width: `${progress}%` }}
+          ></div>
         </div>
-
-        {/* Current Step */}
-        <div className="bg-white p-5 shadow-md rounded-md">
-          <CurrentComponent
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-            isLastStep={isLastStep}
-            onSubmit={handleSubmit}
-            data={formData[steps[currentStep].name.toLowerCase().replace(" ", "")]}
-          />
-        </div>
+        <p className="text-center text-sm mt-2">
+          Step {currentStep + 1} of {steps.length}
+        </p>
       </div>
-    </QueryClientProvider>
+
+      {/* Current Step */}
+      <CurrentComponent
+        data={formData[steps[currentStep].name.toLowerCase().replace(" ", "")]}
+        updateData={updateData}
+      />
+
+      {/* Navigation Buttons */}
+      <div className="flex justify-between mt-4">
+        {currentStep > 0 && (
+          <button
+            onClick={handlePrevious}
+            className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+          >
+            Previous
+          </button>
+        )}
+        <button
+          onClick={handleNext}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          {currentStep === steps.length - 1 ? "View My Profile" : "Next"}
+        </button>
+      </div>
+    </div>
   );
 };
-
-export default BuildYourProfile;

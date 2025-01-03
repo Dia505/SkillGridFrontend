@@ -3,7 +3,6 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { InfoProvider } from "./context/info_context";
 import AuthRoute from './components/auth_route';
-import BuildYourProfile from './core/private/freelancer/build_your_profile_pages/build_your_profile';
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"));
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
@@ -11,6 +10,7 @@ const FreelancerRegistration = lazy(() => import("./core/public/pages/freelancer
 const Login = lazy(() => import("./core/public/pages/login"));
 const ClientDashboard = lazy(() => import("./core/public/pages/client/client_dashboard"));
 const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelancer_dashboard"));
+const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"))
 
 const queryClient = new QueryClient();
 
