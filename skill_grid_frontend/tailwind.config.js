@@ -28,7 +28,12 @@ export default {
 
       }
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        caprasimo: ["Caprasimo", "sans-serif"],
+        inter: ['Inter', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 }

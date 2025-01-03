@@ -5,6 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import AppLogo from "../../../components/app_logo";
 
 const loginSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Email is required"),
@@ -38,7 +39,7 @@ function Login() {
 
             if (response.role == "client") {
                 navigate("/client-dashboard");
-            } 
+            }
             else if (response.role == "freelancer") {
                 navigate("/freelancer-dashboard");
             }
@@ -67,49 +68,21 @@ function Login() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-md">
-                <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">Login</h2>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    {/* Email Field */}
-                    <div className="mb-4">
-                        <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            {...register("email")}
-                            className={`border ${errors.email ? "border-red-500" : "border-gray-300"
-                                } p-2 w-full rounded-md focus:outline-none focus:ring-2 ${errors.email ? "focus:ring-red-500" : "focus:ring-blue-500"
-                                }`}
-                            placeholder="Enter your email"
-                        />
-                        {errors.email && <p className="mt-1 text-sm text-red-500">{errors?.email?.message}</p>}
-                    </div>
+        <div className="min-h-screen flex flex-col pt-10 pl-16 bg-purple-700">
+            <AppLogo />
 
-                    {/* Password Field */}
-                    <div className="mb-4">
-                        <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
-                        <input
-                            type="password"
-                            {...register("password")}
-                            className={`border ${errors.password ? "border-red-500" : "border-gray-300"
-                                } p-2 w-full rounded-md focus:outline-none focus:ring-2 ${errors.password ? "focus:ring-red-500" : "focus:ring-blue-500"
-                                }`}
-                            placeholder="Enter your password"
-                        />
-                        {errors.password && (
-                            <p className="mt-1 text-sm text-red-500">{errors?.password?.message}</p>
-                        )}
+            <div className="flex justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <img src="src/assets/login_carousel_img1.png" />
+                    <p className="font-caprasimo text-purple-50 text-3xl">Where Skills Find Purpose</p>
+                    <div className="w-[365px]">
+                        <p className="font-inter text-purple-50 text-lg font-light text-center">Connecting clients and freelancers for impactful projects</p>
                     </div>
+                </div>
 
-                    {/* Submit Button */}
-                    <button
-                        type="submit"
-                        className="w-full py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        disabled={login.isLoading}
-                    >
-                        {login.isLoading ? "Logging in..." : "Login"}
-                    </button>
-                </form>
+                <div className="w-[456px] h-[621px] flex bg-purple-50 rounded-[22px]">
+
+                </div>
             </div>
         </div>
     );
