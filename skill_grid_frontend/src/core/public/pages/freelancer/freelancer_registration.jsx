@@ -4,11 +4,13 @@ import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import AppLogo from "../../../../components/app_logo";
+import { useNavigate } from "react-router-dom";
 
 const freelancerSchema = yup.object().shape({
     first_name: yup.string().required("*required"),
     last_name: yup.string().required("*required"),
-    
+
     date_of_birth: yup
         .string()
         .required("*required")
@@ -36,6 +38,9 @@ const freelancerSchema = yup.object().shape({
         .matches(/[0-9]/, "Password must contain at least one number")
         .matches(/[@$!%*?&#]/, "Password must contain at least one special character")
         .required("Password is required"),
+    terms: yup
+            .boolean()
+            .oneOf([true]),
 });
 
 function FreelancerRegistration() {
@@ -72,88 +77,159 @@ function FreelancerRegistration() {
     const maxDate = new Date(today);
     maxDate.setFullYear(today.getFullYear() - 65);
 
+    const navigate = useNavigate();
+
     return (
         <>
-            <h2 className="text-2xl font-bold mb-4">Freelancer Registration</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label>First name: </label>
-                    <input className="border p-2 rounded mb-4" {...register("first_name")} />
+            <div className="h-screen overflow-auto flex flex-col pt-10 pl-16 pb-20 bg-purple-700">
+                <AppLogo />
 
-                    <p style={{ color: "red" }}>{errors?.first_name?.message}</p>
+                <div className="flex justify-center gap-20">
+                    <img className="w-[416px] h-[299px] self-end" src="src/assets/registration_img1.png" />
 
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="w-[456px] h-auto flex flex-col gap-6 bg-purple-50 rounded-[22px] pt-12 pb-12 pl-12 pr-16">
+                            <div>
+                                <p className="font-caprasimo text-purple-700 text-[28px]">Sign up</p>
+                                <p className="font-inter text-purple-700">Find the work you love</p>
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                                <div className="flex gap-4">
+                                    <div>
+                                        <label className="font-inter text-purple-700 text-[15px] ml-2">First name</label>
+                                        <input
+                                            type="first_name"
+                                            {...register("first_name")}
+                                            className={`border ${errors.first_name ? "border-red-500" : "border-purple-700"} 
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.first_name ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                        />
+                                        {errors.first_name && <p className="mt-1 text-sm text-red-500">{errors?.first_name?.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="font-inter text-purple-700 text-[15px] ml-2">Last name</label>
+                                        <input
+                                            type="last_name"
+                                            {...register("last_name")}
+                                            className={`border ${errors.last_name ? "border-red-500" : "border-purple-700"} 
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.last_name ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                        />
+                                        {errors.last_name && <p className="mt-1 text-sm text-red-500">{errors?.last_name?.message}</p>}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="font-inter text-purple-700 text-[15px] ml-2">Date of birth</label>
+                                    <input type="date" className={`border ${errors.city ? "border-red-500" : "border-purple-700"} 
+                                        bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                        ${errors.city ? "focus:ring-red-500" : "focus:ring-purple-700"}`} {...register("date_of_birth")} />
+
+                                    <p style={{ color: "red" }}>{errors?.date_of_birth?.message}</p>
+                                </div>
+
+                                <div className="flex flex-col gap-4">
+                                    <div className="flex gap-4">
+                                        <div>
+                                            <label className="font-inter text-purple-700 text-[15px] ml-2">Address</label>
+                                            <input
+                                                type="address"
+                                                {...register("address")}
+                                                className={`border ${errors.address ? "border-red-500" : "border-purple-700"} 
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.address ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                            />
+                                            {errors.address && <p className="mt-1 text-sm text-red-500">{errors?.address?.message}</p>}
+                                        </div>
+
+                                        <div>
+                                            <label className="font-inter text-purple-700 text-[15px] ml-2">City</label>
+                                            <select
+                                                className={`border ${errors.city ? "border-red-500" : "border-purple-700"} 
+                                        bg-purple-50 p-2 w-[163px] rounded-xl focus:outline-none focus:ring-2 
+                                        ${errors.city ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                                {...register("city")}
+                                            >
+                                                <option value="">Select a city</option>
+                                                <option value="Kathmandu">Kathmandu</option>
+                                                <option value="Lalitpur">Lalitpur</option>
+                                                <option value="Bhaktapur">Bhaktapur</option>
+                                                <option value="Pokhara">Pokhara</option>
+                                                <option value="Chitwan">Chitwan</option>
+                                                <option value="Lumbini">Lumbini</option>
+                                                <option value="Janakpur">Janakpur</option>
+                                                <option value="Biratnagar">Biratnagar</option>
+                                                <option value="Dharan">Dharan</option>
+                                                <option value="Butwal">Butwal</option>
+                                            </select>
+
+                                            {errors.city && <p className="mt-1 text-sm text-red-500">{errors?.city?.message}</p>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="font-inter text-purple-700 text-[15px] ml-2">Email address</label>
+                                    <input
+                                        type="email"
+                                        {...register("email")}
+                                        className={`border ${errors.email ? "border-red-500" : "border-purple-700"} 
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.email ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                    />
+                                    {errors.email && <p className="mt-1 text-sm text-red-500">{errors?.email?.message}</p>}
+                                </div>
+
+                                <div>
+                                    <label className="font-inter text-purple-700 text-[15px] ml-2">Password</label>
+                                    <input
+                                        type="password"
+                                        {...register("password")}
+                                        className={`border ${errors.password ? "border-red-500" : "border-purple-700"} 
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.password ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                    />
+                                    {errors.password && <p className="mt-1 text-sm text-red-500">{errors?.password?.message}</p>}
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-4">
+                                <label className="flex items-start space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        {...register("terms")}
+                                        className={`h-5 w-5 appearance-none bg-purple-50 border ${errors.terms ? "border-red-500" : "border-purple-700"
+                                            } rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700 shrink-0`}
+                                    />
+                                    <span className="text-grey-700 font-inter text-[13px] leading-tight">
+                                        Yes, I understand and agree to the
+                                        <span className="text-purple-700 underline"> SkillGrid Terms of Service</span>, including the
+                                        <span className="text-purple-700 underline"> User Agreement</span> and
+                                        <span className="text-purple-700 underline"> Privacy Policy</span>.
+                                    </span>
+                                </label>
+
+
+                                <button
+                                    type="submit"
+                                    className="w-[295px] h-[43px] text-purple-50 font-caprasimo text-lg bg-purple-700 rounded-xl border-2 border-transparent hover:bg-purple-50 hover:text-purple-700 hover:border-purple-700"
+                                >
+                                    Create Account
+                                </button>
+
+                                <div className="flex gap-2">
+                                    <p className="font-inter font-light text-purple-700">Already have an account?</p>
+                                    <p className="font-caprasimo text-purple-700 hover:underline cursor-pointer" onClick={() => navigate("/login")}>Log In</p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <img className="w-[360px] h-[312px]" src="src/assets/registration_img2.png" />
                 </div>
-
-                <div>
-                    <label>Last name: </label>
-                    <input className="border p-2 rounded mb-4" {...register("last_name")} />
-
-                    <p style={{ color: "red" }}>{errors?.last_name?.message}</p>
-
-                </div>
-
-                <div>
-                    <label>Date of birth: </label>
-                    <input type="date" className="border p-2 rounded mb-4" {...register("date_of_birth")}/>
-
-                    <p style={{ color: "red" }}>{errors?.date_of_birth?.message}</p>
-                </div>
-
-                <div>
-                    <label>Mobile number: </label>
-                    <input className="border p-2 rounded mb-4" {...register("mobile_no")} />
-
-                    <p style={{ color: "red" }}>{errors?.mobile_no?.message}</p>
-
-                </div>
-
-                <div>
-                    <label>Address: </label>
-                    <input className="border p-2 rounded mb-4" {...register("address")} />
-
-                    <p style={{ color: "red" }}>{errors?.address?.message}</p>
-
-                </div>
-
-                <label className="mb-2">
-                    City:
-                    <select
-                        className="border p-2 rounded mb-4"
-                        {...register("city")}
-                    >
-                        <option value="">Select a city</option>
-                        <option value="Kathmandu">Kathmandu</option>
-                        <option value="Lalitpur">Lalitpur</option>
-                        <option value="Bhaktapur">Bhaktapur</option>
-                        <option value="Pokhara">Pokhara</option>
-                        <option value="Chitwan">Chitwan</option>
-                        <option value="Lumbini">Lumbini</option>
-                        <option value="Janakpur">Janakpur</option>
-                        <option value="Biratnagar">Biratnagar</option>
-                        <option value="Dharan">Dharan</option>
-                        <option value="Butwal">Butwal</option>
-                    </select>
-                    <p style={{ color: "red" }}>{errors?.city?.message}</p>
-                </label>
-
-                <div>
-                    <label>Email: </label>
-                    <input className="border p-2 rounded mb-4" {...register("email")} />
-
-                    <p style={{ color: "red" }}>{errors?.email?.message}</p>
-
-                </div>
-
-                <div>
-                    <label>Password: </label>
-                    <input type="password" className="border p-2 rounded mb-4" {...register("password")} />
-
-                    <p style={{ color: "red" }}>{errors?.password?.message}</p>
-
-                </div>
-
-                <button className="bg-blue-500 text-white py-2 px-4 rounded" type="submit">Submit</button>
-            </form>
+            </div>
         </>
     );
 }

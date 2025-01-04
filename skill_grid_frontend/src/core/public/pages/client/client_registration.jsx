@@ -77,7 +77,7 @@ function ClientRegistration() {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="w-[456px] h-auto flex flex-col gap-6 bg-purple-50 rounded-[22px] pt-12 pb-12 pl-12 pr-16">
                             <div>
-                                <p className="font-caprasimo text-purple-700 text-[28px]">Sign up!</p>
+                                <p className="font-caprasimo text-purple-700 text-[28px]">Sign up</p>
                                 <p className="font-inter text-purple-700">Connect with professionals for your next big project</p>
                             </div>
 
