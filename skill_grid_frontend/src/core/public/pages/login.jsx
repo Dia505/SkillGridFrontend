@@ -154,7 +154,7 @@ function Login() {
 
                                 <div className="flex gap-2">
                                     <p className="font-inter text-purple-700">New to SkillGrid?</p>
-                                    <p className="font-caprasimo text-purple-700 hover:underline cursor-pointer">Sign Up</p>
+                                    <p className="font-caprasimo text-purple-700 hover:underline cursor-pointer" onClick={() => navigate("/join-client-freelancer")}>Sign Up</p>
                                 </div>
                             </div>
                         </div>

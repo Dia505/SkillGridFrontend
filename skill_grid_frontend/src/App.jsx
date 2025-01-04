@@ -9,6 +9,7 @@ const ClientRegistration = lazy(() => import("./core/public/pages/client/client_
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
 const FreelancerRegistration = lazy(() => import("./core/public/pages/freelancer/freelancer_registration"));
 const Login = lazy(() => import("./core/public/pages/login"));
+const JoinClientFreelancer = lazy(() => import("./core/public/pages/join_client_freelancer"));
 const ClientDashboard = lazy(() => import("./core/public/pages/client/client_dashboard"));
 const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelancer_dashboard"));
 const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"))
@@ -44,6 +45,15 @@ function App() {
       element: (
         <Suspense>
           <Login />
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+    {
+      path: "/join-client-freelancer",
+      element: (
+        <Suspense>
+          <JoinClientFreelancer />
         </Suspense>
       ),
       errorElement: <>error</>
