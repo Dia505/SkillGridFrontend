@@ -1,11 +1,11 @@
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/auth_context";
 
 const AuthRoute = ({ element, requiredRole }) => {
-  const token = localStorage.getItem("authToken");
-  const role = localStorage.getItem("role");
+  const { authToken, role } = useAuth(); // Consistent with AuthContext
 
   // If no token or role doesn't match, redirect to the login page
-  if (!token || role !== requiredRole) {
+  if (!authToken || role !== requiredRole) {
     return <Navigate to="/login" replace />;
   }
 

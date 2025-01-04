@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import AppLogo from "../../../components/app_logo";
 import LoginCarousel from "../../../components/login_carousel";
+import { useAuth } from "../../../context/auth_context";
 
 const loginSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Email is required"),
@@ -26,25 +27,26 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const login = useMutation({
+    const { login } = useAuth();
+
+    const loginUser = useMutation({
         mutationKey: "LOGIN",
         mutationFn: async (data) => {
             const response = await axios.post("http://localhost:3000/api/auth/login", data);
             return response.data;
         },
         onSuccess: (response) => {
-            alert(`Login successful!`);
             console.log(response);
-            localStorage.setItem("authToken", response.token);
-            localStorage.setItem("role", response.role);
 
-            if (response.role == "client") {
+            // Pass both token and role to AuthContext
+            login(response.token, response.role);
+
+            // Navigate based on role
+            if (response.role === "client") {
                 navigate("/client-dashboard");
-            }
-            else if (response.role == "freelancer") {
+            } else if (response.role === "freelancer") {
                 navigate("/freelancer-dashboard");
-            }
-            else if (response.role == "admin") {
+            } else if (response.role === "admin") {
                 navigate("/admin-dashboard");
             }
         },
@@ -65,7 +67,7 @@ function Login() {
     });
 
     const onSubmit = (values) => {
-        login.mutate(values);
+        loginUser.mutate(values);
     };
 
     const loginCarouselData = [
@@ -96,7 +98,7 @@ function Login() {
                         <LoginCarousel carouselData={loginCarouselData} />
                     </div>
 
-                    <form>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="w-[456px] h-[621px] flex flex-col gap-8 bg-purple-50 rounded-[22px] pt-16 pl-12 pr-16">
                             <div>
                                 <p className="font-caprasimo text-purple-700 text-[28px]">Welcome Back!</p>
@@ -110,8 +112,8 @@ function Login() {
                                         type="email"
                                         {...register("email")}
                                         className={`border ${errors.email ? "border-red-500" : "border-purple-700"} 
-                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                ${errors.email ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.email ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                     />
                                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors?.email?.message}</p>}
                                 </div>
@@ -122,19 +124,19 @@ function Login() {
                                         type="password"
                                         {...register("password")}
                                         className={`border ${errors.password ? "border-red-500" : "border-purple-700"} 
-                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                ${errors.password ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.password ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                     />
                                     {errors.password && <p className="mt-1 text-sm text-red-500">{errors?.password?.message}</p>}
                                 </div>
 
                                 <div className="flex gap-20">
-                                    <label class="flex items-center space-x-2">
+                                    <label className="flex items-center space-x-2">
                                         <input
                                             type="checkbox"
-                                            className="h-5 w-5 appearance-none bg-purple-50 border border-purple-700 rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700 checked:before:content-['✔'] checked:before:text-purple-50 checked:before:flex checked:before:items-center checked:before:justify-center"
+                                            className="h-5 w-5 appearance-none bg-purple-50 border border-purple-700 rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700"
                                         />
-                                        <span class="text-purple-700 font-inter">Remember me</span>
+                                        <span className="text-purple-700 font-inter">Remember me</span>
                                     </label>
 
                                     <p className="text-purple-700 font-inter hover:underline cursor-pointer">Forgot password</p>

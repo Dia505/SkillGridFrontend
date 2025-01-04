@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { InfoProvider } from "./context/info_context";
 import AuthRoute from './components/auth_route';
+import { AuthProvider } from './context/auth_context';
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"));
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
@@ -89,7 +90,9 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <InfoProvider>
-          <RouterProvider router={router} />
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
         </InfoProvider>
       </QueryClientProvider>
     </>
