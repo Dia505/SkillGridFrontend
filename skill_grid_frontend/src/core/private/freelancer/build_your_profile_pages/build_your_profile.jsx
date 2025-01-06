@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { QueryClient, QueryClientProvider, useMutation } from "@tanstack/react-query";
+import AppLogo2 from "../../../../components/app_logo2";
+import BioDetails from "./bio_details";
 import JobCategory from "./job_category";
 import JobDetails from "./job_details";
 import ServiceDetails from "./service_details";
-import BioDetails from "./bio_details";
 
 const BuildYourProfile = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -52,43 +52,53 @@ const BuildYourProfile = () => {
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
-    <div>
-      {/* Progress Bar */}
-      <div className="w-full">
-        <div className="relative w-full bg-gray-200 rounded-full h-2.5">
-          <div
-            className="absolute bg-green-500 h-2.5 rounded-full transition-all"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-        <p className="text-center text-sm mt-2">
-          Step {currentStep + 1} of {steps.length}
+    <>
+      <div className="h-screen overflow-auto flex flex-col pt-10 pl-16 bg-purple-50">
+        <AppLogo2 />
+
+        <p className="ml-24 mt-10 text-purple-700">
+          Build your profile {currentStep + 1}/{steps.length}
         </p>
-      </div>
 
-      {/* Current Step */}
-      <CurrentComponent
-        data={formData[steps[currentStep].name.toLowerCase().replace(" ", "")]}
-        updateData={updateData}
-      />
 
-      {/* Navigation Buttons */}
-      <div className="flex justify-between mt-4">
-        {currentStep > 0 && (
+        {/* Current Step */}
+        <div>
+          <CurrentComponent
+            data={formData[steps[currentStep].name.toLowerCase().replace(" ", "")]}
+            updateData={updateData}
+          />
+        </div>
+
+
+        {/* Progress Bar */}
+        <div className="w-full flex fixed bottom-20 left-0">
+          <div className="relative w-full bg-grey-100 rounded-full h-2.5">
+            <div
+              className="absolute bg-purple-700 h-2.5 rounded-full transition-all"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="flex fixed bottom-5">
           <button
             onClick={handlePrevious}
-            className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
-          >
+            className="w-[126px] h-[40px] bg-purple-50 border-2 border-purple-700 text-purple-700 font-caprasimo rounded-lg">
             Previous
           </button>
-        )}
-        <button
-          onClick={handleNext}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          {currentStep === steps.length - 1 ? "View My Profile" : "Next"}
-        </button>
+
+          <button
+            onClick={handleNext}
+            className="w-auto h-[40px] pl-7 pr-7 bg-purple-700 border-2 border-purple-700 text-purple-50 font-caprasimo rounded-lg fixed right-16"
+          >
+            {currentStep === steps.length - 1 ? "View My Profile" : "Next"}
+          </button>
+        </div>
+
       </div>
-    </div>
+    </>
   );
 };
+
+export default BuildYourProfile

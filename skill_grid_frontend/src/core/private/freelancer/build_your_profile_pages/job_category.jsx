@@ -24,17 +24,17 @@ const JobCategoryForm = ({ data, updateData }) => {
   };
 
   return (
-    <div className="space-y-5">
-      <h2 className="text-xl font-semibold text-center">Select a Job Category</h2>
+    <div className="ml-24 mr-40 mt-4">
+      <h2 className="text-2xl font-caprasimo text-purple-700">Select your job category</h2>
 
       {/* Category Icons Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mt-4">
         {categories.map((category) => (
           <div
             key={category.id}
             onClick={() => handleCategoryClick(category.id)}
-            className={`flex flex-col items-center justify-center p-4 border rounded-lg cursor-pointer
-              ${selectedCategory === category.id ? "border-green-500 bg-green-100" : "border-gray-300 hover:bg-gray-100"}`}
+            className={`flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer
+              ${selectedCategory === category.id ? "border-purple-700 bg-purple-200 bg-opacity-80" : "border-grey-300 hover:bg-grey-50 hover:bg-opacity-60"}`}
           >
             <div className="text-4xl">{category.icon}</div>
             <p className="text-sm font-medium mt-2">{category.name}</p>

@@ -83,7 +83,8 @@ function App() {
     {
       path: "/build-your-profile",
       element: (
-        <AuthRoute requiredRole="freelancer" element={<Suspense><BuildYourProfile /></Suspense>} />
+        // <AuthRoute requiredRole="freelancer" element={<Suspense><BuildYourProfile /></Suspense>} />
+        <Suspense><BuildYourProfile/></Suspense>
       )
     },
     // Fallback route for unauthorized access
