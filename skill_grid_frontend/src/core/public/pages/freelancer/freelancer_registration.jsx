@@ -60,7 +60,16 @@ function FreelancerRegistration() {
         mutationFn: (requestData) => {
             console.log(requestData)
             return axios.post("http://localhost:3000/api/freelancer", requestData)
-        }
+        },
+        onSuccess: (data) => {
+            const token = data.data.token;
+            localStorage.setItem("authToken", token);
+            navigate("/build-your-profile"); 
+        },
+        onError: (error) => {
+            console.error("Error saving freelancer data:", error);
+            alert("Failed to save freelancer data. Please try again.");
+        },
     })
 
     const onSubmit = (values) => {

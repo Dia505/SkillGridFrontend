@@ -1,3 +1,5 @@
+import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 import React, { useState } from "react";
 import AppLogo2 from "../../../../components/app_logo2";
 import BioDetails from "./bio_details";
@@ -31,7 +33,6 @@ const BuildYourProfile = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      // Submit data
       handleSubmit();
     }
   };
@@ -42,10 +43,19 @@ const BuildYourProfile = () => {
 
   const handleSubmit = async () => {
     try {
-      await submitProfile.mutateAsync(formData);
-      alert("Profile created successfully!");
+      const token = localStorage.getItem("authToken");
+      const decoded = jwtDecode(token);
+      const freelancerId = decoded.id;
+
+      // Update profile data
+      await axios.put(`http://localhost:3000/api/freelancer/${freelancerId}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      alert("Profile built successfully!");
     } catch (error) {
-      alert("Error submitting profile");
+      console.error("Error submitting profile:", error);
+      alert("Error submitting profile. Please try again.");
     }
   };
 
@@ -60,7 +70,6 @@ const BuildYourProfile = () => {
           Build your profile {currentStep + 1}/{steps.length}
         </p>
 
-
         {/* Current Step */}
         <div>
           <CurrentComponent
@@ -68,7 +77,6 @@ const BuildYourProfile = () => {
             updateData={updateData}
           />
         </div>
-
 
         {/* Progress Bar */}
         <div className="w-full flex fixed bottom-20 left-0">
@@ -84,7 +92,8 @@ const BuildYourProfile = () => {
         <div className="flex fixed bottom-5">
           <button
             onClick={handlePrevious}
-            className="w-[126px] h-[40px] bg-purple-50 border-2 border-purple-700 text-purple-700 font-caprasimo rounded-lg">
+            className="w-[126px] h-[40px] bg-purple-50 border-2 border-purple-700 text-purple-700 font-caprasimo rounded-lg"
+          >
             Previous
           </button>
 
@@ -95,10 +104,9 @@ const BuildYourProfile = () => {
             {currentStep === steps.length - 1 ? "View My Profile" : "Next"}
           </button>
         </div>
-
       </div>
     </>
   );
 };
 
-export default BuildYourProfile
+export default BuildYourProfile;
