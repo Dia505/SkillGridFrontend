@@ -5,7 +5,7 @@ import AppLogo2 from "../../../../components/app_logo2";
 import BioDetails from "./bio_details";
 import JobCategory from "./job_category";
 import JobDetails from "./job_details";
-import ServiceDetails from "./service_details";
+import ServiceDetails from "./service_details_files/service_details";
 
 const BuildYourProfile = () => {
   const [currentStep, setCurrentStep] = useState(0);
