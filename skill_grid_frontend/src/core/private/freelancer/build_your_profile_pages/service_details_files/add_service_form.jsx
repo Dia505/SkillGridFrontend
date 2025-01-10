@@ -3,35 +3,45 @@ import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
-// Yup validation schema
-const serviceDetailsSchema = yup.object().shape({
-    service_name: yup.string().required("*required"),
-    hourly_rate: yup.string().required("*required"),
-    skill_portfolio: yup.number().required("*required"),
-});
-
 function AddServiceForm({ closeForm, updateServiceDetails }) {
+    const [uploadedFiles, setUploadedFiles] = useState([]); // State for the uploaded images
+
+    // Yup validation schema
+    const serviceDetailsSchema = yup.object().shape({
+        service_name: yup.string().required("*required"),
+        hourly_rate: yup.string().required("*required"),
+        skill_portfolio: yup
+            .mixed()
+            .test("has-images", "*You must upload at least one picture.", () => {
+                return uploadedFiles && uploadedFiles.length > 0; // Validate if at least one file exists
+            }),
+    });
+
     const {
         register,
         handleSubmit,
         formState: { errors },
+        clearErrors, // Add clearErrors to fix error clearing logic
     } = useForm({
         resolver: yupResolver(serviceDetailsSchema),
     });
 
     const fileInputRef = useRef(null); // Reference to the hidden file input
-    const [uploadedFile, setUploadedFile] = useState(null); // State for the uploaded image
-
-    const onSubmit = (data) => {
-        // Call the passed updateServiceDetails function to send the data back to parent
-        updateServiceDetails({ ...data, uploadedFile }); // Include the uploaded file in the data
-        closeForm(); // Close the form after submission
-    };
 
     const handleFileChange = (event) => {
-        const file = event.target.files[0]; // Get the selected file
-        if (file) {
-            setUploadedFile(URL.createObjectURL(file)); // Create a preview URL for the uploaded file
+        const files = Array.from(event.target.files);
+
+        if (uploadedFiles.length + files.length > 4) {
+            alert("You can only upload up to 4 pictures.");
+            return;
+        }
+
+        const filePreviews = files.map((file) => URL.createObjectURL(file));
+        setUploadedFiles((prevFiles) => [...prevFiles, ...filePreviews]);
+
+        // Clear validation error if any files are uploaded
+        if (errors.skill_portfolio) {
+            clearErrors("skill_portfolio");
         }
     };
 
@@ -39,8 +49,18 @@ function AddServiceForm({ closeForm, updateServiceDetails }) {
         fileInputRef.current.click(); // Programmatically click the hidden file input
     };
 
+    const removeImage = (index) => {
+        setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index)); // Remove the image at the given index
+    };
+
+    const onSubmit = (data) => {
+        console.log("Form submitted:", { ...data, uploadedFiles });
+        updateServiceDetails({ ...data, uploadedFiles });
+        closeForm();
+    };
+
     return (
-        <div className="flex flex-col relative bg-purple-50 rounded-2xl w-[747px] h-auto pl-16 pt-2 pb-20">
+        <div className="flex flex-col relative bg-purple-50 rounded-2xl w-[747px] h-[655px] pl-16 pt-2">
             <button
                 onClick={closeForm}
                 className="text-grey-400 font-light text-[40px] absolute right-7">
@@ -79,21 +99,41 @@ function AddServiceForm({ closeForm, updateServiceDetails }) {
                     <button
                         type="button"
                         onClick={triggerFileUpload}
-                        className="w-[187px] h-[47px] bg-purple-700 text-purple-50 rounded-xl font-inter mt-6"
+                        className={`w-[187px] h-[47px] ${uploadedFiles.length >= 4 ? "bg-gray-400 cursor-not-allowed" : "bg-purple-700"} 
+                text-purple-50 rounded-xl font-inter mt-6`}
+                        disabled={uploadedFiles.length >= 4}
                     >
-                        🖼️ Upload Picture
+                        🖼️ Upload Pictures
                     </button>
+
                     <input
                         type="file"
                         accept="image/*"
                         ref={fileInputRef}
                         onChange={handleFileChange}
+                        multiple // Allow multiple file uploads
                         style={{ display: "none" }}
                     />
-                    {uploadedFile && (
-                        <div className="flex flex-col gap-2 mt-2">
-                            <p className="text-sm text-grey-700">Preview:</p>
-                            <img src={uploadedFile} alt="Uploaded Preview" className="w-32 h-32 object-cover rounded-md" />
+
+                    {/* Image Previews */}
+                    {uploadedFiles.length > 0 && (
+                        <div className="w-[500px] flex gap-4 mt-4">
+                            {uploadedFiles.map((file, index) => (
+                                <div key={index} className="relative">
+                                    <img
+                                        src={file}
+                                        alt={`Uploaded Preview ${index + 1}`}
+                                        className="w-[126px] h-[126px] object-cover rounded-md"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeImage(index)}
+                                        className="absolute top-2 right-1 bg-purple-50 text-[13px] border rounded-full w-5 h-5 flex justify-center"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     )}
 
