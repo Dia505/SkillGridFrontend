@@ -1,4 +1,4 @@
-import { PlusIcon } from "@heroicons/react/20/solid";
+import { PlusIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import React, { useState } from "react";
 import AddServiceForm from "./add_service_form";
 
@@ -27,6 +27,25 @@ function ServiceDetails({ data, updateData }) {
         }
     };
 
+    // Carousel state to track the current image index
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const nextImage = (serviceIndex) => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === serviceData[serviceIndex].uploadedFiles.length - 1
+                ? 0
+                : prevIndex + 1
+        );
+    };
+
+    const prevImage = (serviceIndex) => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === 0
+                ? serviceData[serviceIndex].uploadedFiles.length - 1
+                : prevIndex - 1
+        );
+    };
+
     return (
         <div className="ml-24 mr-40 mt-4">
             <h2 className="text-2xl font-caprasimo text-purple-700">Highlight your services</h2>
@@ -50,25 +69,43 @@ function ServiceDetails({ data, updateData }) {
                         {serviceData.map((service, index) => (
                             <div
                                 key={index}
-                                className="flex flex-col justify-center pl-8 w-[349px] h-[265px] border border-grey-400 rounded-2xl mt-4"
+                                className="flex flex-col justify-center pl-3 pr-3 w-[349px] h-[265px] border border-grey-400 rounded-2xl mt-4"
                             >
-                                <div className="flex gap-4">
-                                    {service.uploadedFiles.map((file, idx) => (
+                                {/* Image Carousel */}
+                                {service.uploadedFiles.length > 1 ? (
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => prevImage(index)}
+                                            className="bg-purple-700 rounded-full w-[40px] h-[35px] flex flex justify-center items-center"
+                                        >
+                                            <ChevronLeftIcon className="w-6 h-6 text-purple-50"/>
+                                        </button>
                                         <img
-                                            key={idx}
-                                            src={file}
-                                            alt={`Service Image ${idx + 1}`}
+                                            src={service.uploadedFiles[currentIndex]}
+                                            alt={`Service Image ${currentIndex + 1}`}
                                             className="w-[278px] h-[146px] object-cover rounded-md"
                                         />
-                                    ))}
-                                </div>
-                                <h3 className="text-purple-700 text-xl font-bold mt-2">{service.service_name}</h3>
-                                <div className="flex justify-between">
+                                        <button
+                                            onClick={() => nextImage(index)}
+                                            className="bg-purple-700 rounded-full w-[40px] h-[35px] flex flex justify-center items-center"
+                                        >
+                                            <ChevronRightIcon className="w-6 h-6 text-purple-50"/>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <img
+                                        src={service.uploadedFiles[0]}
+                                        alt="Service Image"
+                                        className="w-[278px] h-[146px] object-cover rounded-md ml-5"
+                                    />
+                                )}
+                                <h3 className="text-purple-700 text-xl font-bold mt-2 ml-3">{service.service_name}</h3>
+                                <div className="flex justify-between ml-3">
                                     <p className="text-grey-700 text-lg">Rs. {service.hourly_rate}/hr</p>
-                                    <div className="flex mr-8 gap-2">
+                                    <div className="flex gap-2">
                                         <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]">✏️</button>
-                                        {/* Delete button now calls handleDeleteService */}
-                                        <button 
+                        
+                                        <button
                                             onClick={() => handleDeleteService(index)}
                                             className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]"
                                         >
@@ -84,9 +121,9 @@ function ServiceDetails({ data, updateData }) {
                     {serviceData.length < 3 && (
                         <button
                             onClick={handleAddServiceClick}
-                            className="border-2 border-purple-700 w-[45px] h-[45px] rounded-full text-[36px] text-purple-700 flex justify-center items-center mt-6 ml-36"
+                            className="border-2 border-purple-700 w-[45px] h-[45px] rounded-full flex justify-center items-center mt-6 ml-36"
                         >
-                            +
+                            <PlusIcon className="h-8 text-purple-700" />
                         </button>
                     )}
                 </div>
