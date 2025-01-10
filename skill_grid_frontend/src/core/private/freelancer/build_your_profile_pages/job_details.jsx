@@ -77,6 +77,7 @@ function JobDetails({ data, updateData }) {
                         </div>
 
                     </div>
+                    <button type="submit" className="hidden" /> {/* To allow submission without actual button */}
                 </form>
 
             </div>

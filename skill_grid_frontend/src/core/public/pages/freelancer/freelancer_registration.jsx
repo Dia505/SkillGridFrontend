@@ -40,7 +40,8 @@ const freelancerSchema = yup.object().shape({
         .required("Password is required"),
     terms: yup
             .boolean()
-            .oneOf([true]),
+            .oneOf([true])
+            .required("You must accept the terms and conditions"),
 });
 
 function FreelancerRegistration() {
@@ -73,7 +74,11 @@ function FreelancerRegistration() {
     })
 
     const onSubmit = (values) => {
-        saveFreelancerData.mutate(values)
+        // Remove the 'terms' field from the form data before submitting
+        const { terms, ...filteredValues } = values;
+    
+        // Pass the modified data to the mutation function
+        saveFreelancerData.mutate(filteredValues);
     };
 
     const today = new Date();
@@ -137,6 +142,18 @@ function FreelancerRegistration() {
                                         ${errors.city ? "focus:ring-red-500" : "focus:ring-purple-700"}`} {...register("date_of_birth")} />
 
                                     <p style={{ color: "red" }}>{errors?.date_of_birth?.message}</p>
+                                </div>
+
+                                <div>
+                                    <label className="font-inter text-purple-700 text-[15px] ml-2">Mobile number</label>
+                                    <input
+                                        type="mobile_no"
+                                        {...register("mobile_no")}
+                                        className={`border ${errors.mobile_no ? "border-red-500" : "border-purple-700"} 
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.mobile_no ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                    />
+                                    {errors.mobile_no && <p className="mt-1 text-sm text-red-500">{errors?.mobile_no?.message}</p>}
                                 </div>
 
                                 <div className="flex flex-col gap-4">

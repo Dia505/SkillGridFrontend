@@ -39,6 +39,7 @@ function BioDetails({ data, updateData }) {
                             />
                             {errors.profession && <p className="mt-1 text-sm text-red-500">{errors?.profession?.message}</p>}
                         </div>
+                        <button type="submit" className="hidden" /> {/* To allow submission without actual button */}
                 </form>
 
             </div>
