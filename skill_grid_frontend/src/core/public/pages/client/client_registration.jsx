@@ -5,7 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import AppLogo from "../../../../components/app_logo";
+import AppLogo from "../../../../components/app_logo/app_logo";
 
 // Define Yup validation schema
 const clientSchema = yup.object().shape({

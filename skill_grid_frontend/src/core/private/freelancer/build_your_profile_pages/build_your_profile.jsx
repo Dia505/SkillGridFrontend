@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
-import AppLogo2 from "../../../../components/app_logo2";
+import AppLogo2 from "../../../../components/app_logo/app_logo2";
 import BioDetails from "./bio_details";
 import JobCategory from "./job_category";
 import JobDetails from "./job_details";

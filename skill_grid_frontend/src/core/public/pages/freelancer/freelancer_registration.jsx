@@ -3,9 +3,9 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import AppLogo from "../../../../components/app_logo";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import AppLogo from "../../../../components/app_logo/app_logo";
 
 const freelancerSchema = yup.object().shape({
     first_name: yup.string().required("*required"),
@@ -39,9 +39,9 @@ const freelancerSchema = yup.object().shape({
         .matches(/[@$!%*?&#]/, "Password must contain at least one special character")
         .required("Password is required"),
     terms: yup
-            .boolean()
-            .oneOf([true])
-            .required("You must accept the terms and conditions"),
+        .boolean()
+        .oneOf([true])
+        .required("You must accept the terms and conditions"),
 });
 
 function FreelancerRegistration() {
@@ -65,7 +65,7 @@ function FreelancerRegistration() {
         onSuccess: (data) => {
             const token = data.data.token;
             localStorage.setItem("authToken", token);
-            navigate("/build-your-profile"); 
+            navigate("/build-your-profile");
         },
         onError: (error) => {
             console.error("Error saving freelancer data:", error);
@@ -76,7 +76,7 @@ function FreelancerRegistration() {
     const onSubmit = (values) => {
         // Remove the 'terms' field from the form data before submitting
         const { terms, ...filteredValues } = values;
-    
+
         // Pass the modified data to the mutation function
         saveFreelancerData.mutate(filteredValues);
     };

@@ -5,7 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import AppLogo from "../../../components/app_logo";
+import AppLogo from "../../../components/app_logo/app_logo";
 import LoginCarousel from "../../../components/login_carousel";
 import { useAuth } from "../../../context/auth_context";
 
@@ -38,8 +38,7 @@ function Login() {
         onSuccess: (response) => {
             console.log(response);
 
-            // Pass both token and role to AuthContext
-            login(response.token, response.role);
+            login(response.token, response.role, response.userId); 
 
             // Navigate based on role
             if (response.role === "client") {
@@ -51,13 +50,14 @@ function Login() {
             }
         },
         onError: (error) => {
-            console.log(error.response?.data)
+            console.log(error);
+            console.log(error.response?.data);
 
             if (error.response?.status === 403) {
-                if (error.response?.data == "Incorrect email address") {
+                if (error.response?.data === "Incorrect email address") {
                     setError("email", { type: "manual", message: "Incorrect email address" });
                 }
-                if (error.response?.data == "Incorrect password") {
+                if (error.response?.data === "Incorrect password") {
                     setError("password", { type: "manual", message: "Incorrect password" });
                 }
             }
