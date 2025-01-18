@@ -42,7 +42,7 @@ function Login() {
 
             // Navigate based on role
             if (response.role === "client") {
-                navigate("/client-dashboard");
+                navigate("/");
             } else if (response.role === "freelancer") {
                 navigate("/freelancer-dashboard");
             } else if (response.role === "admin") {

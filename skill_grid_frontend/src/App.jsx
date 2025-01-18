@@ -59,7 +59,7 @@ function App() {
       errorElement: <>error</>
     },
     {
-      path: "/client-dashboard",
+      path: "/",
       element: (
         <Suspense>
           <ClientDashboard />
