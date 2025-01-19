@@ -35,12 +35,15 @@ export default {
 
       blue: {
         300: "#9EB8FF",
-        500: "#7B8EFF"
+        500: "#7B8EFF",
+        600: "#236FD2"
       },
 
       pink: {
         300: "#FF9DE0"
-      }
+      },
+
+      white: "#FFFFFF"
     },
     extend: {
       fontFamily: {

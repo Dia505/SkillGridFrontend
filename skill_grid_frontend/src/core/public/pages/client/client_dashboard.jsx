@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import AppFeatureDiv from "../../../../components/client_dashboard/app_feature_div";
+import OnGoingCollaborations from "../../../../components/client_dashboard/on_going_collaborations";
 
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -72,6 +73,8 @@ function ClientDashboard() {
                             subtitle="Effortlessly manage all your projects and collaborations in one unified space."
                         />
                     </div>
+
+                    <OnGoingCollaborations/>
                 </div>
             </div>
         </>
