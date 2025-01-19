@@ -1,9 +1,10 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { jwtDecode } from "jwt-decode";
-import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
-import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import AppFeatureDiv from "../../../../components/client_dashboard/app_feature_div";
 import OnGoingCollaborations from "../../../../components/client_dashboard/on_going_collaborations";
+import ServiceCategoryDiv from "../../../../components/client_dashboard/service_category_div";
+import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
+import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
 
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -33,7 +34,7 @@ function ClientDashboard() {
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
                 {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
-                <div className="flex flex-col items-center justify-center mt-[90px] pt-10 pb-14 gap-10">
+                <div className="flex flex-col mt-[90px] pt-10 pb-14 pl-56 gap-10">
                     <div className="w-[1067px] h-[556px] bg-purple-700 rounded-xl flex justify-between pl-20">
                         <div className="flex flex-col mt-10 gap-8">
                             <div className="w-[538px]">
@@ -45,23 +46,23 @@ function ClientDashboard() {
                                     placeholder="Search freelancer"
                                     className="bg-purple-100 p-2 w-[350px] h-[47px] rounded-xl" />
                                 <button className="absolute left-80 h-[47px] w-[47px] bg-purple-400 text-purple-50 rounded-r-xl pl-2">
-                                    <MagnifyingGlassIcon className="h-8"/>
+                                    <MagnifyingGlassIcon className="h-8" />
                                 </button>
                             </div>
                         </div>
 
-                        <img className="w-[419px] rounded-xl" src="src/assets/client_dashboard_top_img.png"/>
+                        <img className="w-[419px] rounded-xl" src="src/assets/client_dashboard_top_img.png" />
                     </div>
 
                     <div className="flex gap-8">
                         <AppFeatureDiv
-                            bgColor="bg-blue-300"
+                            bgColor="bg-blue-100"
                             featureImg="src/assets/client_dashboard_feature1.png"
                             title="Tailored Hiring Service"
                             subtitle="Connect with the right talent to meet your unique project requirements effortlessly."
                         />
                         <AppFeatureDiv
-                            bgColor="bg-blue-500"
+                            bgColor="bg-blue-200"
                             featureImg="src/assets/client_dashboard_feature2.png"
                             title="Secure Payments, Simplified"
                             subtitle="Enjoy seamless transactions with transparent billing and secure payment gateways."
@@ -74,7 +75,78 @@ function ClientDashboard() {
                         />
                     </div>
 
-                    <OnGoingCollaborations/>
+                    <OnGoingCollaborations />
+
+                    <div className="w-[1067px] h-[3px] bg-grey-500"></div>
+
+                    <div className="w-[1067px] h-[400px] bg-blue-400 rounded-2xl flex justify-between pl-10">
+                        <div className="flex flex-col gap-4 pt-12">
+                            <div className="w-[427px]">
+                                <span className="font-caprasimo text-[48px] text-white leading-[1.1]">
+                                    Access a Pool of
+                                    <span className="text-blue-700"> Exceptional Talent</span>
+                                </span>
+                            </div>
+
+                            <div className="w-[427px]">
+                                <p className="font-inter text-white font-light text-base">Browse comprehensive freelancer profiles with detailed work experience, skills, and client feedback, empowering you to choose the perfect fit for your project.</p>
+                            </div>
+                        </div>
+
+                        <img className="w-[560px] rounded-r-2xl" src="src/assets/client_dashboard_exceptional_talent.png" />
+                    </div>
+
+                    <div className="flex flex-col gap-8">
+                        <p className="text-3xl font-inter font-light">Service Category</p>
+
+                        <div className="flex gap-10">
+                            <div className="flex flex-col gap-4">
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_technology.jpg"
+                                    serviceName="Technology"
+                                    serviceList={["Mobile App Development", "Web Development", "Cloud Computing", "Software Development"]}
+                                />
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_marketing.png"
+                                    serviceName="Marketing"
+                                    serviceList={["Digital Marketing", "Digital Marketing", "Content Marketing", "Search Engine Optimization (SEO)"]}
+                                />
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_education.jpg"
+                                    serviceName="Education"
+                                    serviceList={["Online Tutoring", "Educational Content Creation", "Course Development", "Exam Preparation and Coaching"]}
+                                />
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_art.jpg"
+                                    serviceName="Artisan and Craft"
+                                    serviceList={["Painting", "Pottery and Ceramics", "Custom Woodworking", "Textile Arts and Weaving"]}
+                                />
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_design.jpg"
+                                    serviceName="Design"
+                                    serviceList={["UI/UX Design", "Graphic Design", "Interior Design", "Motion Graphics Design"]}
+                                />
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_business.png"
+                                    serviceName="Business"
+                                    serviceList={["Business Consulting", "Market Research", "Financial Planning and Analysis", "Project Management"]}
+                                />
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_photography.jpg"
+                                    serviceName="Photography"
+                                    serviceList={["Event Photography", "Product Photography", "Wedding Photography", "Event Videography"]}
+                                />
+                                <ServiceCategoryDiv
+                                    serviceImg="src/assets/client_dashboard_content.png"
+                                    serviceName="Content creation"
+                                    serviceList={["Video Production", "Blogging", "Copywriting", "Social Media Management"]}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
