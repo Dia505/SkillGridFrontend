@@ -31,6 +31,15 @@ export default {
 
       red: {
         500: "#E50000"
+      },
+
+      blue: {
+        300: "#9EB8FF",
+        500: "#7B8EFF"
+      },
+
+      pink: {
+        300: "#FF9DE0"
       }
     },
     extend: {
