@@ -107,7 +107,7 @@ function OnGoingCollaborations() {
                                 <div className="flex items-center gap-4">
                                     <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
                                         <img
-                                            src={freelancer.profile_picture}
+                                            src={`http://localhost:3000/freelancer_images/${freelancer.profile_picture}`}
                                             alt={freelancer.first_name}
                                             className="w-full h-full object-cover"
                                         />
