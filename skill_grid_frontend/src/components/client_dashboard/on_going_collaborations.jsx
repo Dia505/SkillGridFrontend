@@ -22,6 +22,18 @@ function OnGoingCollaborations() {
         return { daysRemaining: daysRemaining > 0 ? `${daysRemaining} days` : "Completed", completionPercentage };
     };
 
+    // Function to render star ratings
+    const renderStars = (rating) => {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 !== 0;
+        const stars = [];
+
+        for (let i = 0; i < fullStars; i++) {
+            stars.push("⭐");
+        }
+        return stars.join(" ");
+    };
+
     // Fetch ongoing collaborations for the client
     useEffect(() => {
         if (userId && token) {
@@ -102,7 +114,7 @@ function OnGoingCollaborations() {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-base font-inter">{`${freelancer.first_name} ${freelancer.last_name}`}</p>
-                                        <p className="text-base font-inter">Rating: {avgRating.toFixed(1)}</p>
+                                        <p className="text-base font-inter">{renderStars(avgRating)}</p>
                                     </div>
                                 </div>
 

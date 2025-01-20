@@ -5,6 +5,7 @@ import OnGoingCollaborations from "../../../../components/client_dashboard/on_go
 import ServiceCategoryDiv from "../../../../components/client_dashboard/service_category_div";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import TopRatedFreelancer from "../../../../components/client_dashboard/top_rated_freelancer";
 
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -54,47 +55,51 @@ function ClientDashboard() {
                         <img className="w-[419px] rounded-xl" src="src/assets/client_dashboard_top_img.png" />
                     </div>
 
-                    <div className="flex gap-8">
-                        <AppFeatureDiv
-                            bgColor="bg-blue-100"
-                            featureImg="src/assets/client_dashboard_feature1.png"
-                            title="Tailored Hiring Service"
-                            subtitle="Connect with the right talent to meet your unique project requirements effortlessly."
-                        />
-                        <AppFeatureDiv
-                            bgColor="bg-blue-200"
-                            featureImg="src/assets/client_dashboard_feature2.png"
-                            title="Secure Payments, Simplified"
-                            subtitle="Enjoy seamless transactions with transparent billing and secure payment gateways."
-                        />
-                        <AppFeatureDiv
-                            bgColor="bg-pink-300"
-                            featureImg="src/assets/client_dashboard_feature3.png"
-                            title="Streamlined Project Management"
-                            subtitle="Effortlessly manage all your projects and collaborations in one unified space."
-                        />
-                    </div>
+                    {!isTokenValid && (
+                        <div className="flex gap-8">
+                            <AppFeatureDiv
+                                bgColor="bg-blue-100"
+                                featureImg="src/assets/client_dashboard_feature1.png"
+                                title="Tailored Hiring Service"
+                                subtitle="Connect with the right talent to meet your unique project requirements effortlessly."
+                            />
+                            <AppFeatureDiv
+                                bgColor="bg-blue-200"
+                                featureImg="src/assets/client_dashboard_feature2.png"
+                                title="Secure Payments, Simplified"
+                                subtitle="Enjoy seamless transactions with transparent billing and secure payment gateways."
+                            />
+                            <AppFeatureDiv
+                                bgColor="bg-pink-300"
+                                featureImg="src/assets/client_dashboard_feature3.png"
+                                title="Streamlined Project Management"
+                                subtitle="Effortlessly manage all your projects and collaborations in one unified space."
+                            />
+                        </div>
+                    )}
 
                     <OnGoingCollaborations />
 
                     <div className="w-[1067px] h-[3px] bg-grey-500"></div>
 
-                    <div className="w-[1067px] h-[400px] bg-blue-400 rounded-2xl flex justify-between pl-10">
-                        <div className="flex flex-col gap-4 pt-12">
-                            <div className="w-[427px]">
-                                <span className="font-caprasimo text-[48px] text-white leading-[1.1]">
-                                    Access a Pool of
-                                    <span className="text-blue-700"> Exceptional Talent</span>
-                                </span>
+                    {!isTokenValid && (
+                        <div className="w-[1067px] h-[400px] bg-blue-400 rounded-2xl flex justify-between pl-10">
+                            <div className="flex flex-col gap-4 pt-12">
+                                <div className="w-[427px]">
+                                    <span className="font-caprasimo text-[48px] text-white leading-[1.1]">
+                                        Access a Pool of
+                                        <span className="text-blue-700"> Exceptional Talent</span>
+                                    </span>
+                                </div>
+
+                                <div className="w-[427px]">
+                                    <p className="font-inter text-white font-light text-base">Browse comprehensive freelancer profiles with detailed work experience, skills, and client feedback, empowering you to choose the perfect fit for your project.</p>
+                                </div>
                             </div>
 
-                            <div className="w-[427px]">
-                                <p className="font-inter text-white font-light text-base">Browse comprehensive freelancer profiles with detailed work experience, skills, and client feedback, empowering you to choose the perfect fit for your project.</p>
-                            </div>
+                            <img className="w-[560px] rounded-r-2xl" src="src/assets/client_dashboard_exceptional_talent.png" />
                         </div>
-
-                        <img className="w-[560px] rounded-r-2xl" src="src/assets/client_dashboard_exceptional_talent.png" />
-                    </div>
+                    )}
 
                     <div className="flex flex-col gap-8">
                         <p className="text-3xl font-inter font-light">Service Category</p>
@@ -146,6 +151,11 @@ function ClientDashboard() {
                                 />
                             </div>
                         </div>
+                    </div>
+
+                    <div className="flex flex-col gap-8">
+                        <p className="text-3xl font-inter font-light">Top-rated Freelancers</p>
+                        <TopRatedFreelancer/>
                     </div>
                 </div>
             </div>

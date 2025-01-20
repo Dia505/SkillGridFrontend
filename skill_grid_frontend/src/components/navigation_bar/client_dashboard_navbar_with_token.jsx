@@ -41,7 +41,7 @@ function ClientDashboardNavbarWithToken() {
         <div className="bg-purple-50 flex w-full h-[90px] items-center justify-between pl-10 pr-10 fixed top-0">
             <AppLogo2 onClick={() => navigate("/client-dashboard")} />
 
-            <div className="flex gap-5">
+            <div className="flex gap-8">
                 <div className="relative">
                     <input
                         type="text"
