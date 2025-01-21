@@ -45,7 +45,9 @@ export default {
         300: "#FF9DE0"
       },
 
-      white: "#FFFFFF"
+      white: "#FFFFFF",
+
+      black: "#000000"
     },
     extend: {
       fontFamily: {

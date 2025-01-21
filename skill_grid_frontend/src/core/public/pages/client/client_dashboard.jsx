@@ -3,9 +3,9 @@ import { jwtDecode } from "jwt-decode";
 import AppFeatureDiv from "../../../../components/client_dashboard/app_feature_div";
 import OnGoingCollaborations from "../../../../components/client_dashboard/on_going_collaborations";
 import ServiceCategoryDiv from "../../../../components/client_dashboard/service_category_div";
+import TopRatedFreelancer from "../../../../components/client_dashboard/top_rated_freelancer";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import TopRatedFreelancer from "../../../../components/client_dashboard/top_rated_freelancer";
 
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -35,7 +35,7 @@ function ClientDashboard() {
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
                 {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
-                <div className="flex flex-col mt-[90px] pt-10 pb-14 pl-56 gap-10">
+                <div className="flex flex-col mt-[90px] pt-10 pb-40 pl-56 gap-10">
                     <div className="w-[1067px] h-[556px] bg-purple-700 rounded-xl flex justify-between pl-20">
                         <div className="flex flex-col mt-10 gap-8">
                             <div className="w-[538px]">
@@ -155,7 +155,15 @@ function ClientDashboard() {
 
                     <div className="flex flex-col gap-8">
                         <p className="text-3xl font-inter font-light">Top-rated Freelancers</p>
-                        <TopRatedFreelancer/>
+                        <TopRatedFreelancer />
+                    </div>
+                </div>
+
+                <div className="flex bg-black w-full justify-between items-center pl-12 pr-12 pt-6 pb-6">
+                    <p className="text-lg text-white font-inter">© 2024 SkillGrid. All rights reserved.</p>
+                    <div className="flex items-center gap-2">
+                        <img className="h-[80px]" src="src/assets/app_logo_dashboard.png" />
+                        <p className="font-caprasimo text-white text-3xl">SkillGrid.</p>
                     </div>
                 </div>
             </div>

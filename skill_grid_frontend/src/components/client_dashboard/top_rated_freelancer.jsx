@@ -130,7 +130,7 @@ function TopRatedFreelancer() {
                                 {freelancer.freelancer_id.first_name} {freelancer.freelancer_id.last_name}
                             </p>
                             <p className="text-base text-grey-500">{freelancer.freelancer_id.profession}</p>
-                            <p className="text-base font-inter">⭐ {freelancer.rating}</p>
+                            <p className="text-base font-inter">⭐⭐⭐⭐⭐</p>
                             <p className="text-base">From Rs. {freelancer.lowestRate}/hr</p>
                         </div>
 
