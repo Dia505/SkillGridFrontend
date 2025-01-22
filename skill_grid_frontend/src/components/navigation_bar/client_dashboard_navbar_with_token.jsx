@@ -46,7 +46,7 @@ function ClientDashboardNavbarWithToken() {
                     <input
                         type="text"
                         className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl" />
-                    <button className="absolute w-[29px] h-[29px] right-2 top-1.5">
+                    <button className="absolute w-[29px] h-[29px] right-2 top-1.5" onClick={() => navigate("/search-freelancer")}>
                         <MagnifyingGlassIcon />
                     </button>
                 </div>

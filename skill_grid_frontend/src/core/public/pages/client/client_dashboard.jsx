@@ -45,7 +45,7 @@ function ClientDashboard() {
                                 <input
                                     type="text"
                                     placeholder="Search freelancer"
-                                    className="bg-purple-100 p-2 w-[350px] h-[47px] rounded-xl" />
+                                    className="bg-purple-100 p-2 w-[366px] h-[47px] rounded-xl" />
                                 <button className="absolute left-80 h-[47px] w-[47px] bg-purple-400 text-purple-50 rounded-r-xl pl-2">
                                     <MagnifyingGlassIcon className="h-8" />
                                 </button>

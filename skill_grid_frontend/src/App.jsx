@@ -13,6 +13,7 @@ const JoinClientFreelancer = lazy(() => import("./core/public/pages/join_client_
 const ClientDashboard = lazy(() => import("./core/public/pages/client/client_dashboard"));
 const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelancer_dashboard"));
 const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"))
+const SearchPage = lazy(() => import("./core/public/pages/client/search_page"))
 
 const queryClient = new QueryClient();
 
@@ -86,6 +87,15 @@ function App() {
         // <AuthRoute requiredRole="freelancer" element={<Suspense><BuildYourProfile /></Suspense>} />
         <Suspense><BuildYourProfile/></Suspense>
       )
+    },
+    {
+      path: "/search-freelancer",
+      element: (
+        <Suspense>
+          <SearchPage />
+        </Suspense>
+      ),
+      errorElement: <>error</>
     },
     // Fallback route for unauthorized access
     {
