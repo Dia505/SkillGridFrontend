@@ -6,6 +6,7 @@ import AppLogo2 from "../app_logo/app_logo2";
 function ClientDashboardNavbarWithToken() {
     const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(""); 
 
     useEffect(() => {
         const savedAuthData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -36,26 +37,36 @@ function ClientDashboardNavbarWithToken() {
         }
     }, []);
 
+    const handleSearch = () => {
+        if (searchTerm.trim() !== "") {
+            navigate(`/search-freelancer?query=${encodeURIComponent(searchTerm)}`);
+        }
+    };
 
     return (
         <div className="bg-purple-50 flex w-full h-[90px] items-center justify-between pl-10 pr-10 fixed top-0 z-50">
-            <AppLogo2 onClick={() => navigate("/client-dashboard")} />
+            <button onClick={() => navigate("/")} ><AppLogo2/></button>
 
             <div className="flex gap-8">
                 <div className="relative">
                     <input
                         type="text"
-                        className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl" />
-                    <button className="absolute w-[29px] h-[29px] right-2 top-1.5" onClick={() => navigate("/search-freelancer")}>
+                        className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl" 
+                        placeholder="Search freelancer/profession"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)} 
+                        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    />
+                    <button className="absolute w-[29px] h-[29px] right-2 top-1.5" onClick={handleSearch}>
                         <MagnifyingGlassIcon />
                     </button>
                 </div>
 
-                <button className="w-[30px]" onClick={() => navigate("/")}>
+                <button className="w-[30px]">
                     <CalendarIcon />
                 </button>
 
-                <button className="w-[30px]" onClick={() => navigate("/")}>
+                <button className="w-[30px]">
                     <BellIcon />
                 </button>
 

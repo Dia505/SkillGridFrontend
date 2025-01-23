@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import SearchFilter from "../../../../components/search_page/search_filter";
+import SearchResult from "../../../../components/search_page/search_result";
 
 function SearchPage() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -106,7 +107,12 @@ function SearchPage() {
                                 </div>
                             </div>
                         </div>
+
                         <div className="w-0.5 h-screen bg-grey-500"></div>
+
+                        <div className="flex flex-col">
+                            <SearchResult/>
+                        </div>
                     </div>
                 </div>
             </div>

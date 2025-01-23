@@ -1,15 +1,18 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import AppFeatureDiv from "../../../../components/client_dashboard/app_feature_div";
 import OnGoingCollaborations from "../../../../components/client_dashboard/on_going_collaborations";
 import ServiceCategoryDiv from "../../../../components/client_dashboard/service_category_div";
 import TopRatedFreelancer from "../../../../components/client_dashboard/top_rated_freelancer";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import { useEffect, useState } from "react";
 
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
     const token = authData?.token;
+    const [searchTerm, setSearchTerm] = useState("");
 
     let isTokenValid = false;
 
@@ -30,6 +33,14 @@ function ClientDashboard() {
         }
     }
 
+    const navigate = useNavigate();
+
+    const handleSearch = () => {
+        if (searchTerm.trim() !== "") {
+            navigate(`/search-freelancer?query=${encodeURIComponent(searchTerm)}`);
+        }
+    };
+
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
@@ -44,9 +55,12 @@ function ClientDashboard() {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Search freelancer"
-                                    className="bg-purple-100 p-2 w-[366px] h-[47px] rounded-xl" />
-                                <button className="absolute left-80 h-[47px] w-[47px] bg-purple-400 text-purple-50 rounded-r-xl pl-2">
+                                    placeholder="Search freelancer/profession"
+                                    className="bg-purple-100 p-2 w-[366px] h-[47px] rounded-xl"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onKeyDown={(e) => e.key === "Enter" && handleSearch()} />
+                                <button className="absolute left-80 h-[47px] w-[47px] bg-purple-400 text-purple-50 rounded-r-xl pl-2" onClick={handleSearch}>
                                     <MagnifyingGlassIcon className="h-8" />
                                 </button>
                             </div>
