@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
     const token = authData?.token;
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     let isTokenValid = false;
 
@@ -36,8 +36,8 @@ function ClientDashboard() {
     const navigate = useNavigate();
 
     const handleSearch = () => {
-        if (searchTerm.trim() !== "") {
-            navigate(`/search-freelancer?query=${encodeURIComponent(searchTerm)}`);
+        if (searchQuery.trim()) {
+            navigate(`/search-freelancer/${encodeURIComponent(searchQuery.trim())}`);
         }
     };
 
@@ -57,8 +57,8 @@ function ClientDashboard() {
                                     type="text"
                                     placeholder="Search freelancer/profession"
                                     className="bg-purple-100 p-2 w-[366px] h-[47px] rounded-xl"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && handleSearch()} />
                                 <button className="absolute left-80 h-[47px] w-[47px] bg-purple-400 text-purple-50 rounded-r-xl pl-2" onClick={handleSearch}>
                                     <MagnifyingGlassIcon className="h-8" />
