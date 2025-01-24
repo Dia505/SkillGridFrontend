@@ -5,11 +5,11 @@ import AppLogo2 from "../app_logo/app_logo2";
 
 function ClientDashboardNavbarWithoutToken() {
     const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState(""); // State to store search input
+    const [searchQuery, setSearchQuery] = useState(""); // State to store search input
 
     const handleSearch = () => {
-        if (searchTerm.trim() !== "") {
-            navigate(`/search-freelancer?query=${encodeURIComponent(searchTerm)}`);
+        if (searchQuery.trim()) {
+            navigate(`/search-freelancer/${encodeURIComponent(searchQuery.trim())}`);
         }
     };
 
@@ -24,8 +24,8 @@ function ClientDashboardNavbarWithoutToken() {
                             type="text"
                             className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl"
                             placeholder="Search freelancer/profession"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)} // Update state on input change
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
                             onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Search on Enter key
                         />
                         <button className="absolute w-[29px] h-[29px] right-2 top-1.5" onClick={handleSearch}>

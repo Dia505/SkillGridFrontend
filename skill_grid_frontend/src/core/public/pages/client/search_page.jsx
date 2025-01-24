@@ -1,13 +1,21 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import SearchFilter from "../../../../components/search_page/search_filter";
 import SearchResult from "../../../../components/search_page/search_result";
+import noResultImage from "../../../../assets/no_result_found.png"
 
 function SearchPage() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
     const token = authData?.token;
+
+    const { searchQuery } = useParams(); // Get searchQuery from URL
+
+    const [results, setResults] = useState([]);
+    const [error, setError] = useState(null);
 
     let isTokenValid = false;
 
@@ -27,13 +35,31 @@ function SearchPage() {
         }
     }
 
+    useEffect(() => {
+        const fetchSearchResults = async () => {
+            if (!searchQuery) return;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/freelancer/search/${encodeURIComponent(searchQuery)}`);
+                if (!response.ok) throw new Error("Failed to fetch search results");
+
+                const data = await response.json();
+                setResults(data);
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+
+        fetchSearchResults();
+    }, [searchQuery]);
+
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
                 {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 <div className="flex flex-col mt-[90px] pt-8">
-                    <p className="text-2xl font-inter font-extrabold text-purple-700 pl-20">Search results for 'search-input'</p>
+                    <p className="text-2xl font-inter font-extrabold text-purple-700 pl-20">Search results for '{searchQuery}'</p>
                     <div className="w-full h-0.5 bg-grey-500 mt-9"></div>
 
                     <div className="flex">
@@ -108,11 +134,23 @@ function SearchPage() {
                             </div>
                         </div>
 
-                        <div className="w-0.5 h-screen bg-grey-500"></div>
+                        <div className="w-0.5 h-full bg-grey-500"></div>
 
-                        <div className="flex flex-col">
-                            <SearchResult/>
+                        <div className="flex flex-col pb-20">
+                            {results.length > 0 ? (
+                                results.map((freelancer, index) => (
+                                    <SearchResult key={index} freelancer={freelancer} />
+                                ))
+                            ) : (
+                                <div className="flex flex-col items-center pt-10 pl-80">
+                                    <img className="w-[300px]" src={noResultImage}/>
+                                    <div className="w-[450px]">
+                                        <p className="text-2xl font-inter font-extrabold text-purple-700 text-center">Looks like there are no results for that. Keep searching!</p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
+
                     </div>
                 </div>
             </div>

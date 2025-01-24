@@ -89,7 +89,7 @@ function App() {
       )
     },
     {
-      path: "/search-freelancer",
+      path: "/search-freelancer/:searchQuery",
       element: (
         <Suspense>
           <SearchPage />
