@@ -25,6 +25,13 @@ function SearchPage() {
         "Rs. 4000 - Rs. 5000": false,
         "Above Rs. 5000": false,
     });
+    const [ratingFilter, setRatingFilter] = useState({
+        5: false,
+        4: false,
+        3: false,
+        2: false,
+        1: false,
+    });
 
     let isTokenValid = false;
 
@@ -66,6 +73,10 @@ function SearchPage() {
         fetchSearchResults();
     }, [searchQuery]);
 
+    useEffect(() => {
+        console.log(results); // Logs updated results
+    }, [results]); 
+
     // Function to filter by location
     const filterByLocation = (location) => {
         if (location) {
@@ -76,6 +87,67 @@ function SearchPage() {
         } else {
             setFilteredResults(results);
         }
+    };
+
+    //Filter by hourly rate
+    useEffect(() => {
+        const selectedRates = Object.keys(rateFilter).filter((rate) => rateFilter[rate]);
+
+        if (selectedRates.length > 0) {
+            const filtered = results.filter((freelancer) => {
+                const { lowestHourlyRate } = freelancer;
+
+                // Check if the freelancer's hourly rate is within any of the selected ranges
+                return selectedRates.some((rate) => {
+                    if (rate === "Below Rs. 1000") return lowestHourlyRate < 1000;
+                    if (rate === "Rs. 1000 - Rs. 2000")
+                        return lowestHourlyRate >= 1000 && lowestHourlyRate <= 2000;
+                    if (rate === "Rs. 2000 - Rs. 3000")
+                        return lowestHourlyRate >= 2000 && lowestHourlyRate <= 3000;
+                    if (rate === "Rs. 3000 - Rs. 4000")
+                        return lowestHourlyRate >= 3000 && lowestHourlyRate <= 4000;
+                    if (rate === "Rs. 4000 - Rs. 5000")
+                        return lowestHourlyRate >= 4000 && lowestHourlyRate <= 5000;
+                    if (rate === "Above Rs. 5000") return lowestHourlyRate > 5000;
+                    return false;
+                });
+            });
+            setFilteredResults(filtered);
+        } else {
+            setFilteredResults(results); // Show all results if no rates are selected
+        }
+    }, [rateFilter, results]);
+
+    useEffect(() => {
+        const selectedRatings = Object.keys(ratingFilter).filter((rating) => ratingFilter[rating]);
+
+        if (selectedRatings.length > 0) {
+            const filteredByRating = results.filter((freelancer) => {
+                const { avgRating } = freelancer;
+
+                // Check if the freelancer's average rating is equal to or greater than any of the selected ratings
+                return selectedRatings.some((rating) => avgRating == rating);
+            });
+            setFilteredResults(filteredByRating);
+        } else {
+            setFilteredResults(results); // Show all results if no ratings are selected
+        }
+    }, [ratingFilter, results]);
+
+    // Function to filter by hourly rate
+    const filterByHourlyRate = (rate) => {
+        setRateFilter((prev) => ({
+            ...prev,
+            [rate]: !prev[rate], // Toggle the selection of the rate
+        }));
+    };
+
+    // Function to filter by star ratings
+    const filterByStarRating = (rating) => {
+        setRatingFilter((prev) => ({
+            ...prev,
+            [rating]: !prev[rating], // Toggle the selection of the rating
+        }));
     };
 
     return (
@@ -127,10 +199,18 @@ function SearchPage() {
                         <div className="flex flex-col gap-4">
                             <p className="text-xl font-medium">Ratings</p>
                             <div className="flex flex-col gap-2">
-                                {[...Array(5)].map((_, index) => (
+                                {[5, 4, 3, 2, 1].map((star) => (
                                     <SearchFilter
-                                        key={index}
-                                        searchFilter={<StarIcon className="w-6 h-6 text-black" />}
+                                        key={star}
+                                        searchFilter={
+                                            <>
+                                                {[...Array(star)].map((_, index) => (
+                                                    <StarIcon key={index} className="w-6 h-6 text-black" />
+                                                ))}
+                                            </>
+                                        }
+                                        onChange={() => filterByStarRating(star)}
+                                        checked={ratingFilter[star]}
                                     />
                                 ))}
                             </div>

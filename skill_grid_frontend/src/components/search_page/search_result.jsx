@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 
 function SearchResult({ freelancer }) {
     const skills = freelancer.skills.split(",").map(skill => skill.trim());
-    const [imageIndexes, setImageIndexes] = useState({}); 
-    const [lowestRate, setLowestRate] = useState(null);  
-    const [portfolioImages, setPortfolioImages] = useState([]);  
+    const [imageIndexes, setImageIndexes] = useState({});
+    const [portfolioImages, setPortfolioImages] = useState([]);
     const maxSkills = 4;
 
     const fetchFreelancerPortfolioImages = async (freelancerId) => {
@@ -17,23 +16,34 @@ function SearchResult({ freelancer }) {
         return response.json();
     };
 
+    const fetchFreelancerRatings = async (freelancerId) => {
+        const response = await fetch(`http://localhost:3000/api/review/freelancer/${freelancerId}`)
+        return response.json();
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const portfolioImages = await fetchFreelancerPortfolioImages(freelancer._id);
                 const recentImages = portfolioImages
                     .sort((a, b) => new Date(b.upload_date) - new Date(a.upload_date))
-                    .slice(0, 3)  
-                    .flatMap(imageObj => imageObj.file_path);  
+                    .slice(0, 3)
+                    .flatMap(imageObj => imageObj.file_path);
 
                 const services = await fetchFreelancerServices(freelancer._id);
                 const validServices = Array.isArray(services) ? services : [];
                 const serviceRates = validServices.map(service => service.hourly_rate);
-                const lowestRate = serviceRates.length > 0 ? Math.min(...serviceRates) : 0;
+                const lowestHourlyRate = serviceRates.length > 0 ? Math.min(...serviceRates) : 0;
+
+                // Update freelancer object directly with lowestHourlyRate
+                freelancer.lowestHourlyRate = lowestHourlyRate;
+
+                const ratings = await fetchFreelancerRatings(freelancer._id);
+                const avgRating = ratings.reduce((acc, review) => acc + review.rating, 0) / ratings.length || 0;
+                freelancer.avgRating = avgRating;
 
                 setImageIndexes(prev => ({ ...prev, [freelancer._id]: 0 }));
-                setLowestRate(lowestRate); 
-                setPortfolioImages(recentImages); 
+                setPortfolioImages(recentImages);
             } catch (error) {
                 console.error("Error fetching data", error);
             }
@@ -80,8 +90,9 @@ function SearchResult({ freelancer }) {
                         </p>
                     </div>
                 </div>
+
                 {/* Display lowest rate */}
-                <p className="text-base font-inter">{`From Rs. ${lowestRate}/hr`}</p>
+                <p className="text-base font-inter">{`From Rs. ${freelancer.lowestHourlyRate}/hr`}</p>
             </div>
 
             {/* Portfolio Image Section */}
@@ -97,7 +108,7 @@ function SearchResult({ freelancer }) {
                         />
                     ))
                 ) : (
-                    <p>No portfolio images available</p>  // Add fallback message if no images are available
+                    <p>No portfolio images available</p>
                 )}
             </div>
 
