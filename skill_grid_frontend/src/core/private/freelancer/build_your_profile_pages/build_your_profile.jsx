@@ -75,23 +75,25 @@ const BuildYourProfile = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        console.log("Service Response:", serviceResponse.data);
+
         // Ensure serviceResponse.data is an array
         const serviceIds = Array.isArray(serviceResponse.data)
-          ? serviceResponse.data.map(service => service.id)
-          : [serviceResponse.data.id];
+          ? serviceResponse.data.map(service => service._id)
+          : [serviceResponse.data._id];
 
         // Freelancer service mapping
         const freelancerServiceData = formData.service_details.map((service, index) => ({
           freelancer_id: freelancerId,
-          service_id: serviceIds[index] || null,
+          service_id: serviceIds[index] ?? serviceIds[0], // Fallback to first ID if index is out of bounds
           hourly_rate: service.hourly_rate,
         }));
 
         const freelancerServiceResponse = await axios.post(
           'http://localhost:3000/api/freelancer-service',
-          freelancerServiceData,
+          freelancerServiceData.length === 1 ? freelancerServiceData[0] : freelancerServiceData,
           { headers: { Authorization: `Bearer ${token}` } }
-        );
+        );        
 
         // Ensure freelancerServiceResponse.data is an array
         const freelancerServiceIds = Array.isArray(freelancerServiceResponse.data)
