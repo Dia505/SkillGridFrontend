@@ -93,35 +93,38 @@ const BuildYourProfile = () => {
           'http://localhost:3000/api/freelancer-service',
           freelancerServiceData.length === 1 ? freelancerServiceData[0] : freelancerServiceData,
           { headers: { Authorization: `Bearer ${token}` } }
-        );        
+        );
 
         // Ensure freelancerServiceResponse.data is an array
         const freelancerServiceIds = Array.isArray(freelancerServiceResponse.data)
-          ? freelancerServiceResponse.data.map(service => service.id)
-          : [freelancerServiceResponse.data.id];
+          ? freelancerServiceResponse.data.map(service => service._id)
+          : [freelancerServiceResponse.data._id];
 
         // Portfolio mapping
-        const portfolioData = formData.service_details.flatMap((service, index) => {
-          if (!service.file_path) return []; // Ensure file_path exists
+        const portfolioData = formData.service_details
+          .filter(service => service.uploadedFiles && service.uploadedFiles.length > 0) // Ensure uploaded files exist
+          .map((service, index) => ({
+            file_path: service.uploadedFiles, // Store all file paths in an array
+            upload_date: new Date().toISOString(), // Ensure a proper ISO date format
+            freelancer_service_id: freelancerServiceIds[index] ?? freelancerServiceIds[0], // Ensure correct mapping
+          }));
 
-          return Array.isArray(service.file_path)
-            ? service.file_path.map(filePath => ({
-              file_path: filePath,
-              upload_date: new Date(),
-              freelancer_service_id: freelancerServiceIds[index] || null,
-            }))
-            : [{  // Handle single file as an object
-              file_path: service.file_path,
-              upload_date: new Date(),
-              freelancer_service_id: freelancerServiceIds[index] || null,
-            }];
-        });
+        console.log("Portfolio Data:", portfolioData); // Debugging
 
-        if (portfolioData.length > 0) {
+        if (portfolioData.length === 1) {
+          // If only one service, send it as an object
+          await axios.post('http://localhost:3000/api/portfolio', portfolioData[0], {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } else if (portfolioData.length > 1) {
+          // If multiple services, send them as an array
           await axios.post('http://localhost:3000/api/portfolio', portfolioData, {
             headers: { Authorization: `Bearer ${token}` },
           });
+        } else {
+          console.log("No portfolio data to upload.");
         }
+
       }
 
       alert("Profile built successfully!");
