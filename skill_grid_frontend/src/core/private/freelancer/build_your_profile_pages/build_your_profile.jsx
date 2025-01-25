@@ -14,7 +14,7 @@ const BuildYourProfile = () => {
     profession: null,
     skills: null,
     years_of_experience: null,
-    service_details: null,
+    service_details: [],
     bio: null,
   });
 
@@ -46,12 +46,13 @@ const BuildYourProfile = () => {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("authToken");
-      console.log("Token: ", token);
+      if (!token) {
+        alert("Authentication token missing. Please log in again.");
+        return;
+      }
       const decoded = jwtDecode(token);
-      console.log("Decoded token: ", decoded);
       const freelancerId = decoded.userId;
-      console.log("Freelancer id: ", freelancerId);
-  
+
       const freelancerData = {
         job_category: formData.job_category,
         profession: formData.profession,
@@ -59,65 +60,72 @@ const BuildYourProfile = () => {
         years_of_experience: formData.years_of_experience,
         bio: formData.bio,
       };
-  
-      // Submit freelancer data
+
       await axios.put(`http://localhost:3000/api/freelancer/${freelancerId}`, freelancerData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
-      // Data for the service table
+
       const serviceData = formData.service_details.map(service => ({
         service_name: service.service_name,
       }));
-  
-      // Submit services (adding new services)
-      const serviceResponse = await axios.post('http://localhost:3000/api/service', serviceData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
-      // Log the serviceResponse to check the structure
-      console.log("Service Response: ", serviceResponse);
-  
-      // Ensure serviceResponse.data is an array before using .map
-      const serviceIds = serviceResponse.data.map(service => service.id);
-  
-      // Data for freelancer_service table
-      const freelancerServiceData = formData.service_details.map((service, index) => ({
-        freelancer_id: freelancerId,
-        service_id: serviceIds[index], // Use the newly created service ID
-        hourly_rate: service.hourly_rate,
-      }));
-  
-      // Submit freelancer services
-      const freelancerServiceResponse = await axios.post(
-        'http://localhost:3000/api/freelancer-service',
-        freelancerServiceData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-  
-      const freelancerServiceIds = freelancerServiceResponse.data.map(service => service.id);
-  
-      // Data for portfolio table (Fixing the mapping issue)
-      const portfolioData = formData.service_details.flatMap((service, index) =>
-        Array.isArray(service.file_path) && service.file_path.length > 0
-          ? service.file_path.map(filePath => ({
-              file_path: filePath,
-              upload_date: new Date(),
-              freelancer_service_id: freelancerServiceIds[index],
-            }))
-          : []
-      );
-  
-      if (portfolioData.length > 0) {
-        await axios.post('http://localhost:3000/api/portfolio', portfolioData, {
+
+      if (serviceData.length > 0) {
+        const serviceResponse = await axios.post('http://localhost:3000/api/service',
+          serviceData.length === 1 ? serviceData[0] : serviceData, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        // Ensure serviceResponse.data is an array
+        const serviceIds = Array.isArray(serviceResponse.data)
+          ? serviceResponse.data.map(service => service.id)
+          : [serviceResponse.data.id];
+
+        // Freelancer service mapping
+        const freelancerServiceData = formData.service_details.map((service, index) => ({
+          freelancer_id: freelancerId,
+          service_id: serviceIds[index] || null,
+          hourly_rate: service.hourly_rate,
+        }));
+
+        const freelancerServiceResponse = await axios.post(
+          'http://localhost:3000/api/freelancer-service',
+          freelancerServiceData,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        // Ensure freelancerServiceResponse.data is an array
+        const freelancerServiceIds = Array.isArray(freelancerServiceResponse.data)
+          ? freelancerServiceResponse.data.map(service => service.id)
+          : [freelancerServiceResponse.data.id];
+
+        // Portfolio mapping
+        const portfolioData = formData.service_details.flatMap((service, index) => {
+          if (!service.file_path) return []; // Ensure file_path exists
+
+          return Array.isArray(service.file_path)
+            ? service.file_path.map(filePath => ({
+              file_path: filePath,
+              upload_date: new Date(),
+              freelancer_service_id: freelancerServiceIds[index] || null,
+            }))
+            : [{  // Handle single file as an object
+              file_path: service.file_path,
+              upload_date: new Date(),
+              freelancer_service_id: freelancerServiceIds[index] || null,
+            }];
+        });
+
+        if (portfolioData.length > 0) {
+          await axios.post('http://localhost:3000/api/portfolio', portfolioData, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        }
       }
-  
+
       alert("Profile built successfully!");
     } catch (error) {
-      console.error("Error submitting profile:", error);
-      alert("Error submitting profile. Please try again.");
+      console.error("Error submitting profile:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Error submitting profile. Please try again.");
     }
   };
 
