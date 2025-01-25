@@ -11,7 +11,9 @@ const BuildYourProfile = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     job_category: null,
-    job_details: null,
+    profession: null,
+    skills: null,
+    years_of_experience: null,
     service_details: null,
     bio: null,
   });
@@ -44,58 +46,74 @@ const BuildYourProfile = () => {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("authToken");
+      console.log("Token: ", token);
       const decoded = jwtDecode(token);
-      const freelancerId = decoded.id;
-
-      // Data for the freelancer table (job_category, job_details, bio)
+      console.log("Decoded token: ", decoded);
+      const freelancerId = decoded.userId;
+      console.log("Freelancer id: ", freelancerId);
+  
       const freelancerData = {
         job_category: formData.job_category,
-        job_details: formData.job_details,
+        profession: formData.profession,
+        skills: formData.skills,
+        years_of_experience: formData.years_of_experience,
         bio: formData.bio,
       };
-
+  
       // Submit freelancer data
       await axios.put(`http://localhost:3000/api/freelancer/${freelancerId}`, freelancerData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      // Data for the service table (service_name)
+  
+      // Data for the service table
       const serviceData = formData.service_details.map(service => ({
-        service_name: service.service_name
+        service_name: service.service_name,
       }));
-
-      // Submit services to service table and store service ids
+  
+      // Submit services (adding new services)
       const serviceResponse = await axios.post('http://localhost:3000/api/service', serviceData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const serviceIds = serviceResponse.data.map(service => service.id); // Assuming response contains service ids
-
-      // Data for freelancer_service table (service_id, hourly_rate)
-      const freelancerServiceData = formData.service_details.map((service, index) => ({
-        freelancer_id: freelancerId,
-        service_id: serviceIds[index],
-        hourly_rate: service.hourly_rate,
-      }));
-
-      // Submit freelancer_service data
-      await axios.post('http://localhost:3000/api/freelancer_service', freelancerServiceData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      // Data for the portfolio table (file_path, upload_date, freelancer_service_id)
-      const portfolioData = formData.service_details.map((service, index) => {
-        return service.uploadedFiles.map(filePath => ({
-          file_path: filePath,
-          upload_date: new Date(),
-          freelancer_service_id: freelancerServiceData[index].id, // Assuming this ID is generated after posting to freelancer_service
-        }));
-      }).flat();
-
-      // Submit portfolio data
-      await axios.post('http://localhost:3000/api/portfolio', portfolioData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
+      // Log the serviceResponse to check the structure
+      console.log("Service Response: ", serviceResponse);
+  
+      // Ensure serviceResponse.data is an array before using .map
+      const serviceIds = serviceResponse.data.map(service => service.id);
+  
+      // Data for freelancer_service table
+      const freelancerServiceData = formData.service_details.map((service, index) => ({
+        freelancer_id: freelancerId,
+        service_id: serviceIds[index], // Use the newly created service ID
+        hourly_rate: service.hourly_rate,
+      }));
+  
+      // Submit freelancer services
+      const freelancerServiceResponse = await axios.post(
+        'http://localhost:3000/api/freelancer-service',
+        freelancerServiceData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      const freelancerServiceIds = freelancerServiceResponse.data.map(service => service.id);
+  
+      // Data for portfolio table (Fixing the mapping issue)
+      const portfolioData = formData.service_details.flatMap((service, index) =>
+        Array.isArray(service.file_path) && service.file_path.length > 0
+          ? service.file_path.map(filePath => ({
+              file_path: filePath,
+              upload_date: new Date(),
+              freelancer_service_id: freelancerServiceIds[index],
+            }))
+          : []
+      );
+  
+      if (portfolioData.length > 0) {
+        await axios.post('http://localhost:3000/api/portfolio', portfolioData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+  
       alert("Profile built successfully!");
     } catch (error) {
       console.error("Error submitting profile:", error);
