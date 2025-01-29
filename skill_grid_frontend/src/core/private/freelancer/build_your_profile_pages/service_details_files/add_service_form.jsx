@@ -5,8 +5,8 @@ import * as yup from "yup";
 
 function AddServiceForm({ closeForm, updateServiceDetails }) {
     const [uploadedFiles, setUploadedFiles] = useState([]); // State for the uploaded images
+    const [previewUrls, setPreviewUrls] = useState([]); // State for image preview
 
-    // Yup validation schema
     const serviceDetailsSchema = yup.object().shape({
         service_name: yup.string().required("*required"),
         hourly_rate: yup.string().required("*required"),
@@ -30,20 +30,26 @@ function AddServiceForm({ closeForm, updateServiceDetails }) {
 
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
-
+    
         if (uploadedFiles.length + files.length > 4) {
             alert("You can only upload up to 4 pictures.");
             return;
         }
 
-        const filePreviews = files.map((file) => URL.createObjectURL(file));
-        setUploadedFiles((prevFiles) => [...prevFiles, ...filePreviews]);
+        // Create preview URLs for each selected file
+        const newPreviewUrls = files.map((file) => URL.createObjectURL(file));
+    
+        // Add the selected files directly to the uploadedFiles state
+        setUploadedFiles((prevFiles) => [...prevFiles, ...files]);
 
+        // Add the preview URLs to the previewUrls state
+        setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviewUrls]);
+    
         // Clear validation error if any files are uploaded
         if (errors.skill_portfolio) {
             clearErrors("skill_portfolio");
         }
-    };
+    };    
 
     const triggerFileUpload = () => {
         fileInputRef.current.click(); // Programmatically click the hidden file input
@@ -116,9 +122,9 @@ function AddServiceForm({ closeForm, updateServiceDetails }) {
                     />
 
                     {/* Image Previews */}
-                    {uploadedFiles.length > 0 && (
+                    {previewUrls.length > 0 && (
                         <div className="w-[500px] flex gap-4 mt-4">
-                            {uploadedFiles.map((file, index) => (
+                            {previewUrls.map((file, index) => (
                                 <div key={index} className="relative">
                                     <img
                                         src={file}

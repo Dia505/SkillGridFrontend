@@ -44,6 +44,7 @@ const BuildYourProfile = () => {
   };
 
   const handleSubmit = async () => {
+    //-----------------Update freelancer table-----------------------
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -65,74 +66,116 @@ const BuildYourProfile = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      //-----------------Add Service-----------------------
       const serviceData = formData.service_details.map(service => ({
         service_name: service.service_name,
       }));
 
+      let serviceIds = [];
+
       if (serviceData.length > 0) {
-        const serviceResponse = await axios.post('http://localhost:3000/api/service',
-          serviceData.length === 1 ? serviceData[0] : serviceData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        for (const service of serviceData) {
+          try {
+            const serviceResponse = await axios.post('http://localhost:3000/api/service', service, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
 
-        console.log("Service Response:", serviceResponse.data);
+            console.log("Service Response:", serviceResponse.data);
 
-        // Ensure serviceResponse.data is an array
-        const serviceIds = Array.isArray(serviceResponse.data)
-          ? serviceResponse.data.map(service => service._id)
-          : [serviceResponse.data._id];
+            // Store service ID
+            if (serviceResponse.data && serviceResponse.data._id) {
+              serviceIds.push(serviceResponse.data._id);
+            }
+          } catch (error) {
+            console.error("Error inserting service:", error.response?.data || error.message);
+          }
+        }
+      }
 
-        // Freelancer service mapping
-        const freelancerServiceData = formData.service_details.map((service, index) => ({
-          freelancer_id: freelancerId,
-          service_id: serviceIds[index] ?? serviceIds[0], // Fallback to first ID if index is out of bounds
-          hourly_rate: service.hourly_rate,
+      console.log("Service IDs:", serviceIds);
+
+      //-----------------Add Freelancer-Service-----------------------
+      let freelancerServiceIds = [];
+
+      for (let i = 0; i < formData.service_details.length; i++) {
+        try {
+          const freelancerService = {
+            freelancer_id: freelancerId,
+            service_id: serviceIds[i], // Ensure correct mapping
+            hourly_rate: formData.service_details[i].hourly_rate,
+          };
+
+          const freelancerServiceResponse = await axios.post(
+            'http://localhost:3000/api/freelancer-service',
+            freelancerService,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          console.log("Freelancer-Service Response:", freelancerServiceResponse.data);
+
+          // Store freelancer-service ID
+          if (freelancerServiceResponse.data && freelancerServiceResponse.data._id) {
+            freelancerServiceIds.push(freelancerServiceResponse.data._id);
+          }
+        } catch (error) {
+          console.error("Error inserting freelancer-service:", error.response?.data || error.message);
+        }
+      }
+
+      console.log("Freelancer Service IDs:", freelancerServiceIds);
+
+
+      //-----------------Add Portfolio-----------------------
+      // Portfolio mapping
+      const portfolioData = formData.service_details
+        .filter(service => service.uploadedFiles && service.uploadedFiles.length > 0) // Ensure uploaded files exist
+        .map((service, index) => ({
+          file_path: service.uploadedFiles,
+          upload_date: new Date().toISOString(),
+          freelancer_service_id: freelancerServiceIds[index] ?? freelancerServiceIds[0],
         }));
 
-        const freelancerServiceResponse = await axios.post(
-          'http://localhost:3000/api/freelancer-service',
-          freelancerServiceData.length === 1 ? freelancerServiceData[0] : freelancerServiceData,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+      console.log("Portfolio Data:", portfolioData);
 
-        // Ensure freelancerServiceResponse.data is an array
-        const freelancerServiceIds = Array.isArray(freelancerServiceResponse.data)
-          ? freelancerServiceResponse.data.map(service => service._id)
-          : [freelancerServiceResponse.data._id];
+      if (portfolioData.length > 0) {
+        for (const portfolioItem of portfolioData) {
+          const formData = new FormData();
 
-        // Portfolio mapping
-        const portfolioData = formData.service_details
-          .filter(service => service.uploadedFiles && service.uploadedFiles.length > 0) // Ensure uploaded files exist
-          .map((service, index) => ({
-            file_path: service.uploadedFiles, // Store all file paths in an array
-            upload_date: new Date().toISOString(), // Ensure a proper ISO date format
-            freelancer_service_id: freelancerServiceIds[index] ?? freelancerServiceIds[0], // Ensure correct mapping
-          }));
-
-        console.log("Portfolio Data:", portfolioData); // Debugging
-
-        if (portfolioData.length === 1) {
-          // If only one service, send it as an object
-          await axios.post('http://localhost:3000/api/portfolio', portfolioData[0], {
-            headers: { Authorization: `Bearer ${token}` },
+          // Append each file to the formData with the field name "file_path"
+          portfolioItem.file_path.forEach((file) => {
+            formData.append("file_path", file); // Ensure the field name matches what multer expects
+            console.log(file);
           });
-        } else if (portfolioData.length > 1) {
-          // If multiple services, send them as an array
-          await axios.post('http://localhost:3000/api/portfolio', portfolioData, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-        } else {
-          console.log("No portfolio data to upload.");
+
+          // Append additional data (upload_date and freelancer_service_id)
+          formData.append("upload_date", portfolioItem.upload_date);
+          formData.append("freelancer_service_id", portfolioItem.freelancer_service_id);
+
+          // Send all files in a single request
+          try {
+            const response = await axios.post('http://localhost:3000/api/portfolio', formData, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data", // Ensure this is set correctly
+              },
+            });
+            console.log("Portfolio item uploaded successfully:", response.data);
+          } catch (error) {
+            console.error("Error uploading portfolio item:", error);
+          }
         }
-
+      } else {
+        console.log("No portfolio data to upload.");
       }
 
       alert("Profile built successfully!");
+
     } catch (error) {
       console.error("Error submitting profile:", error.response?.data || error.message);
       alert(error.response?.data?.message || "Error submitting profile. Please try again.");
     }
-  };
+  }
+
 
   const progress = ((currentStep + 1) / steps.length) * 100;
 

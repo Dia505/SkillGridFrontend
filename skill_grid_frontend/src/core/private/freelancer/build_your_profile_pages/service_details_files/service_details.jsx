@@ -5,6 +5,9 @@ import AddServiceForm from "./add_service_form";
 function ServiceDetails({ data, updateData }) {
     const [showAddServiceForm, setShowAddServiceForm] = useState(false); // State to show/hide the form
     const [serviceData, setServiceData] = useState(data?.service_details || []); // Store the list of services
+    const [previewUrls, setPreviewUrls] = useState(
+      data?.service_details?.map(service => service.uploadedFiles) || []
+    );
 
     const updateServiceDetails = (newService) => {
         // Update the service details in the parent
@@ -30,20 +33,12 @@ function ServiceDetails({ data, updateData }) {
     // Carousel state to track the current image index
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const nextImage = (serviceIndex) => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === serviceData[serviceIndex].uploadedFiles.length - 1
-                ? 0
-                : prevIndex + 1
-        );
+    const nextImage = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === previewUrls.length - 1 ? 0 : prevIndex + 1));
     };
 
-    const prevImage = (serviceIndex) => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0
-                ? serviceData[serviceIndex].uploadedFiles.length - 1
-                : prevIndex - 1
-        );
+    const prevImage = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === 0 ? previewUrls.length - 1 : prevIndex - 1));
     };
 
     return (
@@ -72,7 +67,7 @@ function ServiceDetails({ data, updateData }) {
                                 className="flex flex-col justify-center pl-3 pr-3 w-[349px] h-[265px] border border-grey-400 rounded-2xl mt-4"
                             >
                                 {/* Image Carousel */}
-                                {service.uploadedFiles.length > 1 ? (
+                                {previewUrls.length > 1 ? (
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={() => prevImage(index)}
@@ -81,7 +76,7 @@ function ServiceDetails({ data, updateData }) {
                                             <ChevronLeftIcon className="w-6 h-6 text-purple-50"/>
                                         </button>
                                         <img
-                                            src={service.uploadedFiles[currentIndex]}
+                                            src={previewUrls[currentIndex]}
                                             alt={`Service Image ${currentIndex + 1}`}
                                             className="w-[278px] h-[146px] object-cover rounded-md"
                                         />
@@ -94,7 +89,7 @@ function ServiceDetails({ data, updateData }) {
                                     </div>
                                 ) : (
                                     <img
-                                        src={service.uploadedFiles[0]}
+                                        src={previewUrls[0]}
                                         alt="Service Image"
                                         className="w-[278px] h-[146px] object-cover rounded-md ml-5"
                                     />
