@@ -7,7 +7,7 @@ import ServiceCategoryDiv from "../../../../components/client_dashboard/service_
 import TopRatedFreelancer from "../../../../components/client_dashboard/top_rated_freelancer";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};

@@ -12,8 +12,9 @@ const Login = lazy(() => import("./core/public/pages/login"));
 const JoinClientFreelancer = lazy(() => import("./core/public/pages/join_client_freelancer"));
 const ClientDashboard = lazy(() => import("./core/public/pages/client/client_dashboard"));
 const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelancer_dashboard"));
-const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"))
-const SearchPage = lazy(() => import("./core/public/pages/client/search_page"))
+const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"));
+const SearchPage = lazy(() => import("./core/public/pages/client/search_page"));
+const FreelancerProfileClientView = lazy(() => import("./core/public/pages/freelancer/freelancer_profile_client_view"));
 
 const queryClient = new QueryClient();
 
@@ -96,6 +97,14 @@ function App() {
         </Suspense>
       ),
       errorElement: <>error</>
+    },
+    {
+      path: "/freelancer-profile/:_id",
+      element: (
+        <Suspense>
+          <FreelancerProfileClientView />
+        </Suspense>
+      )
     },
     // Fallback route for unauthorized access
     {

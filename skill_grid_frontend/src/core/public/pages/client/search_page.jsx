@@ -118,6 +118,7 @@ function SearchPage() {
         }
     }, [rateFilter, results]);
 
+    //Filter by star ratings
     useEffect(() => {
         const selectedRatings = Object.keys(ratingFilter).filter((rating) => ratingFilter[rating]);
 

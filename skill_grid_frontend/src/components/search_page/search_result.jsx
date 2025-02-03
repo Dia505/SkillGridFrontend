@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function SearchResult({ freelancer }) {
     const skills = freelancer.skills.split(",").map(skill => skill.trim());
@@ -70,8 +71,10 @@ function SearchResult({ freelancer }) {
 
     const remainingSkillsCount = skills.length > maxSkills ? skills.length - maxSkills : 0;
 
+    const navigate = useNavigate();
+
     return (
-        <div className="flex flex-col pt-8 pl-14 items-center gap-10">
+        <div className="flex flex-col pt-8 pl-14 items-center gap-10 cursor-pointer" onClick={() => navigate(`/freelancer-profile/${freelancer._id}`)}>
             <div className="flex justify-between w-[687px] items-center">
                 <div className="flex gap-5">
                     <div className="w-[70px] h-[70px] rounded-full overflow-hidden bg-purple-700">
