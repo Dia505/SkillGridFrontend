@@ -9,10 +9,12 @@ function FreelancerProfileClientView() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
     const token = authData?.token;
 
-    const { _id } = useParams();  // ✅ Corrected `useParams()`
-    console.log("Freelancer _ID:", _id);
+    const { _id } = useParams();
 
     const [freelancer, setFreelancer] = useState(null);
+    const [appointments, setAppointments] = useState([]);
+    const [education, setEducation] = useState([]);
+    const [employment, setEmployment] = useState([]);
     let isTokenValid = false;
 
     if (token) {
@@ -41,14 +43,54 @@ function FreelancerProfileClientView() {
 
                 const data = await response.json();
                 setFreelancer(data);
-                console.log("Fetched Freelancer Data:", data); // ✅ Log fetched data
+                console.log("Fetched Freelancer Data:", data);
             } catch (error) {
                 console.error("Error fetching freelancer:", error);
             }
         }
 
         fetchFreelancer();
-    }, [_id]); // ✅ Dependency fix
+
+        function fetchFreelancerBookings() {
+            try {
+                fetch(`http://localhost:3000/api/appointment/freelancer/${_id}`)
+                    .then(response => response.json())
+                    .then(data => setAppointments(data))
+                    .catch(error => console.error("Error fetching appointments:", error));
+            }
+            catch (error) {
+                console.error("Error fetching appointments:", error);
+            }
+        }
+
+        fetchFreelancerBookings();
+
+        async function fetchFreelancerEducation() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/education/freelancer/${_id}`);
+                const data = await response.json();
+                setEducation(data);
+            }
+            catch {
+                console.error("Error fetching freelancer education:", error);
+            }
+        }
+
+        fetchFreelancerEducation();
+
+        async function fetchFreelancerEmployment() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/employment/freelancer/${_id}`);
+                const data = await response.json();
+                setEmployment(data);
+            }
+            catch {
+                console.error("Error fetching freelancer employment:", error);
+            }
+        }
+
+        fetchFreelancerEmployment();
+    }, [_id]);
 
     return (
         <>
@@ -66,7 +108,7 @@ function FreelancerProfileClientView() {
                                 />
                             </div>
 
-                            <div className="flex bg-purple-50 pl-16 pr-16 pt-5 pb-10 justify-between items-center">
+                            <div className="flex bg-purple-50 pl-16 pr-16 pt-5 justify-between items-center">
                                 <div className='flex gap-6'>
                                     <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
                                         <img
@@ -98,11 +140,11 @@ function FreelancerProfileClientView() {
 
                             <div className="flex">
                                 <div className='flex flex-col pt-5'>
-                                    <div className='flex gap-6 pb-5 pl-8 pr-14'>
+                                    <div className='flex gap-14 pb-5 pl-8 pr-14'>
                                         <div className='flex items-center gap-2'>
                                             <img className='h-10' src="/freelancer_profile_bookings.png" />
                                             <div className='flex flex-col items-center'>
-                                                <p className='text-xl'>total appointments</p>
+                                                <p className='text-xl'>{appointments.length}</p>
                                                 <p className='text-grey-500'>bookings</p>
                                             </div>
                                         </div>
@@ -121,10 +163,21 @@ function FreelancerProfileClientView() {
                                     <div className='flex flex-col pt-5 pb-5 pl-8 pr-8 gap-2'>
                                         <p className='text-[22px] font-bold'>Education</p>
 
-                                        <div className='flex flex-col'>
-                                            <p className="text-lg">degree_title</p>
-                                            <p className="text-sm text-grey-500">institution_name</p>
-                                            <p className="text-sm text-grey-500">start_date - end_date</p>
+                                        <div className='flex flex-col gap-4'>
+                                            {education.length > 0 ? (
+                                                education.map((education, index) => (
+                                                    <div key={index} className='flex flex-col'>
+                                                        <p className="text-lg">{education.degree_title}</p>
+                                                        <p className="text-sm text-grey-500">{education.institution_name}</p>
+                                                        <p className="text-sm text-grey-500">
+                                                            {new Date(education.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} -
+                                                            {new Date(education.end_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                                        </p>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-gray-500">No education details available</p>
+                                            )}
                                         </div>
                                     </div>
 
@@ -133,10 +186,25 @@ function FreelancerProfileClientView() {
                                     <div className='flex flex-col pt-5 pb-5 pl-8 pr-8 gap-2'>
                                         <p className='text-[22px] font-bold'>Employment</p>
 
-                                        <div className='flex flex-col'>
-                                            <p className="text-lg">job_title | company_name</p>
-                                            <p className="text-sm text-grey-500">start_date - end_date</p>
-                                            <p className="text-sm text-grey-500">description</p>
+                                        <div className='flex flex-col gap-8'>
+                                            {employment.length > 0 ? (
+                                                employment.map((employment, index) => (
+                                                    <div key={index} className='flex flex-col gap-1'>
+                                                        <p className="text-lg">{employment.job_title} | {employment.company_name}</p>
+                                                        <p className="text-sm text-grey-500">
+                                                            {new Date(employment.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} -
+                                                            {employment.end_date
+                                                                ? new Date(employment.end_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                                                                : 'Present'}
+                                                        </p>
+                                                        <div className='w-[270px]'>
+                                                            <p className="text-sm text-grey-500">{employment.description}</p>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-gray-500">No employment details available</p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
