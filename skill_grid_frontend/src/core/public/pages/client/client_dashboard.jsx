@@ -8,6 +8,7 @@ import TopRatedFreelancer from "../../../../components/client_dashboard/top_rate
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import { useState } from "react";
+import Footer from "../../../../components/footer";
 
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -173,13 +174,7 @@ function ClientDashboard() {
                     </div>
                 </div>
 
-                <div className="flex bg-black w-full justify-between items-center pl-12 pr-12 pt-6 pb-6">
-                    <p className="text-lg text-white font-inter">© 2024 SkillGrid. All rights reserved.</p>
-                    <div className="flex items-center gap-2">
-                        <img className="h-[80px]" src="src/assets/app_logo_dashboard.png" />
-                        <p className="font-caprasimo text-white text-3xl">SkillGrid.</p>
-                    </div>
-                </div>
+                <Footer/>
             </div>
         </>
     );

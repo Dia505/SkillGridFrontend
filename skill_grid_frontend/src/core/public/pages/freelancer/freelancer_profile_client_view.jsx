@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import Footer from "../../../../components/footer";
 
 function FreelancerProfileClientView() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -15,6 +16,7 @@ function FreelancerProfileClientView() {
     const [appointments, setAppointments] = useState([]);
     const [education, setEducation] = useState([]);
     const [employment, setEmployment] = useState([]);
+    const [review, setReview] = useState([]);
     let isTokenValid = false;
 
     if (token) {
@@ -90,7 +92,30 @@ function FreelancerProfileClientView() {
         }
 
         fetchFreelancerEmployment();
+
+        async function fetchFreelancerReviews() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/review/freelancer/${_id}`);
+                const data = await response.json();
+                setReview(data);
+            }
+            catch {
+                console.error("Error fetching freelancer reviews:", error);
+            }
+        }
+
+        fetchFreelancerReviews();
     }, [_id]);
+
+    const renderStars = (rating) => {
+        const fullStars = Math.floor(rating);
+        const stars = [];
+
+        for (let i = 0; i < fullStars; i++) {
+            stars.push("⭐");
+        }
+        return stars;
+    };
 
     return (
         <>
@@ -98,7 +123,7 @@ function FreelancerProfileClientView() {
                 {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 {freelancer && (
-                    <div className="flex flex-col mt-[90px] pl-40 pr-40 pt-10 pb-20">
+                    <div className="flex flex-col mt-[90px] pl-40 pr-40 pt-10 pb-20 gap-16">
                         <div className="flex flex-col border-2 border-grey-500 rounded-xl">
                             <div className="w-full h-[180px] overflow-hidden rounded-t-xl relative">
                                 <img
@@ -212,17 +237,80 @@ function FreelancerProfileClientView() {
                                 <div className="w-0.5 h-full bg-grey-500"></div>
 
                                 <div className='flex flex-col'>
-                                    <div className='pl-8 pr-8 pt-8 pb-8'>
+                                    <div className='pl-8 pt-8 pb-8'>
                                         <p>{`${freelancer.bio}`}</p>
                                     </div>
 
                                     <div className="w-full h-0.5 bg-grey-500"></div>
+
+                                    <div className='flex flex-col pl-8 pt-5 pb-5'>
+                                        <p className='text-[22px] font-bold'>Services</p>
+                                    </div>
+
+                                    <div className="w-full h-0.5 bg-grey-500"></div>
+
+                                    <div className='flex flex-col pl-8 pt-5 pb-5 gap-5'>
+                                        <p className='text-[22px] font-bold'>Reviews</p>
+
+                                        <div className='flex flex-col gap-8'>
+                                            {review.length > 0 ? (
+                                                review.map((review, index) => (
+                                                    <div key={index} className='flex flex-col gap-1'>
+                                                        <p className='text-purple-400 text-lg'>{review.appointment_id.appointment_purpose}</p>
+                                                        <p className='text-sm font-inter'>
+                                                            {renderStars(review.rating)} {review.rating}
+                                                            <span className='px-2'>|</span>
+                                                            <span className='text-grey-700'>
+                                                                {new Date(review.review_date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                            </span>
+                                                        </p>
+                                                        <p>"{review.review}"</p>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-gray-500">No reviews available</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="w-full h-0.5 bg-grey-500"></div>
+
+                                    <div className='flex flex-col pl-8 pr-8 pt-5 pb-5 gap-5'>
+                                        <p className='text-[22px] font-bold'>Skills</p>
+
+                                        <div className="flex flex-wrap gap-3">
+                                            {freelancer?.skills && (
+                                                <div className="flex flex-wrap gap-2">
+                                                    {freelancer.skills.split(",").map((skill, index) => (
+                                                        <span key={index} className="bg-purple-100 text-grey-700 px-4 py-2 rounded-full">
+                                                            {skill.trim()}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='flex bg-purple-700 h-[270px] rounded-xl justify-between items-center px-10'>
+                            <div className='flex flex-col gap-4'>
+                                <p className='text-2xl font-bold text-white font-inter'>Find Talent That Fits Your Vision</p>
+                                <div className='w-[600px]'>
+                                    <p className='text-white font-inter text-lg font-light'>Explore in-depth profiles featuring work 
+                                        experience, education, services, and client reviews — all designed to help you 
+                                        make informed decisions and 
+                                        connect with the right freelancer for your project.</p>
                                 </div>
                             </div>
 
+                            <img className='h-64' src="/freelancer_profile_static_img.png" />
                         </div>
                     </div>
                 )}
+
+                <Footer/>
             </div>
         </>
     );

@@ -7,6 +7,7 @@ import ClientDashboardNavbarWithToken from "../../../../components/navigation_ba
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import SearchFilter from "../../../../components/search_page/search_filter";
 import SearchResult from "../../../../components/search_page/search_result";
+import Footer from "../../../../components/footer";
 
 function SearchPage() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -238,6 +239,8 @@ function SearchPage() {
                     </div>
                 </div>
             </div>
+
+            <Footer/>
         </div>
     );
 }

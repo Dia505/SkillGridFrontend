@@ -30,7 +30,7 @@ function OnGoingCollaborations() {
         for (let i = 0; i < fullStars; i++) {
             stars.push("⭐");
         }
-        return stars.join(" ");
+        return stars;
     };
 
     // Fetch ongoing collaborations for the client
