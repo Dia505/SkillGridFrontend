@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function TopRatedFreelancer() {
     const [topFreelancers, setTopFreelancers] = useState([]);
@@ -94,6 +95,8 @@ function TopRatedFreelancer() {
         return () => clearInterval(interval);
     }, [topFreelancers]);
 
+    const navigate = useNavigate();
+
     return (
         <div className="flex flex-wrap gap-4">
             {topFreelancers.map((freelancer) => (
@@ -134,7 +137,7 @@ function TopRatedFreelancer() {
                             <p className="text-base">From Rs. {freelancer.lowestRate}/hr</p>
                         </div>
 
-                        <button className="h-[40px] w-[40px] bg-purple-400 rounded-lg justify-center items-center flex mt-16">
+                        <button className="h-[40px] w-[40px] bg-purple-400 rounded-lg justify-center items-center flex mt-16" onClick={() => navigate(`/freelancer-profile/${freelancer.freelancer_id._id}`)}>
                             <ChevronRightIcon className="w-7 h-7 text-purple-50" />
                         </button>
                     </div>
