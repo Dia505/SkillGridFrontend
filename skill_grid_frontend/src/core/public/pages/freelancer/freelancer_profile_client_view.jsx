@@ -246,7 +246,6 @@ function FreelancerProfileClientView() {
                                 {isTokenValid ?
                                     <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold' 
                                     onClick={() => {
-                                        console.log("Navigating with Freelancer ID:", _id);
                                         navigate("/send-an-offer", { state: { freelancerId: _id } });
                                       }}>
                                             Book an Appointment

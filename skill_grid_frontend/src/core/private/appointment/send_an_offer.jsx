@@ -2,13 +2,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import Footer from "../../../components/footer";
 
 const appointmentSchema = yup.object().shape({
+    service_name: yup.string().required("*required"),
     appointment_purpose: yup.string().required("*required"),
     appointment_date: yup
         .string()
@@ -28,8 +29,8 @@ const appointmentSchema = yup.object().shape({
             .required("*required")
     }),
     terms: yup
-            .boolean()
-            .oneOf([true])
+        .boolean()
+        .oneOf([true])
 });
 
 function SendAnOffer() {
@@ -40,7 +41,6 @@ function SendAnOffer() {
 
     const {
         register,
-        handleSubmit,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(appointmentSchema),
@@ -52,6 +52,8 @@ function SendAnOffer() {
     const [freelancer, setFreelancer] = useState(null);
     const [service, setService] = useState([]);
     const [selectedService, setSelectedService] = useState(null);
+
+    const navigate = useNavigate();
 
     if (token) {
         try {
@@ -108,10 +110,10 @@ function SendAnOffer() {
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
                 {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
-                <div className="flex flex-col mt-[90px] px-60 pt-10 pb-20 gap-10 items-center">
-                    <p className="font-extrabold text-3xl text-purple-700">Send an Offer</p>
+                {freelancer && (
+                    <div className="flex flex-col mt-[90px] px-60 pt-10 pb-20 gap-10 items-center">
+                        <p className="font-extrabold text-3xl text-purple-700">Send an Offer</p>
 
-                    {freelancer && (
                         <div className="flex pl-20 gap-10">
                             <div className="w-[370px] flex flex-col items-center bg-purple-200 pl-5 pr-5 pt-8 rounded-xl gap-5">
                                 <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
@@ -122,7 +124,7 @@ function SendAnOffer() {
                                 </div>
 
                                 <div className="flex flex-col gap-5">
-                                    <div className="flex flex-col ml-5 gap-">
+                                    <div className="flex flex-col ml-5">
                                         <p className="text-xl font-inter font-bold text-white">{`${freelancer.first_name} ${freelancer.last_name}`}</p>
                                         <p className="text-lg text-white font-light">{`${freelancer.profession}`}</p>
                                         <p className="text-base text-purple-500 font-medium">{`${freelancer.address}, ${freelancer.city}`}</p>
@@ -150,7 +152,10 @@ function SendAnOffer() {
                                             <span className="text-red-500">*</span>
                                         </span>
                                         <select
-                                            className={"border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
+                                            className={`border ${errors.service_name ? "border-red-500" : "border-purple-700"} 
+                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                            ${errors.service_name ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                            {...register("service_name")}
                                             onChange={handleServiceChange}
                                         >
                                             <option value="">Select a service</option>
@@ -229,29 +234,36 @@ function SendAnOffer() {
                                 </div>
                             </form>
                         </div>
-                    )}
 
-                    <div className="w-full h-0.5 bg-grey-500"></div>
 
-                    <label className="flex items-center gap-2 ml-20">
-                        <input
-                            type="checkbox"
-                            className={`h-7 w-7 appearance-none bg-purple-50 border ${errors.terms ? "border-red-500" : "border-purple-700"
-                                } rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700 shrink-0`}
-                        />
-                        <span className="text-grey-700 font-inter text-base leading-tight">
-                            Yes, I understand and agree to the
-                            <span className="text-purple-700 underline"> SkillGrid Terms of Service</span>, including the
-                            <span className="text-purple-700 underline"> User Agreement</span> and
-                            <span className="text-purple-700 underline"> Privacy Policy</span>.
-                        </span>
-                    </label>
+                        <div className="w-full h-0.5 bg-grey-500"></div>
 
-                    <div className="flex gap-4">
-                        <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400">Cancel</button>
-                        <button className="border-2 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white">Continue</button>
+                        <label className="flex items-center gap-2 ml-20">
+                            <input
+                                type="checkbox"
+                                className={`h-7 w-7 appearance-none bg-purple-50 border ${errors.terms ? "border-red-500" : "border-purple-700"
+                                    } rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700 shrink-0`}
+                            />
+                            <span className="text-grey-700 font-inter text-base leading-tight">
+                                Yes, I understand and agree to the
+                                <span className="text-purple-700 underline"> SkillGrid Terms of Service</span>, including the
+                                <span className="text-purple-700 underline"> User Agreement</span> and
+                                <span className="text-purple-700 underline"> Privacy Policy</span>.
+                            </span>
+                        </label>
+
+                        <div className="flex gap-4">
+                            <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400" 
+                                onClick={() => navigate(`/freelancer-profile/${freelancer._id}`)}>Cancel</button>
+                            <button 
+                                type="submit" 
+                                onClick={() => {
+                                    navigate("/billing-and-payment", { state: { freelancerId: freelancer._id } });
+                                  }}
+                                className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white">Continue</button>
+                        </div>
                     </div>
-                </div>
+                )}
                 <Footer />
             </div>
         </>

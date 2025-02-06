@@ -4,7 +4,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { InfoProvider } from "./context/info_context";
 import AuthRoute from './components/auth_route';
 import { AuthProvider } from './context/auth_context';
-import SendAnOffer from './core/private/appointment/send_an_offer';
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"));
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
@@ -16,6 +15,8 @@ const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelan
 const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"));
 const SearchPage = lazy(() => import("./core/public/pages/client/search_page"));
 const FreelancerProfileClientView = lazy(() => import("./core/public/pages/freelancer/freelancer_profile_client_view"));
+const SendAnOffer = lazy(() => import("./core/private/appointment/send_an_offer"));
+const BillingAndPayment = lazy(() => import("./core/private/appointment/billing_and_payment"));
 
 const queryClient = new QueryClient();
 
@@ -111,6 +112,12 @@ function App() {
       path: "/send-an-offer",
       element: (
         <AuthRoute requiredRole={"client"} element={<Suspense><SendAnOffer/></Suspense>}/>
+      )
+    },
+    {
+      path: "/billing-and-payment",
+      element: (
+        <AuthRoute requiredRole={"client"} element={<Suspense><BillingAndPayment/></Suspense>}/>
       )
     },
 
