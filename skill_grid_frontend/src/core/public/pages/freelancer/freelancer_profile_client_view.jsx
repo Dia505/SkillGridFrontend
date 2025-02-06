@@ -2,7 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
@@ -21,6 +21,8 @@ function FreelancerProfileClientView() {
     const [service, setService] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [portfolioImages, setPortfolioImages] = useState([]);
+
+    const navigate = useNavigate();
 
     const [imageIndexes, setImageIndexes] = useState(() => {
         const initialIndexes = {};
@@ -165,7 +167,7 @@ function FreelancerProfileClientView() {
         setCurrentIndex(newIndex);
         setImageIndexes(prevIndexes => {
             const newIndexes = { ...prevIndexes };
-            newIndexes[service[newIndex].service_id] = 0; 
+            newIndexes[service[newIndex].service_id] = 0;
             return newIndexes;
         });
     };
@@ -175,7 +177,7 @@ function FreelancerProfileClientView() {
         setCurrentIndex(newIndex);
         setImageIndexes(prevIndexes => {
             const newIndexes = { ...prevIndexes };
-            newIndexes[service[newIndex].service_id] = 0; 
+            newIndexes[service[newIndex].service_id] = 0;
             return newIndexes;
         });
     };
@@ -241,7 +243,23 @@ function FreelancerProfileClientView() {
                                     </div>
                                 </div>
 
-                                <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold'>Book an Appointment</button>
+                                {isTokenValid ?
+                                    <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold' 
+                                    onClick={() => {
+                                        console.log("Navigating with Freelancer ID:", _id);
+                                        navigate("/send-an-offer", { state: { freelancerId: _id } });
+                                      }}>
+                                            Book an Appointment
+                                    </button>
+                                    : <div className="flex flex-col items-center gap-2">
+                                        <p className="text-xl font-semibold">Ready to work with {`${freelancer.first_name}`}?</p>
+                                        <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold' onClick={() => navigate("/client-registration")}>Sign up</button>
+                                        <div className="flex gap-2">
+                                            <p className="font-inter font-light text-sm">Already have an account?</p>
+                                            <p className="text-sm font-caprasimo text-purple-700 hover:underline cursor-pointer" onClick={() => navigate("/login")}>Log In</p>
+                                        </div>
+                                    </div>
+                                }
                             </div>
 
                             <div className="w-full h-0.5 bg-grey-500 mt-9"></div>
@@ -359,7 +377,7 @@ function FreelancerProfileClientView() {
                                                                             />
                                                                         ));
                                                                     }
-                                                                    return null; 
+                                                                    return null;
                                                                 })
                                                             ) : (
                                                                 <p>No portfolio images available</p>

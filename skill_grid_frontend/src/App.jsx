@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { InfoProvider } from "./context/info_context";
 import AuthRoute from './components/auth_route';
 import { AuthProvider } from './context/auth_context';
+import SendAnOffer from './core/private/appointment/send_an_offer';
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"));
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
@@ -23,7 +24,7 @@ function App() {
   const token = localStorage.getItem("authToken");
 
   const routes = [
-    // Public Routes
+    //-----------------------Public Routes-------------------------
     {
       path: "/client-registration",
       element: (
@@ -61,35 +62,6 @@ function App() {
       errorElement: <>error</>
     },
     {
-      path: "/",
-      element: (
-        <Suspense>
-          <ClientDashboard />
-        </Suspense>
-      ),
-      errorElement: <>error</>
-    },
-    {
-      path: "/freelancer-dashboard",
-      element: (
-        <AuthRoute requiredRole="freelancer" element={<Suspense><FreelancerDashboard /></Suspense>} />
-      )
-    },
-    // Private Routes (with AuthRoute)
-    {
-      path: "/admin-dashboard",
-      element: (
-        <AuthRoute requiredRole="admin" element={<Suspense><AdminDashboard /></Suspense>} />
-      )
-    },
-    {
-      path: "/build-your-profile",
-      element: (
-        // <AuthRoute requiredRole="freelancer" element={<Suspense><BuildYourProfile /></Suspense>} />
-        <Suspense><BuildYourProfile/></Suspense>
-      )
-    },
-    {
       path: "/search-freelancer/:searchQuery",
       element: (
         <Suspense>
@@ -106,6 +78,42 @@ function App() {
         </Suspense>
       )
     },
+    {
+      path: "/",
+      element: (
+        <Suspense>
+          <ClientDashboard />
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+
+    //-----------------------Private Routes (with AuthRoute)------------------------
+    {
+      path: "/freelancer-dashboard",
+      element: (
+        <AuthRoute requiredRole="freelancer" element={<Suspense><FreelancerDashboard /></Suspense>} />
+      )
+    },
+    {
+      path: "/admin-dashboard",
+      element: (
+        <AuthRoute requiredRole="admin" element={<Suspense><AdminDashboard /></Suspense>} />
+      )
+    },
+    {
+      path: "/build-your-profile",
+      element: (
+        <AuthRoute requiredRole="freelancer" element={<Suspense><BuildYourProfile /></Suspense>} />
+      )
+    },
+    {
+      path: "/send-an-offer",
+      element: (
+        <AuthRoute requiredRole={"client"} element={<Suspense><SendAnOffer/></Suspense>}/>
+      )
+    },
+
     // Fallback route for unauthorized access
     {
       path: "*",
