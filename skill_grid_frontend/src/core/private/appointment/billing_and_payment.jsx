@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import * as yup from "yup";
+import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import Footer from "../../../components/footer";
 
 const billingAndPaymentSchema = yup.object().shape({
     payment_method: yup.string().required("*required"),
@@ -21,9 +21,12 @@ function BillingAndPayment() {
     let isTokenValid = false;
 
     const location = useLocation();
+    const formData = location.state?.formData;
     const { freelancerId } = location.state || {};
     const [freelancer, setFreelancer] = useState(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+
+    console.log("Form data: ", formData);
 
     const {
         register,
@@ -97,27 +100,33 @@ function BillingAndPayment() {
 
                                     <div className="w-full h-0.5 bg-white"></div>
 
-                                    <div className="flex flex-col ml-5 mr-5">
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-inter font-medium">Service:
-                                                <span className="font-bold"> service_name</span>
-                                            </span>
+                                    {formData && (
+                                        <div className="flex flex-col ml-5 mr-5 gap-2">
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-inter">Service:
+                                                    <span className="font-bold"> {`${formData.selectedService.service_id.service_name}`}</span>
+                                                </span>
 
-                                            <p className="font-bold text-purple-500">Rs. hourly_rate/hr</p>
+                                                <p className="font-bold text-purple-500">Rs. {`${formData.selectedService.hourly_rate}`}/hr</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-inter">Reason for appointment:</p>
+                                                <p className="font-bold break-words">{`${formData.appointment_purpose}`}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-inter">Appointment date:</p>
+                                                <p className="font-bold">{`${formData.appointment_date}`}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-inter">Project duration:</p>
+                                                <p className="font-bold">{`${formData.project_duration.value}`} {`${formData.project_duration.unit}`}</p>
+                                            </div>
+                                            {formData.appointment_time != "" && (<div className="flex items-center gap-2">
+                                                <p className="font-inter">Appointment time:</p>
+                                                <p className="font-bold">{`${formData.appointment_time}`}</p>
+                                            </div>)}
                                         </div>
-                                        <div className="flex items-center justify-between">
-                                            <p className="font-inter font-medium">Reason for appointment:</p>
-                                            <p className="font-bold">appointment_purpose</p>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <p className="font-inter font-medium">Appointment date:</p>
-                                            <p className="font-bold">appointment_date</p>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <p className="font-inter font-medium">Project duration:</p>
-                                            <p className="font-bold">project_duration.value project_duration.duration</p>
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
 
