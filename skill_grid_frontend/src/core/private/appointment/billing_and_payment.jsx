@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import * as yup from "yup";
+import axios from "axios";
 import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
 
 const billingAndPaymentSchema = yup.object().shape({
-    payment_method: yup.string().required("*required"),
     address: yup.string().required("*required"),
     city: yup.string().required("*required"),
 });
@@ -17,6 +17,7 @@ const billingAndPaymentSchema = yup.object().shape({
 function BillingAndPayment() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
     const token = authData?.token;
+    const clientId = authData?.userId;
 
     let isTokenValid = false;
 
@@ -26,10 +27,14 @@ function BillingAndPayment() {
     const [freelancer, setFreelancer] = useState(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
 
+    const { clearErrors } = useForm();
+    const { setValue } = useForm();
+
     console.log("Form data: ", formData);
 
     const {
         register,
+        handleSubmit,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(billingAndPaymentSchema),
@@ -69,8 +74,52 @@ function BillingAndPayment() {
     }, [freelancerId]);
 
     const handleChange = (event) => {
-        setSelectedPaymentMethod(event.target.value);
+        const { value } = event.target;
+        setSelectedPaymentMethod(value);
+        setValue("payment_method", value); 
+        clearErrors("payment_method"); 
     };
+
+    const onSubmit = async (data) => {
+        try {
+            const billingAddressData = {
+                address: data.address,
+                city: data.city
+            };
+            const billingResponse = await axios.post('http://localhost:3000/api/billing-address', billingAddressData,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            console.log('Billing address response:', billingResponse.data);
+
+            const appointmentData = {
+                appointment_purpose: formData.appointment_purpose,
+                appointment_date: formData.appointment_date,
+                project_duration: {
+                    value: formData.project_duration.value,
+                    unit: formData.project_duration.unit
+                },
+                freelancer_service_id: formData.selectedService._id,
+                client_id: clientId
+            };
+            const appointmentResponse = await axios.post('http://localhost:3000/api/appointment', appointmentData,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            console.log("Appointment response: ", appointmentResponse.data);
+
+            const paymentData = {
+                payment_method: selectedPaymentMethod,
+                appointment_id: appointmentResponse.data._id, // Assuming the appointment response contains the appointment_id
+                billing_address_id: billingResponse.data._id // Assuming the billing address response contains the billing_address_id
+            };
+            const paymentResponse = await axios.post('http://localhost:3000/api/payment', paymentData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            console.log("Payment response: ", paymentResponse.data);
+        }
+        catch (error) {
+            console.error("Error during submission:", error);
+        }
+    }
 
     return (
         <>
@@ -81,56 +130,57 @@ function BillingAndPayment() {
                     <p className="font-extrabold text-3xl text-purple-700">Billing and Payment</p>
 
                     {freelancer && (
-                        <div className="flex pl-20 gap-10">
-                            <div className="w-[380px] flex flex-col bg-gradient-to-b from-purple-200 to-purple-50 border-2 border-purple-200 pl-5 pr-5 py-8 rounded-xl gap-5">
-                                <div className="w-[110px] h-[110px] rounded-full overflow-hidden ml-28">
-                                    <img
-                                        src={`${freelancer.profile_picture}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col gap-5">
-                                    <div className="flex flex-col ml-5">
-                                        <p className="text-xl font-inter font-bold text-white">{`${freelancer.first_name} ${freelancer.last_name}`}</p>
-                                        <p className="text-lg text-white font-light">{`${freelancer.profession}`}</p>
-                                        <p className="text-base text-purple-500 font-medium">{`${freelancer.address}, ${freelancer.city}`}</p>
-                                        <p className="text-base text-purple-500 font-medium">{`${freelancer.mobile_no}`}</p>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="flex pl-20 gap-10">
+                                <div className="w-[380px] flex flex-col bg-gradient-to-b from-purple-200 to-purple-50 border-2 border-purple-200 pl-5 pr-5 py-8 rounded-xl gap-5">
+                                    <div className="w-[110px] h-[110px] rounded-full overflow-hidden ml-28">
+                                        <img
+                                            src={`${freelancer.profile_picture}`}
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
 
-                                    <div className="w-full h-0.5 bg-white"></div>
-
-                                    {formData && (
-                                        <div className="flex flex-col ml-5 mr-5 gap-2">
-                                            <div className="flex items-center justify-between">
-                                                <span className="font-inter">Service:
-                                                    <span className="font-bold"> {`${formData.selectedService.service_id.service_name}`}</span>
-                                                </span>
-
-                                                <p className="font-bold text-purple-500">Rs. {`${formData.selectedService.hourly_rate}`}/hr</p>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <p className="font-inter">Reason for appointment:</p>
-                                                <p className="font-bold break-words">{`${formData.appointment_purpose}`}</p>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <p className="font-inter">Appointment date:</p>
-                                                <p className="font-bold">{`${formData.appointment_date}`}</p>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <p className="font-inter">Project duration:</p>
-                                                <p className="font-bold">{`${formData.project_duration.value}`} {`${formData.project_duration.unit}`}</p>
-                                            </div>
-                                            {formData.appointment_time != "" && (<div className="flex items-center gap-2">
-                                                <p className="font-inter">Appointment time:</p>
-                                                <p className="font-bold">{`${formData.appointment_time}`}</p>
-                                            </div>)}
+                                    <div className="flex flex-col gap-5">
+                                        <div className="flex flex-col ml-5">
+                                            <p className="text-xl font-inter font-bold text-white">{`${freelancer.first_name} ${freelancer.last_name}`}</p>
+                                            <p className="text-lg text-white font-light">{`${freelancer.profession}`}</p>
+                                            <p className="text-base text-purple-500 font-medium">{`${freelancer.address}, ${freelancer.city}`}</p>
+                                            <p className="text-base text-purple-500 font-medium">{`${freelancer.mobile_no}`}</p>
                                         </div>
-                                    )}
-                                </div>
-                            </div>
 
-                            <form>
+                                        <div className="w-full h-0.5 bg-white"></div>
+
+                                        {formData && (
+                                            <div className="flex flex-col ml-5 mr-5 gap-2">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="font-inter">Service:
+                                                        <span className="font-bold"> {`${formData.selectedService.service_id.service_name}`}</span>
+                                                    </span>
+
+                                                    <p className="font-bold text-purple-500">Rs. {`${formData.selectedService.hourly_rate}`}/hr</p>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <p className="font-inter">Reason for appointment:</p>
+                                                    <p className="font-bold break-words">{`${formData.appointment_purpose}`}</p>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <p className="font-inter">Appointment date:</p>
+                                                    <p className="font-bold">{`${formData.appointment_date}`}</p>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <p className="font-inter">Project duration:</p>
+                                                    <p className="font-bold">{`${formData.project_duration.value}`} {`${formData.project_duration.unit}`}</p>
+                                                </div>
+                                                {formData.appointment_time != "" && (<div className="flex items-center gap-2">
+                                                    <p className="font-inter">Appointment time:</p>
+                                                    <p className="font-bold">{`${formData.appointment_time}`}</p>
+                                                </div>)}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+
                                 <div className="flex flex-col gap-7">
                                     <div className="flex flex-col gap-4">
                                         <span className="font-inter text-xl font-medium ml-2">Select a payment method
@@ -140,6 +190,7 @@ function BillingAndPayment() {
                                         <label className="flex items-center space-x-3 cursor-pointer">
                                             <input
                                                 type="radio"
+                                                name="payment_method" 
                                                 value="Cash"
                                                 checked={selectedPaymentMethod === "Cash"}
                                                 onChange={handleChange}
@@ -157,6 +208,7 @@ function BillingAndPayment() {
                                         <label className="flex items-center space-x-3 cursor-pointer">
                                             <input
                                                 type="radio"
+                                                name="payment_method" 
                                                 value="Credit/Debit card"
                                                 checked={selectedPaymentMethod === "Credit/Debit card"}
                                                 onChange={handleChange}
@@ -178,6 +230,7 @@ function BillingAndPayment() {
                                         <label className="flex items-center space-x-3 cursor-pointer">
                                             <input
                                                 type="radio"
+                                                name="payment_method" 
                                                 value="eSewa"
                                                 checked={selectedPaymentMethod === "eSewa"}
                                                 onChange={handleChange}
@@ -191,8 +244,6 @@ function BillingAndPayment() {
                                             </div>
                                             <img className="h-5" src="/esewa-seeklogo[1].png" />
                                         </label>
-
-                                        {errors.payment_method && <p style={{ color: "red" }}>{errors.payment_method.message}</p>}
                                     </div>
 
                                     <div className="flex flex-col gap-4">
@@ -201,11 +252,11 @@ function BillingAndPayment() {
                                         </span>
                                         <input
                                             type="address"
+                                            {...register("address")}
                                             className={`border ${errors.address ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
                                             ${errors.address ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                         />
-                                        {errors.address && <p className="mt-1 text-sm text-red-500">{errors?.address?.message}</p>}
 
                                         <select
                                             className={`border ${errors.city ? "border-red-500" : "border-purple-700"} 
@@ -225,15 +276,19 @@ function BillingAndPayment() {
                                             <option value="Dharan">Dharan</option>
                                             <option value="Butwal">Butwal</option>
                                         </select>
-
-                                        {errors.city && <p className="mt-1 text-sm text-red-500">{errors?.city?.message}</p>}
                                     </div>
 
-                                    <button className="bg-grey-50 rounded-xl px-20 py-2 font-semibold text-grey-500">Send an offer</button>
+                                    <button
+                                        className={"bg-purple-700 text-white rounded-xl px-20 py-2 font-semibold"}
+                                        type="submit"
+                                    >
+                                        Send an offer
+                                    </button>
 
                                 </div>
-                            </form>
-                        </div>
+
+                            </div>
+                        </form>
                     )}
                 </div>
 

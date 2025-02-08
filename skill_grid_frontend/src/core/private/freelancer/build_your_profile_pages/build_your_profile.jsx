@@ -66,7 +66,7 @@ const BuildYourProfile = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      //-----------------Add Service-----------------------
+      //---------------------Add Service-----------------------
       const serviceData = formData.service_details.map(service => ({
         service_name: service.service_name,
       }));
