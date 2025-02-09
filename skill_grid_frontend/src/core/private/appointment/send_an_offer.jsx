@@ -40,15 +40,6 @@ function SendAnOffer() {
 
     let isTokenValid = false;
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(appointmentSchema),
-        mode: "all"
-    });
-
     const location = useLocation();
     const { freelancerId } = location.state || {};
     const [freelancer, setFreelancer] = useState(null);
@@ -56,6 +47,16 @@ function SendAnOffer() {
     const [selectedService, setSelectedService] = useState(null);
 
     const navigate = useNavigate();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue
+    } = useForm({
+        resolver: yupResolver(appointmentSchema),
+        mode: "all",
+    });
 
     if (token) {
         try {
@@ -76,7 +77,9 @@ function SendAnOffer() {
     useEffect(() => {
         async function fetchFreelancer() {
             try {
-                const response = await fetch(`http://localhost:3000/api/freelancer/${freelancerId}`);
+                const response = await fetch(`http://localhost:3000/api/freelancer/${freelancerId}`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
                 if (!response.ok) throw new Error("Freelancer not found");
 
                 const data = await response.json();

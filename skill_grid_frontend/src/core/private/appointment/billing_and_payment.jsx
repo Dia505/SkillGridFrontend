@@ -1,10 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import axios from "axios";
 import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
@@ -29,6 +29,8 @@ function BillingAndPayment() {
 
     const { clearErrors } = useForm();
     const { setValue } = useForm();
+
+    const navigate = useNavigate();
 
     console.log("Form data: ", formData);
 
@@ -60,7 +62,9 @@ function BillingAndPayment() {
     useEffect(() => {
         async function fetchFreelancer() {
             try {
-                const response = await fetch(`http://localhost:3000/api/freelancer/${freelancerId}`);
+                const response = await fetch(`http://localhost:3000/api/freelancer/${freelancerId}`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
                 if (!response.ok) throw new Error("Freelancer not found");
 
                 const data = await response.json();
@@ -76,8 +80,8 @@ function BillingAndPayment() {
     const handleChange = (event) => {
         const { value } = event.target;
         setSelectedPaymentMethod(value);
-        setValue("payment_method", value); 
-        clearErrors("payment_method"); 
+        setValue("payment_method", value);
+        clearErrors("payment_method");
     };
 
     const onSubmit = async (data) => {
@@ -108,8 +112,8 @@ function BillingAndPayment() {
 
             const paymentData = {
                 payment_method: selectedPaymentMethod,
-                appointment_id: appointmentResponse.data._id, // Assuming the appointment response contains the appointment_id
-                billing_address_id: billingResponse.data._id // Assuming the billing address response contains the billing_address_id
+                appointment_id: appointmentResponse.data._id,
+                billing_address_id: billingResponse.data._id
             };
             const paymentResponse = await axios.post('http://localhost:3000/api/payment', paymentData, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -190,7 +194,7 @@ function BillingAndPayment() {
                                         <label className="flex items-center space-x-3 cursor-pointer">
                                             <input
                                                 type="radio"
-                                                name="payment_method" 
+                                                name="payment_method"
                                                 value="Cash"
                                                 checked={selectedPaymentMethod === "Cash"}
                                                 onChange={handleChange}
@@ -208,7 +212,7 @@ function BillingAndPayment() {
                                         <label className="flex items-center space-x-3 cursor-pointer">
                                             <input
                                                 type="radio"
-                                                name="payment_method" 
+                                                name="payment_method"
                                                 value="Credit/Debit card"
                                                 checked={selectedPaymentMethod === "Credit/Debit card"}
                                                 onChange={handleChange}
@@ -230,7 +234,7 @@ function BillingAndPayment() {
                                         <label className="flex items-center space-x-3 cursor-pointer">
                                             <input
                                                 type="radio"
-                                                name="payment_method" 
+                                                name="payment_method"
                                                 value="eSewa"
                                                 checked={selectedPaymentMethod === "eSewa"}
                                                 onChange={handleChange}

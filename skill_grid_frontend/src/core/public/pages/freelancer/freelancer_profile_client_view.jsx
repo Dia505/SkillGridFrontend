@@ -55,7 +55,10 @@ function FreelancerProfileClientView() {
 
         async function fetchFreelancer() {
             try {
-                const response = await fetch(`http://localhost:3000/api/freelancer/${_id}`);
+                const response = await fetch(`http://localhost:3000/api/freelancer/${_id}`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
                 if (!response.ok) throw new Error("Freelancer not found");
 
                 const data = await response.json();
@@ -70,7 +73,9 @@ function FreelancerProfileClientView() {
 
         function fetchFreelancerBookings() {
             try {
-                fetch(`http://localhost:3000/api/appointment/freelancer/${_id}`)
+                fetch(`http://localhost:3000/api/appointment/freelancer/${_id}`,{
+                    headers: { "Authorization": `Bearer ${token}` }
+                })
                     .then(response => response.json())
                     .then(data => setAppointments(data))
                     .catch(error => console.error("Error fetching appointments:", error));
@@ -84,7 +89,9 @@ function FreelancerProfileClientView() {
 
         async function fetchFreelancerEducation() {
             try {
-                const response = await fetch(`http://localhost:3000/api/education/freelancer/${_id}`);
+                const response = await fetch(`http://localhost:3000/api/education/freelancer/${_id}`,{
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
                 const data = await response.json();
                 setEducation(data);
             }
@@ -97,7 +104,9 @@ function FreelancerProfileClientView() {
 
         async function fetchFreelancerEmployment() {
             try {
-                const response = await fetch(`http://localhost:3000/api/employment/freelancer/${_id}`);
+                const response = await fetch(`http://localhost:3000/api/employment/freelancer/${_id}`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
                 const data = await response.json();
                 setEmployment(data);
             }
@@ -244,11 +253,11 @@ function FreelancerProfileClientView() {
                                 </div>
 
                                 {isTokenValid ?
-                                    <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold' 
-                                    onClick={() => {
-                                        navigate("/send-an-offer", { state: { freelancerId: _id } });
-                                      }}>
-                                            Book an Appointment
+                                    <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold'
+                                        onClick={() => {
+                                            navigate("/send-an-offer", { state: { freelancerId: _id } });
+                                        }}>
+                                        Book an Appointment
                                     </button>
                                     : <div className="flex flex-col items-center gap-2">
                                         <p className="text-xl font-semibold">Ready to work with {`${freelancer.first_name}`}?</p>
