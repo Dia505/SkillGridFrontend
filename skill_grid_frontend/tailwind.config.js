@@ -19,6 +19,7 @@ export default {
       },
       
       grey: {
+
         50: "#D9D9D9",
         100: "#C8C8C8",
         200: "#D3CDCD",
@@ -47,7 +48,11 @@ export default {
 
       white: "#FFFFFF",
 
-      black: "#000000"
+      black: {
+        50: "#2E2E2E",
+        400: "#111111",
+        700: "#000000"
+      }
     },
     extend: {
       fontFamily: {
