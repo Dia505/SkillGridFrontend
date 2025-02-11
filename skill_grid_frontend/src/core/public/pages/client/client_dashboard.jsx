@@ -13,9 +13,11 @@ import Footer from "../../../../components/footer";
 function ClientDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
     const token = authData?.token;
+    const role = authData?.role;
     const [searchQuery, setSearchQuery] = useState("");
 
     let isTokenValid = false;
+    let isClient = false;
 
     if (token) {
         try {
@@ -24,6 +26,7 @@ function ClientDashboard() {
 
             if (decodedToken.exp > currentTime) {
                 isTokenValid = true;
+                isClient = role === "client";
             } else {
                 // Token expired, remove it from localStorage
                 localStorage.removeItem("authData");
@@ -45,7 +48,7 @@ function ClientDashboard() {
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
-                {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
+                {isTokenValid && isClient ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 <div className="flex flex-col mt-[90px] pt-10 pb-40 pl-56 gap-10">
                     <div className="w-[1067px] h-[556px] bg-purple-700 rounded-xl flex justify-between pl-20">
@@ -97,7 +100,7 @@ function ClientDashboard() {
 
                     <div className="w-[1067px] h-[3px] bg-grey-500"></div>
 
-                    {!isTokenValid && (
+                    {!isTokenValid || !isClient && (
                         <div className="w-[1067px] h-[400px] bg-blue-400 rounded-2xl flex justify-between pl-10">
                             <div className="flex flex-col gap-4 pt-12">
                                 <div className="w-[427px]">

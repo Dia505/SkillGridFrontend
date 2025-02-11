@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { InfoProvider } from "./context/info_context";
 import AuthRoute from './components/auth_route';
 import { AuthProvider } from './context/auth_context';
+import { InfoProvider } from "./context/info_context";
 
 const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"));
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
@@ -14,7 +14,7 @@ const ClientDashboard = lazy(() => import("./core/public/pages/client/client_das
 const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelancer_dashboard"));
 const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"));
 const SearchPage = lazy(() => import("./core/public/pages/client/search_page"));
-const FreelancerProfileClientView = lazy(() => import("./core/public/pages/freelancer/freelancer_profile_client_view"));
+const FreelancerProfileClientView = lazy(() => import("./core/private/client/freelancer_profile_client_view"));
 const SendAnOffer = lazy(() => import("./core/private/appointment/send_an_offer"));
 const BillingAndPayment = lazy(() => import("./core/private/appointment/billing_and_payment"));
 
@@ -72,14 +72,6 @@ function App() {
       errorElement: <>error</>
     },
     {
-      path: "/freelancer-profile/:_id",
-      element: (
-        <Suspense>
-          <FreelancerProfileClientView />
-        </Suspense>
-      )
-    },
-    {
       path: "/",
       element: (
         <Suspense>
@@ -109,15 +101,24 @@ function App() {
       )
     },
     {
+      path: "/freelancer-profile/:_id",
+      element: (
+        <AuthRoute requiredRole="client"
+          element={<Suspense>
+            <FreelancerProfileClientView />
+          </Suspense>} />
+      )
+    },
+    {
       path: "/send-an-offer",
       element: (
-        <AuthRoute requiredRole={"client"} element={<Suspense><SendAnOffer/></Suspense>}/>
+        <AuthRoute requiredRole={"client"} element={<Suspense><SendAnOffer /></Suspense>} />
       )
     },
     {
       path: "/billing-and-payment",
       element: (
-        <AuthRoute requiredRole={"client"} element={<Suspense><BillingAndPayment/></Suspense>}/>
+        <AuthRoute requiredRole={"client"} element={<Suspense><BillingAndPayment /></Suspense>} />
       )
     },
 

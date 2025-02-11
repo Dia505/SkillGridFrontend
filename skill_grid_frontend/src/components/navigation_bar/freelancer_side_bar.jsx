@@ -1,6 +1,15 @@
 import { BellIcon, CalendarIcon, FolderIcon, Squares2X2Icon, UserIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/auth_context'; 
 
 function FreelancerSideBar() {
+    const navigate = useNavigate();
+    const { logout } = useAuth();  
+
+    const handleLogout = () => {
+        logout();  
+        navigate("/login"); 
+    };
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-black-400">
@@ -16,7 +25,7 @@ function FreelancerSideBar() {
                     </div>
 
                     <div className="flex flex-col">
-                        <button className="cursor-pointer hover:bg-black-50">
+                        <button className="cursor-pointer hover:bg-black-50" onClick={() => navigate("/freelancer-dashboard")}>
                             <div className='flex items-center gap-2 py-5 pl-10'>
                                 <Squares2X2Icon className='text-white h-7' />
                                 <p className='text-white font-inter'>Dashboard</p>
@@ -49,7 +58,7 @@ function FreelancerSideBar() {
                     </div>
                 </div>
 
-                <button className="fixed bottom-0 cursor-pointer">
+                <button className="fixed bottom-0 cursor-pointer" onClick={handleLogout}>
                     <div className='flex items-center gap-2 py-7 px-10'>
                         <ArrowLeftOnRectangleIcon className='text-white h-7' />
                         <p className='text-white font-inter hover:underline'>Log out</p>

@@ -3,9 +3,9 @@ import { MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Footer from "../../../../components/footer";
-import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
-import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import Footer from "../../../components/footer";
+import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
+import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
 
 function FreelancerProfileClientView() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
