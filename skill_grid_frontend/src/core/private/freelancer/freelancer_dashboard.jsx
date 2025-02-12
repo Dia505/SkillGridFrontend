@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
+import ActiveProjectsTable from "../../../components/react_table/active_projects_table";
 
 function FreelancerDashboard() {
     const authData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -10,6 +11,7 @@ function FreelancerDashboard() {
     const [completedProjectsCount, setCompletedProjectsCount] = useState(0);
     const [totalEarning, setTotalEarning] = useState(0);
     const [avgRatings, setAvgRatings] = useState(0);
+    const [activeProjects, setActiveProjects] = useState([]);
 
     useEffect(() => {
         async function fetchFreelancer() {
@@ -38,24 +40,35 @@ function FreelancerDashboard() {
 
                 const projects = await response.json();
 
-                // Function to count completed projects based on project_end_date
+                // Function to count completed projects based on project_end_date or appointment_time
                 const countCompleteProjects = (projects) => {
                     const currentDate = new Date();
 
                     return projects.filter(project => {
-                        // Compare the project_end_date with the current date
-                        const projectEndDate = new Date(project.project_end_date);
-                        return projectEndDate <= currentDate && project.status === true; // Status should also be true
+                        let endDate = new Date(project.project_end_date);  // Default to project_end_date if available
+
+                        if (project.appointment_time) {
+                            // If appointment_time is provided, adjust the appointment_date with the appointment_time
+                            const [hours, minutes] = project.appointment_time.split(":").map(Number);
+                            const appointmentDate = new Date(project.appointment_date);
+                            appointmentDate.setHours(hours, minutes, 0, 0);
+                            endDate = appointmentDate;  // Overwrite endDate with the calculated value
+                        }
+
+                        // Return completed projects
+                        return endDate <= currentDate && project.status === true;
                     }).length;
                 };
 
                 const completedProjectCount = countCompleteProjects(projects);
 
                 setCompletedProjectsCount(completedProjectCount);
+
             } catch (error) {
                 console.error("Error fetching completed projects:", error);
             }
         }
+
 
         async function fetchTotalEarnings() {
             try {
@@ -105,11 +118,44 @@ function FreelancerDashboard() {
             }
         }
 
+        async function fetchActiveProjects() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/appointment/freelancer/${userId}`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error("Projects not found");
+
+                const projects = await response.json();
+
+                const activeProjects = projects.filter(project => {
+                    const endDate = new Date(project.project_end_date);
+                    const currentDate = new Date();
+
+                    if (project.appointment_time) {
+                        const [hours, minutes] = project.appointment_time.split(":").map(Number);
+                        const appointmentDate = new Date(project.appointment_date);
+                        appointmentDate.setHours(hours, minutes, 0, 0);
+                        endDate = appointmentDate;
+                    }
+
+                    return project.status === true && endDate > currentDate;
+                });
+
+                setActiveProjects(activeProjects);
+
+                console.log("Active projects: ", activeProjects);
+
+            } catch (error) {
+                console.error("Error fetching completed projects:", error);
+            }
+        }
 
         fetchFreelancer();
         fetchCompletedProjects();
         fetchTotalEarnings();
         fetchFreelancerRatings();
+        fetchActiveProjects();
     }, [userId, token]);
 
     return (
@@ -147,6 +193,8 @@ function FreelancerDashboard() {
                             </div>
                         </div>
                     )}
+
+                    <ActiveProjectsTable activeProjects={activeProjects} />
                 </div>
             </div>
         </div>
