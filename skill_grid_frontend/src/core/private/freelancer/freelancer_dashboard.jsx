@@ -129,7 +129,7 @@ function FreelancerDashboard() {
                 const projects = await response.json();
 
                 const activeProjects = projects.filter(project => {
-                    const endDate = new Date(project.project_end_date);
+                    let endDate = new Date(project.project_end_date);
                     const currentDate = new Date();
 
                     if (project.appointment_time) {

@@ -43,7 +43,7 @@ function FreelancerSideBar() {
                                 <p className='text-white font-inter'>Calendar</p>
                             </div>
                         </button>
-                        <button className="cursor-pointer hover:bg-black-50">
+                        <button className="cursor-pointer hover:bg-black-50" onClick={() => navigate("/freelancer-notification")}>
                             <div className='flex items-center gap-2 py-5 pl-10'>
                                 <BellIcon className='text-white h-7' />
                                 <p className='text-white font-inter'>Notification</p>
