@@ -12,10 +12,11 @@ function ClientDashboardNavbarWithToken() {
         const savedAuthData = JSON.parse(localStorage.getItem("authData")) || {};
         const userId = savedAuthData?.userId ?? "";
         const token = savedAuthData?.token ?? "";
+        const role = savedAuthData?.role ?? "";
 
         console.log("User ID:", userId);
 
-        if (userId && token) {
+        if (userId && token && role === "client") {
             fetch(`http://localhost:3000/api/client/${userId}`, {
                 method: "GET",
                 headers: {

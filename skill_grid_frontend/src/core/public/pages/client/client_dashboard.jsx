@@ -1,41 +1,26 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppFeatureDiv from "../../../../components/client_dashboard/app_feature_div";
 import OnGoingCollaborations from "../../../../components/client_dashboard/on_going_collaborations";
 import ServiceCategoryDiv from "../../../../components/client_dashboard/service_category_div";
 import TopRatedFreelancer from "../../../../components/client_dashboard/top_rated_freelancer";
+import Footer from "../../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import { useState } from "react";
-import Footer from "../../../../components/footer";
+import { useAuth } from "../../../../context/auth_context";
 
 function ClientDashboard() {
-    const authData = JSON.parse(localStorage.getItem("authData")) || {};
-    const token = authData?.token;
-    const role = authData?.role;
+    const { authToken, role, userId } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
 
-    let isTokenValid = false;
-    let isClient = false;
-
-    if (token) {
-        try {
-            const decodedToken = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-
-            if (decodedToken.exp > currentTime) {
-                isTokenValid = true;
-                isClient = role === "client";
-            } else {
-                // Token expired, remove it from localStorage
-                localStorage.removeItem("authData");
-            }
-        } catch (error) {
-            console.error("Error decoding token:", error);
-            localStorage.removeItem("authData"); // Remove invalid token
+    useEffect(() => {
+        if (authToken) {
+            console.log("User is logged in:", userId);
+        } else {
+            console.log("User is not logged in");
         }
-    }
+    }, [authToken, userId]);
 
     const navigate = useNavigate();
 
@@ -48,7 +33,7 @@ function ClientDashboard() {
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
-                {isTokenValid && isClient ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
+                {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 <div className="flex flex-col mt-[90px] pt-10 pb-40 pl-56 gap-10">
                     <div className="w-[1067px] h-[556px] bg-purple-700 rounded-xl flex justify-between pl-20">
@@ -73,7 +58,7 @@ function ClientDashboard() {
                         <img className="w-[419px] rounded-xl" src="src/assets/client_dashboard_top_img.png" />
                     </div>
 
-                    {!isTokenValid && (
+                    {authToken && (
                         <div className="flex gap-8">
                             <AppFeatureDiv
                                 bgColor="bg-blue-100"
@@ -100,24 +85,23 @@ function ClientDashboard() {
 
                     <div className="w-[1067px] h-[3px] bg-grey-500"></div>
 
-                    {!isTokenValid || !isClient && (
-                        <div className="w-[1067px] h-[400px] bg-blue-400 rounded-2xl flex justify-between pl-10">
-                            <div className="flex flex-col gap-4 pt-12">
-                                <div className="w-[427px]">
-                                    <span className="font-caprasimo text-[48px] text-white leading-[1.1]">
-                                        Access a Pool of
-                                        <span className="text-blue-700"> Exceptional Talent</span>
-                                    </span>
-                                </div>
-
-                                <div className="w-[427px]">
-                                    <p className="font-inter text-white font-light text-base">Browse comprehensive freelancer profiles with detailed work experience, skills, and client feedback, empowering you to choose the perfect fit for your project.</p>
-                                </div>
+                    <div className="w-[1067px] h-[400px] bg-blue-400 rounded-2xl flex justify-between pl-10">
+                        <div className="flex flex-col gap-4 pt-12">
+                            <div className="w-[427px]">
+                                <span className="font-caprasimo text-[48px] text-white leading-[1.1]">
+                                    Access a Pool of
+                                    <span className="text-blue-700"> Exceptional Talent</span>
+                                </span>
                             </div>
 
-                            <img className="w-[560px] rounded-r-2xl" src="src/assets/client_dashboard_exceptional_talent.png" />
+                            <div className="w-[427px]">
+                                <p className="font-inter text-white font-light text-base">Browse comprehensive freelancer profiles with detailed work experience, skills, and client feedback, empowering you to choose the perfect fit for your project.</p>
+                            </div>
                         </div>
-                    )}
+
+                        <img className="w-[560px] rounded-r-2xl" src="src/assets/client_dashboard_exceptional_talent.png" />
+                    </div>
+
 
                     <div className="flex flex-col gap-8">
                         <p className="text-3xl font-inter font-light">Service Category</p>
@@ -177,7 +161,7 @@ function ClientDashboard() {
                     </div>
                 </div>
 
-                <Footer/>
+                <Footer />
             </div>
         </>
     );

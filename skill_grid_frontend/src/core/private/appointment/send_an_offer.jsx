@@ -1,5 +1,4 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -7,6 +6,7 @@ import * as yup from "yup";
 import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import { useAuth } from "../../../context/auth_context"
 
 const appointmentSchema = yup.object().shape({
     service_name: yup.string().required(),
@@ -35,10 +35,7 @@ const appointmentSchema = yup.object().shape({
 });
 
 function SendAnOffer() {
-    const authData = JSON.parse(localStorage.getItem("authData")) || {};
-    const token = authData?.token;
-
-    let isTokenValid = false;
+    const { authToken, role } = useAuth();
 
     const location = useLocation();
     const { freelancerId } = location.state || {};
@@ -52,33 +49,24 @@ function SendAnOffer() {
         register,
         handleSubmit,
         formState: { errors },
-        setValue
     } = useForm({
         resolver: yupResolver(appointmentSchema),
         mode: "all",
     });
 
-    if (token) {
-        try {
-            const decodedToken = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-
-            if (decodedToken.exp > currentTime) {
-                isTokenValid = true;
-            } else {
-                localStorage.removeItem("authData");
-            }
-        } catch (error) {
-            console.error("Error decoding token:", error);
-            localStorage.removeItem("authData");
+    useEffect(() => {
+        if (authToken) {
+            console.log("User is logged in");
+        } else {
+            console.log("User is not logged in");
         }
-    }
+    }, [authToken]);
 
     useEffect(() => {
         async function fetchFreelancer() {
             try {
                 const response = await fetch(`http://localhost:3000/api/freelancer/${freelancerId}`, {
-                    headers: { "Authorization": `Bearer ${token}` }
+                    headers: { "Authorization": `Bearer ${authToken}` }
                 });
                 if (!response.ok) throw new Error("Freelancer not found");
 
@@ -121,7 +109,7 @@ function SendAnOffer() {
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
-                {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
+                {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 {freelancer && (
                     <form onSubmit={handleSubmit(onSubmit)}>

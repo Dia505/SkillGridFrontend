@@ -1,6 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,6 +7,7 @@ import * as yup from "yup";
 import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import { useAuth } from "../../../context/auth_context";
 
 const billingAndPaymentSchema = yup.object().shape({
     address: yup.string().required("*required"),
@@ -15,11 +15,7 @@ const billingAndPaymentSchema = yup.object().shape({
 });
 
 function BillingAndPayment() {
-    const authData = JSON.parse(localStorage.getItem("authData")) || {};
-    const token = authData?.token;
-    const clientId = authData?.userId;
-
-    let isTokenValid = false;
+    const { authToken, role, userId } = useAuth();
 
     const location = useLocation();
     const formData = location.state?.formData;
@@ -43,27 +39,19 @@ function BillingAndPayment() {
         mode: "all"
     });
 
-    if (token) {
-        try {
-            const decodedToken = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-
-            if (decodedToken.exp > currentTime) {
-                isTokenValid = true;
-            } else {
-                localStorage.removeItem("authData");
-            }
-        } catch (error) {
-            console.error("Error decoding token:", error);
-            localStorage.removeItem("authData");
+    useEffect(() => {
+        if (authToken) {
+            console.log("User is logged in");
+        } else {
+            console.log("User is not logged in");
         }
-    }
+    }, [authToken]);
 
     useEffect(() => {
         async function fetchFreelancer() {
             try {
                 const response = await fetch(`http://localhost:3000/api/freelancer/${freelancerId}`, {
-                    headers: { "Authorization": `Bearer ${token}` }
+                    headers: { "Authorization": `Bearer ${authToken}` }
                 });
                 if (!response.ok) throw new Error("Freelancer not found");
 
@@ -91,7 +79,7 @@ function BillingAndPayment() {
                 city: data.city
             };
             const billingResponse = await axios.post('http://localhost:3000/api/billing-address', billingAddressData,
-                { headers: { Authorization: `Bearer ${token}` } }
+                { headers: { Authorization: `Bearer ${authToken}` } }
             );
             console.log('Billing address response:', billingResponse.data);
 
@@ -103,10 +91,10 @@ function BillingAndPayment() {
                     unit: formData.project_duration.unit
                 },
                 freelancer_service_id: formData.selectedService._id,
-                client_id: clientId
+                client_id: userId
             };
             const appointmentResponse = await axios.post('http://localhost:3000/api/appointment', appointmentData,
-                { headers: { Authorization: `Bearer ${token}` } }
+                { headers: { Authorization: `Bearer ${authToken}` } }
             );
             console.log("Appointment response: ", appointmentResponse.data);
 
@@ -116,7 +104,7 @@ function BillingAndPayment() {
                 billing_address_id: billingResponse.data._id
             };
             const paymentResponse = await axios.post('http://localhost:3000/api/payment', paymentData, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${authToken}` }
             });
             console.log("Payment response: ", paymentResponse.data);
         }
@@ -128,7 +116,7 @@ function BillingAndPayment() {
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
-                {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
+                {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 <div className="flex flex-col mt-[90px] px-60 pt-10 pb-20 gap-10 items-center">
                     <p className="font-extrabold text-3xl text-purple-700">Billing and Payment</p>

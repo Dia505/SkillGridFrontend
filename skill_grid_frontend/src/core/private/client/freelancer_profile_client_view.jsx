@@ -1,15 +1,14 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
-import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import { useAuth } from "../../../context/auth_context";
 
 function FreelancerProfileClientView() {
-    const authData = JSON.parse(localStorage.getItem("authData")) || {};
-    const token = authData?.token;
+    const { authToken, role } = useAuth();
 
     const { _id } = useParams();
 
@@ -32,31 +31,21 @@ function FreelancerProfileClientView() {
         return initialIndexes;
     });
 
-    let isTokenValid = false;
-
-    if (token) {
-        try {
-            const decodedToken = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-
-            if (decodedToken.exp > currentTime) {
-                isTokenValid = true;
-            } else {
-                localStorage.removeItem("authData");
-            }
-        } catch (error) {
-            console.error("Error decoding token:", error);
-            localStorage.removeItem("authData"); // Remove invalid token
+    useEffect(() => {
+        if (authToken) {
+            console.log("User is logged in");
+        } else {
+            console.log("User is not logged in");
         }
-    }
+    }, [authToken]);
 
     useEffect(() => {
-        if (!_id) return; // ✅ Prevents API call if ID is undefined
+        if (!_id || !authToken) return; // ✅ Prevents API call if ID is undefined
 
         async function fetchFreelancer() {
             try {
                 const response = await fetch(`http://localhost:3000/api/freelancer/${_id}`, {
-                    headers: { "Authorization": `Bearer ${token}` }
+                    headers: { "Authorization": `Bearer ${authToken}` }
                 });
 
                 if (!response.ok) throw new Error("Freelancer not found");
@@ -73,8 +62,8 @@ function FreelancerProfileClientView() {
 
         function fetchFreelancerBookings() {
             try {
-                fetch(`http://localhost:3000/api/appointment/freelancer/${_id}`,{
-                    headers: { "Authorization": `Bearer ${token}` }
+                fetch(`http://localhost:3000/api/appointment/freelancer/${_id}`, {
+                    headers: { "Authorization": `Bearer ${authToken}` }
                 })
                     .then(response => response.json())
                     .then(data => setAppointments(data))
@@ -89,8 +78,8 @@ function FreelancerProfileClientView() {
 
         async function fetchFreelancerEducation() {
             try {
-                const response = await fetch(`http://localhost:3000/api/education/freelancer/${_id}`,{
-                    headers: { "Authorization": `Bearer ${token}` }
+                const response = await fetch(`http://localhost:3000/api/education/freelancer/${_id}`, {
+                    headers: { "Authorization": `Bearer ${authToken}` }
                 });
                 const data = await response.json();
                 setEducation(data);
@@ -105,7 +94,7 @@ function FreelancerProfileClientView() {
         async function fetchFreelancerEmployment() {
             try {
                 const response = await fetch(`http://localhost:3000/api/employment/freelancer/${_id}`, {
-                    headers: { "Authorization": `Bearer ${token}` }
+                    headers: { "Authorization": `Bearer ${authToken}` }
                 });
                 const data = await response.json();
                 setEmployment(data);
@@ -159,7 +148,7 @@ function FreelancerProfileClientView() {
 
 
         fetchFreelancerService();
-    }, [_id]);
+    }, [_id, authToken]);
 
     const renderStars = (rating) => {
         const fullStars = Math.floor(rating);
@@ -214,7 +203,7 @@ function FreelancerProfileClientView() {
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
-                {isTokenValid ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
+                {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 {freelancer && (
                     <div className="flex flex-col mt-[90px] pl-40 pr-40 pt-10 pb-20 gap-16">
@@ -252,7 +241,7 @@ function FreelancerProfileClientView() {
                                     </div>
                                 </div>
 
-                                {isTokenValid ?
+                                {authToken && role == "client" ?
                                     <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold'
                                         onClick={() => {
                                             navigate("/send-an-offer", { state: { freelancerId: _id } });

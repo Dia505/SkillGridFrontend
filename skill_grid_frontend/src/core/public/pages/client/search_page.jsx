@@ -8,11 +8,10 @@ import ClientDashboardNavbarWithoutToken from "../../../../components/navigation
 import SearchFilter from "../../../../components/search_page/search_filter";
 import SearchResult from "../../../../components/search_page/search_result";
 import Footer from "../../../../components/footer";
+import { useAuth } from "../../../../context/auth_context";
 
 function SearchPage() {
-    const authData = JSON.parse(localStorage.getItem("authData")) || {};
-    const token = authData?.token;
-    const role = authData?.role;
+    const { authToken, role, userId } = useAuth();
 
     const { searchQuery } = useParams(); // Get searchQuery from URL
 
@@ -35,25 +34,13 @@ function SearchPage() {
         1: false,
     });
 
-    let isTokenValid = false;
-    let isClient = false;
-
-    if (token) {
-        try {
-            const decodedToken = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-
-            if (decodedToken.exp > currentTime) {
-                isTokenValid = true;
-                isClient = role === "client";
-            } else {
-                localStorage.removeItem("authData");
-            }
-        } catch (error) {
-            console.error("Error decoding token:", error);
-            localStorage.removeItem("authData");
+    useEffect(() => {
+        if (authToken) {
+            console.log("User is logged in");
+        } else {
+            console.log("User is not logged in");
         }
-    }
+    }, [authToken]);
 
     // Function to fetch search results from the backend
     useEffect(() => {
@@ -157,7 +144,7 @@ function SearchPage() {
 
     return (
         <div className="h-screen overflow-auto flex flex-col bg-purple-50">
-            {isTokenValid && isClient ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
+            {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
             <div className="flex flex-col mt-[90px] pt-8">
                 <p className="text-2xl font-inter font-extrabold text-purple-700 pl-20">
