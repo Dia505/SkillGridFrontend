@@ -8,6 +8,7 @@ import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import { useAuth } from "../../../context/auth_context";
+import { toast } from "react-toastify";
 
 const billingAndPaymentSchema = yup.object().shape({
     address: yup.string().required("*required"),
@@ -107,6 +108,16 @@ function BillingAndPayment() {
                 headers: { Authorization: `Bearer ${authToken}` }
             });
             console.log("Payment response: ", paymentResponse.data);
+
+            toast.success("Offer sent successfully!", {
+                position: "top-center",
+                autoClose: 3000, 
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                theme: "colored",
+            });
         }
         catch (error) {
             console.error("Error during submission:", error);

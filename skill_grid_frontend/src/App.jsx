@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AuthRoute from './components/auth_route';
 import { AuthProvider } from './context/auth_context';
 import { InfoProvider } from "./context/info_context";
@@ -140,6 +142,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <QueryClientProvider client={queryClient}>
         <InfoProvider>
           <AuthProvider>
