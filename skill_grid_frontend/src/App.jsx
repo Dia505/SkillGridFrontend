@@ -19,7 +19,8 @@ const SearchPage = lazy(() => import("./core/public/pages/client/search_page"));
 const FreelancerProfileClientView = lazy(() => import("./core/private/client/freelancer_profile_client_view"));
 const SendAnOffer = lazy(() => import("./core/private/appointment/send_an_offer"));
 const BillingAndPayment = lazy(() => import("./core/private/appointment/billing_and_payment"));
-const FreelancerNotification = lazy(() => import("./core/private/freelancer/freelancer_notification"));
+const FreelancerNotification = lazy(() => import("./core/private/freelancer/notification/freelancer_notification"));
+const FreelancerOfferView = lazy(() => import("./core/private/freelancer/notification/freelancer_offer_view"));
 
 const queryClient = new QueryClient();
 
@@ -128,6 +129,12 @@ function App() {
       path: "/freelancer-notification",
       element: (
         <AuthRoute requiredRole={"freelancer"} element={<Suspense><FreelancerNotification /></Suspense>} />
+      )
+    },
+    {
+      path: "/freelancer-offer-view/:appointment_id",
+      element: (
+        <AuthRoute requiredRole={"freelancer"} element={<Suspense><FreelancerOfferView /></Suspense>} />
       )
     },
     // Fallback route for unauthorized access
