@@ -1,15 +1,41 @@
-import { BellIcon, CalendarIcon, FolderIcon, Squares2X2Icon, UserIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftOnRectangleIcon, BellIcon, CalendarIcon, FolderIcon, Squares2X2Icon, UserIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/auth_context'; 
+import { useAuth } from '../../context/auth_context';
 
 function FreelancerSideBar() {
+    const { authToken, userId } = useAuth();
     const navigate = useNavigate();
-    const { logout } = useAuth();  
+    const { logout } = useAuth();
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        if (authToken) {
+            console.log("User is logged in");
+        } else {
+            console.log("User is not logged in");
+        }
+
+        fetch(`http://localhost:3000/api/notification/freelancer/${userId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${authToken}`,
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setNotifications(data);
+            })
+            .catch(err => console.error("Error fetching notifications:", err));
+    }, [authToken, userId]);
 
     const handleLogout = () => {
-        logout();  
-        navigate("/login"); 
+        logout();
+        navigate("/login");
     };
+
+    const unreadNotificationsCount = notifications.filter(notification => !notification.read).length;
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-black-400">
@@ -47,6 +73,12 @@ function FreelancerSideBar() {
                             <div className='flex items-center gap-2 py-5 pl-10'>
                                 <BellIcon className='text-white h-7' />
                                 <p className='text-white font-inter'>Notification</p>
+
+                                {unreadNotificationsCount > 0 && (
+                                    <span className="bg-blue-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                        {unreadNotificationsCount}
+                                    </span>
+                                )}
                             </div>
                         </button>
                         <button className="cursor-pointer hover:bg-black-50">

@@ -5,7 +5,7 @@ import FreelancerSideBar from "../../../../components/navigation_bar/freelancer_
 import { useAuth } from "../../../../context/auth_context";
 
 function FreelancerOfferView() {
-    const { authToken, role } = useAuth();
+    const { authToken } = useAuth();
     const [appointment, setAppointment] = useState(null);
     const [payment, setPayment] = useState(null);
 

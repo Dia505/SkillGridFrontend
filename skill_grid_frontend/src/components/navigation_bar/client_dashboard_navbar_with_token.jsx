@@ -1,12 +1,15 @@
 import { BellIcon, CalendarIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ClientNotification from "../../core/private/client/client_notification";
 import AppLogo2 from "../app_logo/app_logo2";
 
 function ClientDashboardNavbarWithToken() {
     const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState(null);
-    const [searchQuery, setSearchQuery] = useState(""); 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         const savedAuthData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -35,6 +38,19 @@ function ClientDashboardNavbarWithToken() {
                     }
                 })
                 .catch(err => console.error("Error fetching profile:", err));
+
+            fetch(`http://localhost:3000/api/notification/client/${userId}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setNotifications(data);
+                })
+                .catch(err => console.error("Error fetching notifications:", err));
         }
     }, []);
 
@@ -44,18 +60,20 @@ function ClientDashboardNavbarWithToken() {
         }
     };
 
+    const unreadNotificationsCount = notifications.filter(notification => !notification.read).length;
+
     return (
         <div className="bg-purple-50 flex w-full h-[90px] items-center justify-between pl-10 pr-10 fixed top-0 z-50">
-            <button onClick={() => navigate("/")} ><AppLogo2/></button>
+            <button onClick={() => navigate("/")} ><AppLogo2 /></button>
 
             <div className="flex gap-8">
                 <div className="relative">
                     <input
                         type="text"
-                        className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl" 
+                        className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl"
                         placeholder="Search freelancer/profession"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)} 
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                     />
                     <button className="absolute w-[29px] h-[29px] right-2 top-1.5" onClick={handleSearch}>
@@ -67,9 +85,22 @@ function ClientDashboardNavbarWithToken() {
                     <CalendarIcon />
                 </button>
 
-                <button className="w-[30px]">
+                <button className="w-[30px]" onClick={() => setIsNotificationOpen((prev) => !prev)}>
                     <BellIcon />
                 </button>
+
+                {unreadNotificationsCount > 0 && (
+                    <span className="absolute top-5 right-24 bg-blue-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                        {unreadNotificationsCount}
+                    </span>
+                )}
+
+
+                {isNotificationOpen && (
+                    <div className="absolute right-12 top-20 bg-white rounded-lg z-50">
+                        <ClientNotification isNotificationOpen={isNotificationOpen} setIsNotificationOpen={setIsNotificationOpen} />
+                    </div>
+                )}
 
                 <div className="w-[40px] h-[40px] rounded-full overflow-hidden border border-gray-300">
                     {profileImage ? (
