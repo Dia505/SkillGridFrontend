@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClientNotification from "../../core/private/client/client_notification";
 import AppLogo2 from "../app_logo/app_logo2";
+import ClientSideBar from "./client_side_bar";
 
 function ClientDashboardNavbarWithToken() {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ function ClientDashboardNavbarWithToken() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
     useEffect(() => {
         const savedAuthData = JSON.parse(localStorage.getItem("authData")) || {};
@@ -85,7 +87,7 @@ function ClientDashboardNavbarWithToken() {
                     <CalendarIcon />
                 </button>
 
-                <button className="w-[30px]" onClick={() => setIsNotificationOpen((prev) => !prev)}>
+                <button className="w-[30px]" onClick={() => {setIsNotificationOpen((prev) => !prev); setIsSideBarOpen(false);}}>
                     <BellIcon />
                 </button>
 
@@ -102,7 +104,7 @@ function ClientDashboardNavbarWithToken() {
                     </div>
                 )}
 
-                <div className="w-[40px] h-[40px] rounded-full overflow-hidden border border-gray-300">
+                <div className="w-[40px] h-[40px] rounded-full overflow-hidden border cursor-pointer" onClick={() => {setIsSideBarOpen((prev) => !prev); setIsNotificationOpen(false)}}>
                     {profileImage ? (
                         <img src={profileImage} alt="User Profile" className="w-full h-full object-cover" />
                     ) : (
@@ -111,6 +113,12 @@ function ClientDashboardNavbarWithToken() {
                         </div>
                     )}
                 </div>
+
+                {isSideBarOpen && (
+                    <div className="absolute right-7 top-20 z-50">
+                        <ClientSideBar isSideBarOpen={isSideBarOpen} setIsSideBarOpen={setIsSideBarOpen}/>
+                    </div>
+                )}
             </div>
         </div>
     );
