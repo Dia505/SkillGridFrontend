@@ -21,7 +21,7 @@ function ClientSideBar({ isSideBarOpen, setIsSideBarOpe }) {
                         </div>
                     </button>
 
-                    <button className="cursor-pointer hover:bg-grey-50">
+                    <button className="cursor-pointer hover:bg-grey-50" onClick={() => navigate("/client-contracts")}>
                         <div className='flex items-center gap-5 py-5 px-10'>
                             <FolderIcon className='h-7' />
                             <p className='font-inter'>Contracts</p>
