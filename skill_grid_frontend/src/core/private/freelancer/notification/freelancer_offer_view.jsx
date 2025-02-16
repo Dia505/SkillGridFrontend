@@ -51,7 +51,7 @@ function FreelancerOfferView() {
                 const data = await response.json();
                 setPayment(data);
                 console.log("Fetched Payment Data:", data);
-            }  
+            }
             catch (error) {
                 console.error("Error fetching Payment:", error);
             }
@@ -81,7 +81,7 @@ function FreelancerOfferView() {
                 draggable: true,
                 theme: "colored",
             });
-        } 
+        }
         catch (error) {
             console.error("Error accepting Appointment:", error);
         }
@@ -151,7 +151,7 @@ function FreelancerOfferView() {
                                     <span className="text-black-700"> {`${appointment.project_duration.value} ${appointment.project_duration.unit}`}</span>
                                 </span>
                                 <span className="text-purple-700 font-inter text-lg">Amount:
-                                    <span className="text-black-700"> Rs. {payment.amount}</span>
+                                    <span className="text-black-700"> Rs. {payment ? payment.amount : "Loading..."}</span>
                                 </span>
                             </div>
                         </div>

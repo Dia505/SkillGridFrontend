@@ -1,7 +1,7 @@
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import React, { useMemo } from "react";
 
-const ActiveProjectsTable = ({ activeProjects = [] }) => {
+const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
     const columns = useMemo(
         () => [
             {
@@ -24,6 +24,21 @@ const ActiveProjectsTable = ({ activeProjects = [] }) => {
             {
                 header: "Project",
                 accessorKey: "appointment_purpose",
+            },
+            {
+                header: "Payment",
+                accessorKey: "projectId", 
+                cell: ({ row }) => {
+                    const projectId = row.original._id;
+                    const paymentData = paymentDetails[projectId];
+                    
+
+                    if (paymentData && paymentData.amount) {
+                        return <span>Rs. {paymentData.amount}</span>;
+                    } else {
+                        return <span>N/A</span>;
+                    }
+                },
             },
             {
                 header: "Deadline",

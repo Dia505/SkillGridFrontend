@@ -12,6 +12,7 @@ function FreelancerDashboard() {
     const [totalEarning, setTotalEarning] = useState(0);
     const [avgRatings, setAvgRatings] = useState(0);
     const [activeProjects, setActiveProjects] = useState([]);
+    const [paymentDetails, setPaymentDetails] = useState({});
 
     useEffect(() => {
         async function fetchFreelancer() {
@@ -144,7 +145,29 @@ function FreelancerDashboard() {
 
                 setActiveProjects(activeProjects);
 
-                console.log("Active projects: ", activeProjects);
+                const paymentFetches = activeProjects.map(async (project) => {
+                    const paymentResponse = await fetch(`http://localhost:3000/api/payment/appointment/${project._id}`, {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+
+                    if (paymentResponse.ok) {
+                        const paymentData = await paymentResponse.json();
+                        return { projectId: project._id, paymentData };
+                    }
+                    return null;
+                });
+
+                // Wait for all payment fetches to complete
+                const paymentResults = await Promise.all(paymentFetches);
+
+                // Update the payment details state only after all fetches are done
+                const paymentDetails = {};
+                paymentResults.forEach(result => {
+                    if (result) {
+                        paymentDetails[result.projectId] = result.paymentData;
+                    }
+                });
+                setPaymentDetails(paymentDetails);
 
             } catch (error) {
                 console.error("Error fetching completed projects:", error);
@@ -194,7 +217,7 @@ function FreelancerDashboard() {
                         </div>
                     )}
 
-                    <ActiveProjectsTable activeProjects={activeProjects} />
+                    <ActiveProjectsTable activeProjects={activeProjects} paymentDetails={paymentDetails}/>
                 </div>
             </div>
         </div>

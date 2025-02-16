@@ -94,6 +94,9 @@ function BillingAndPayment() {
                 freelancer_service_id: formData.selectedService._id,
                 client_id: userId
             };
+            if (formData.appointment_time) {
+                appointmentData.appointment_time = formData.appointment_time;
+            }
             const appointmentResponse = await axios.post('http://localhost:3000/api/appointment', appointmentData,
                 { headers: { Authorization: `Bearer ${authToken}` } }
             );

@@ -6,7 +6,6 @@ import { useAuth } from "../../../context/auth_context";
 
 function ClientContracts() {
     const { authToken, role, userId } = useAuth();
-    const navigate = useNavigate();
     const [contracts, setContracts] = useState([]);
     const [ongoingContracts, setOngoingContracts] = useState([]);
     const [completedContracts, setCompletedContracts] = useState([]);
@@ -28,7 +27,7 @@ function ClientContracts() {
 
                 const today = new Date();
 
-                const ongoingContracts = data.filter(contract => {
+                const ongoingContracts = contracts.filter(contract => {
                     if (!contract.appointment_time) {
                         return new Date(contract.project_end_date) > today;
                     }
@@ -78,22 +77,14 @@ function ClientContracts() {
                         endDateTime.setMonth(endDateTime.getMonth() + value);
                     }
 
-                    return endDate < today;
+                    return endDateTime < today;
                 });
                 setCompletedContracts(completedContracts);
 
                 const requestedOffers = data.filter(contract => contract.status === false);
                 setRequestedOffers(requestedOffers);
 
-                console.log('Fetched contracts:', contracts);
-
-                if (contracts.length === 0) {
-                    console.log('No contracts found, skipping payment fetch.');
-                    return; // No contracts to fetch payment details for
-                }
-
                 const paymentFetches = contracts.map(async (contract) => {
-                    console.log(`Fetching payment for contract ${contract._id}`);
                     const paymentResponse = await fetch(`http://localhost:3000/api/payment/appointment/${contract._id}`, {
                         headers: { "Authorization": `Bearer ${authToken}` }
                     });
@@ -125,13 +116,38 @@ function ClientContracts() {
         fetchContracts();
     }, [userId, authToken]);
 
-    console.log("completed: ", completedContracts);
-
     const getFilteredContracts = () => {
         if (selectedFilter === "Ongoing") return ongoingContracts;
         if (selectedFilter === "Completed") return completedContracts;
         if (selectedFilter === "Requested offers") return requestedOffers;
         return contracts; // Default: Show all contracts
+    };
+
+    const getProgress = (contract) => {
+        const now = new Date();
+        let startTime, endTime;
+
+        if (contract.appointment_time) {
+            startTime = new Date(contract.appointment_date);
+            const [hours, minutes] = contract.appointment_time.split(":").map(Number);
+            startTime.setHours(hours, minutes, 0, 0);
+
+            const { unit, value } = contract.project_duration || {};
+            endTime = new Date(startTime);
+
+            if (unit === "hour") endTime.setHours(startTime.getHours() + value);
+            else if (unit === "day") endTime.setDate(startTime.getDate() + value);
+            else if (unit === "week") endTime.setDate(startTime.getDate() + value * 7);
+            else if (unit === "month") endTime.setMonth(startTime.getMonth() + value);
+        } else {
+            startTime = new Date(contract.appointment_date);
+            endTime = new Date(contract.project_end_date);
+        }
+
+        if (now < startTime) return 0;
+        if (now > endTime) return 100;
+
+        return ((now - startTime) / (endTime - startTime)) * 100;
     };
 
     return (
@@ -177,7 +193,7 @@ function ClientContracts() {
 
                                     <div className="w-0.5 h-full bg-grey-500"></div>
 
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col gap-2">
                                         <p className="text-purple-700 font-caprasimo text-lg">Project details</p>
                                         <span className="text-purple-700 font-medium">
                                             Project: <span className="text-black-700">{contract.appointment_purpose}</span>
@@ -185,8 +201,18 @@ function ClientContracts() {
                                         <span className="text-purple-700 font-medium">
                                             Deadline: <span className="text-black-700">{new Date(contract.project_end_date).toLocaleDateString()}</span>
                                         </span>
+                                        {ongoingContracts.includes(contract) && (
+                                            <div className="flex gap-2">
+                                                <div className="w-full bg-grey-100 rounded-full h-2.5 mt-2">
+                                                    <div className="bg-blue-500 h-2.5 rounded-full" style={{ width: `${getProgress(contract)}%` }}></div>
+                                                </div>
+
+                                                <p className="text-sm font-medium">{Math.round(getProgress(contract))}%</p>
+                                            </div>
+                                        )}
+
                                         {paymentDetails[contract._id] && (
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col gap-2">
                                                 <span className="text-purple-700 font-medium">
                                                     Amount: <span className="text-black-700">Rs. {paymentDetails[contract._id].amount}</span>
                                                 </span>

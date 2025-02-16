@@ -9,19 +9,6 @@ function OnGoingCollaborations() {
     const [freelancerRatings, setFreelancerRatings] = useState({});
     const [loading, setLoading] = useState(true); // Loading state
 
-    // Function to calculate remaining time and completion percentage
-    const calculateRemainingTimeAndCompletion = (appointmentDate, duration) => {
-        const appointment = new Date(appointmentDate);
-        const durationInMs = duration.value * 30 * 24 * 60 * 60 * 1000; // assuming 30 days per month
-        const remainingTime = appointment.getTime() + durationInMs - new Date().getTime();
-        const daysRemaining = Math.ceil(remainingTime / (1000 * 3600 * 24));
-
-        const completedTime = durationInMs - remainingTime;
-        const completionPercentage = Math.max(0, (completedTime / durationInMs) * 100);
-
-        return { daysRemaining: daysRemaining > 0 ? `${daysRemaining} days` : "Completed", completionPercentage };
-    };
-
     // Function to render star ratings
     const renderStars = (rating) => {
         const fullStars = Math.floor(rating);
@@ -45,8 +32,15 @@ function OnGoingCollaborations() {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    setCollaborations(data);
-                    setLoading(false); // Data has loaded
+                    const today = new Date();
+
+                    // Filter ongoing collaborations
+                    const ongoingCollaborations = data.filter(collab =>
+                        collab.status === true && new Date(collab.project_end_date) > today
+                    );
+
+                    setCollaborations(ongoingCollaborations);
+                    setLoading(false);
 
                     // Fetch freelancer reviews and calculate average rating
                     data.forEach(async (collab) => {
@@ -72,6 +66,42 @@ function OnGoingCollaborations() {
         }
     }, [userId, token]);
 
+    const calculateProgress = (collab) => {
+        let startTime, endTime, remainingTime;
+
+        if (collab.appointment_time) {
+            startTime = new Date(collab.appointment_date);
+            const [hours, minutes] = collab.appointment_time.split(":").map(Number);
+            startTime.setHours(hours, minutes, 0, 0);
+
+            const { unit, value } = collab.project_duration || {};
+            endTime = new Date(startTime);
+
+            if (unit === "hour") endTime.setHours(startTime.getHours() + value);
+            else if (unit === "day") endTime.setDate(startTime.getDate() + value);
+            else if (unit === "week") endTime.setDate(startTime.getDate() + value * 7);
+            else if (unit === "month") endTime.setMonth(startTime.getMonth() + value);
+
+            //calculating remaining times
+            const remainingMilliseconds = endTime - new Date();
+            remainingTime = Math.max(remainingMilliseconds / (1000 * 60 * 60), 0);
+        } else {
+            startTime = new Date(collab.appointment_date);
+            endTime = new Date(collab.project_end_date);
+
+            //calculating remaining days
+            const remainingMilliseconds = endTime - new Date();
+            remainingTime = Math.max(remainingMilliseconds / (1000 * 60 * 60 * 24), 0);
+        }
+
+        const today = new Date();
+        const totalDuration = endTime - startTime;
+        const elapsed = today - startTime;
+        const progress = totalDuration > 0 ? Math.min((elapsed / totalDuration) * 100, 100) : 0;
+
+        return { remainingTime, progress };
+    };
+
     // Show nothing if user is not logged in
     if (!userId || !token) return null;
 
@@ -93,10 +123,8 @@ function OnGoingCollaborations() {
                     {collaborations.map((collab) => {
                         const freelancer = collab.freelancer_service_id.freelancer_id;
                         const avgRating = freelancerRatings[freelancer._id] || 0;
-                        const { daysRemaining, completionPercentage } = calculateRemainingTimeAndCompletion(
-                            collab.appointment_date,
-                            collab.project_duration
-                        );
+                        const { remainingTime, progress } = calculateProgress(collab);
+                        const unit = collab.appointment_time ? 'hours' : 'days';
 
                         return (
                             <div
@@ -118,17 +146,17 @@ function OnGoingCollaborations() {
                                 </div>
 
                                 <p className="text-xl font-medium">{collab.appointment_purpose}</p>
-                                <p className="text-[15px]">{daysRemaining} to complete</p>
+                                <p className="text-[15px]">{Math.round(remainingTime)} {unit} to complete</p>
 
                                 <div className="flex items-center gap-2">
                                     {/* Progress Bar */}
                                     <div className="w-full bg-grey-100 rounded-full h-3 mt-2">
                                         <div
                                             className="bg-blue-500 h-3 rounded-full"
-                                            style={{ width: `${completionPercentage}%` }}
+                                            style={{ width: `${progress}%` }}
                                         ></div>
                                     </div>
-                                    <p className="text-sm text-right mt-1">{completionPercentage.toFixed(1)}%</p>
+                                    <p className="text-sm text-right mt-1">{Math.round(progress)}%</p>
                                 </div>
                             </div>
                         );

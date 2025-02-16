@@ -46,7 +46,7 @@ function ClientNotification({ isNotificationOpen, setIsNotificationOpen }) {
             }
         );
         setNotifications((prev) => prev.filter((notif) => notif._id !== id));
-        // navigate("/client-contract");
+        navigate("/client-contracts");
     };
 
     useEffect(() => {

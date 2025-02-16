@@ -57,7 +57,7 @@ function FreelancerSideBar() {
                                 <p className='text-white font-inter'>Dashboard</p>
                             </div>
                         </button>
-                        <button className="cursor-pointer hover:bg-black-50">
+                        <button className="cursor-pointer hover:bg-black-50" onClick={() => navigate("/freelancer-projects")}>
                             <div className='flex items-center gap-2 py-5 pl-10'>
                                 <FolderIcon className='text-white h-7' />
                                 <p className='text-white font-inter'>Projects</p>

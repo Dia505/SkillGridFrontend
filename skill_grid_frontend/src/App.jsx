@@ -22,6 +22,7 @@ const BillingAndPayment = lazy(() => import("./core/private/appointment/billing_
 const FreelancerNotification = lazy(() => import("./core/private/freelancer/notification/freelancer_notification"));
 const FreelancerOfferView = lazy(() => import("./core/private/freelancer/notification/freelancer_offer_view"));
 const ClientContracts = lazy(() => import("./core/private/client/client_contracts"));
+const FreelancerProjects = lazy(() => import("./core/private/freelancer/freelancer_projects"));
 
 const queryClient = new QueryClient();
 
@@ -142,6 +143,12 @@ function App() {
       path: "/client-contracts",
       element: (
         <AuthRoute requiredRole={"client"} element={<Suspense><ClientContracts /></Suspense>} />
+      )
+    },
+    {
+      path: "/freelancer-projects",
+      element: (
+        <AuthRoute requiredRole={"freelancer"} element={<Suspense><FreelancerProjects /></Suspense>} />
       )
     },
     // Fallback route for unauthorized access
