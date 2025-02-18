@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AppLogo from "../../../components/app_logo/app_logo";
-import JoinClientFreelancerContainer from "../../../components/join_client_freelancer_container";
+import AppLogo from "../../components/app_logo/app_logo";
+import JoinClientFreelancerContainer from "../../components/join_client_freelancer_container";
 
 function JoinClientFreelancer() {
     const [activeContainer, setActiveContainer] = useState(null); // Track which container is active

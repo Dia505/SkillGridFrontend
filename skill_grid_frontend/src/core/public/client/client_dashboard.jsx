@@ -1,14 +1,14 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AppFeatureDiv from "../../../../components/client_dashboard/app_feature_div";
-import OnGoingCollaborations from "../../../../components/client_dashboard/on_going_collaborations";
-import ServiceCategoryDiv from "../../../../components/client_dashboard/service_category_div";
-import TopRatedFreelancer from "../../../../components/client_dashboard/top_rated_freelancer";
-import Footer from "../../../../components/footer";
-import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
-import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import { useAuth } from "../../../../context/auth_context";
+import AppFeatureDiv from "../../../components/client_dashboard/app_feature_div";
+import OnGoingCollaborations from "../../../components/client_dashboard/on_going_collaborations";
+import ServiceCategoryDiv from "../../../components/client_dashboard/service_category_div";
+import TopRatedFreelancer from "../../../components/client_dashboard/top_rated_freelancer";
+import Footer from "../../../components/footer";
+import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
+import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import { useAuth } from "../../../context/auth_context";
 
 function ClientDashboard() {
     const { authToken, role, userId } = useAuth();
@@ -58,30 +58,31 @@ function ClientDashboard() {
                         <img className="w-[419px] rounded-xl" src="src/assets/client_dashboard_top_img.png" />
                     </div>
 
-                    {authToken && (
-                        <div className="flex gap-8">
-                            <AppFeatureDiv
-                                bgColor="bg-blue-100"
-                                featureImg="src/assets/client_dashboard_feature1.png"
-                                title="Tailored Hiring Service"
-                                subtitle="Connect with the right talent to meet your unique project requirements effortlessly."
-                            />
-                            <AppFeatureDiv
-                                bgColor="bg-blue-200"
-                                featureImg="src/assets/client_dashboard_feature2.png"
-                                title="Secure Payments, Simplified"
-                                subtitle="Enjoy seamless transactions with transparent billing and secure payment gateways."
-                            />
-                            <AppFeatureDiv
-                                bgColor="bg-pink-300"
-                                featureImg="src/assets/client_dashboard_feature3.png"
-                                title="Streamlined Project Management"
-                                subtitle="Effortlessly manage all your projects and collaborations in one unified space."
-                            />
-                        </div>
-                    )}
+                    <div className="flex gap-8">
+                        <AppFeatureDiv
+                            bgColor="bg-blue-100"
+                            featureImg="src/assets/client_dashboard_feature1.png"
+                            title="Tailored Hiring Service"
+                            subtitle="Connect with the right talent to meet your unique project requirements effortlessly."
+                        />
+                        <AppFeatureDiv
+                            bgColor="bg-blue-200"
+                            featureImg="src/assets/client_dashboard_feature2.png"
+                            title="Secure Payments, Simplified"
+                            subtitle="Enjoy seamless transactions with transparent billing and secure payment gateways."
+                        />
+                        <AppFeatureDiv
+                            bgColor="bg-pink-300"
+                            featureImg="src/assets/client_dashboard_feature3.png"
+                            title="Streamlined Project Management"
+                            subtitle="Effortlessly manage all your projects and collaborations in one unified space."
+                        />
+                    </div>
 
-                    <OnGoingCollaborations />
+
+                    {authToken && (
+                        <OnGoingCollaborations />
+                    )}
 
                     <div className="w-[1067px] h-[3px] bg-grey-500"></div>
 

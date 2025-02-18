@@ -31,6 +31,7 @@ export default {
       },
 
       red: {
+        100: "#FFA8A8",
         500: "#E50000"
       },
 
@@ -55,7 +56,9 @@ export default {
       },
 
       green: {
-        600: "#29A82D"
+        100: "#A7FFBD",
+        600: "#29A82D",
+        700: "#43B925"
       }
     },
     extend: {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../context/auth_context";
+import ActiveProjectsTable from "../../../components/react_table/active_projects_table";
 
 function FreelancerProjects() {
     const { authToken, userId } = useAuth();
@@ -140,6 +141,8 @@ function FreelancerProjects() {
                             </div>
                             <div className="bg-grey-500 w-full h-0.5"></div>
                         </div>
+
+                        <ActiveProjectsTable activeProjects={getFilteredProjects()} paymentDetails={paymentDetails} />
 
                     </div>
                 </div>

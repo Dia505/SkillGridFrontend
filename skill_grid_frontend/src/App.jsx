@@ -7,15 +7,15 @@ import AuthRoute from './components/auth_route';
 import { AuthProvider } from './context/auth_context';
 import { InfoProvider } from "./context/info_context";
 
-const ClientRegistration = lazy(() => import("./core/public/pages/client/client_registration"));
+const ClientRegistration = lazy(() => import("./core/public/client/client_registration"));
 const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
-const FreelancerRegistration = lazy(() => import("./core/public/pages/freelancer/freelancer_registration"));
-const Login = lazy(() => import("./core/public/pages/login"));
-const JoinClientFreelancer = lazy(() => import("./core/public/pages/join_client_freelancer"));
-const ClientDashboard = lazy(() => import("./core/public/pages/client/client_dashboard"));
+const FreelancerRegistration = lazy(() => import("./core/public/freelancer/freelancer_registration"));
+const Login = lazy(() => import("./core/public/login"));
+const JoinClientFreelancer = lazy(() => import("./core/public/join_client_freelancer"));
+const ClientDashboard = lazy(() => import("./core/public/client/client_dashboard"));
 const FreelancerDashboard = lazy(() => import("./core/private/freelancer/freelancer_dashboard"));
 const BuildYourProfile = lazy(() => import("./core/private/freelancer/build_your_profile_pages/build_your_profile"));
-const SearchPage = lazy(() => import("./core/public/pages/client/search_page"));
+const SearchPage = lazy(() => import("./core/public/client/search_page"));
 const FreelancerProfileClientView = lazy(() => import("./core/private/client/freelancer_profile_client_view"));
 const SendAnOffer = lazy(() => import("./core/private/appointment/send_an_offer"));
 const BillingAndPayment = lazy(() => import("./core/private/appointment/billing_and_payment"));
@@ -23,6 +23,7 @@ const FreelancerNotification = lazy(() => import("./core/private/freelancer/noti
 const FreelancerOfferView = lazy(() => import("./core/private/freelancer/notification/freelancer_offer_view"));
 const ClientContracts = lazy(() => import("./core/private/client/client_contracts"));
 const FreelancerProjects = lazy(() => import("./core/private/freelancer/freelancer_projects"));
+const LottieScreen = lazy(() => import("./core/public/lottie_screen"));
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,15 @@ function App() {
       element: (
         <Suspense>
           <SearchPage />
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+    {
+      path: "/lottie-screen",
+      element: (
+        <Suspense>
+          <LottieScreen />
         </Suspense>
       ),
       errorElement: <>error</>
@@ -143,6 +153,12 @@ function App() {
       path: "/client-contracts",
       element: (
         <AuthRoute requiredRole={"client"} element={<Suspense><ClientContracts /></Suspense>} />
+      )
+    },
+    {
+      path: "/freelancer-projects",
+      element: (
+        <AuthRoute requiredRole={"freelancer"} element={<Suspense><FreelancerProjects /></Suspense>} />
       )
     },
     {

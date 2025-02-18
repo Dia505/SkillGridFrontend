@@ -5,9 +5,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import AppLogo from "../../../components/app_logo/app_logo";
-import LoginCarousel from "../../../components/login_carousel";
-import { useAuth } from "../../../context/auth_context";
+import AppLogo from "../../components/app_logo/app_logo";
+import LoginCarousel from "../../components/login_carousel";
+import { useAuth } from "../../context/auth_context";
 
 const loginSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Email is required"),

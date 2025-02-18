@@ -123,7 +123,7 @@ function FreelancerOfferView() {
                         <div className="flex flex-col gap-5">
                             <div className="flex gap-6">
                                 <img
-                                    className="h-28 w-28 rounded-full bg-purple-700"
+                                    className="h-28 w-28 rounded-full"
                                     src={`http://localhost:3000/client_images/${appointment.client_id.profile_picture}`}
                                     alt="client_profile_picture"
                                 />

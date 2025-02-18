@@ -1,14 +1,13 @@
 import { StarIcon } from "@heroicons/react/24/solid";
-import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import noResultImage from "../../../../assets/no_result_found.png";
-import ClientDashboardNavbarWithToken from "../../../../components/navigation_bar/client_dashboard_navbar_with_token";
-import ClientDashboardNavbarWithoutToken from "../../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import SearchFilter from "../../../../components/search_page/search_filter";
-import SearchResult from "../../../../components/search_page/search_result";
-import Footer from "../../../../components/footer";
-import { useAuth } from "../../../../context/auth_context";
+import noResultImage from "../../../assets/no_result_found.png";
+import Footer from "../../../components/footer";
+import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
+import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
+import SearchFilter from "../../../components/search_page/search_filter";
+import SearchResult from "../../../components/search_page/search_result";
+import { useAuth } from "../../../context/auth_context";
 
 function SearchPage() {
     const { authToken, role, userId } = useAuth();
@@ -66,7 +65,7 @@ function SearchPage() {
 
     useEffect(() => {
         console.log(results); // Logs updated results
-    }, [results]); 
+    }, [results]);
 
     // Function to filter by location
     const filterByLocation = (location) => {
@@ -230,7 +229,7 @@ function SearchPage() {
                 </div>
             </div>
 
-            <Footer/>
+            <Footer />
         </div>
     );
 }

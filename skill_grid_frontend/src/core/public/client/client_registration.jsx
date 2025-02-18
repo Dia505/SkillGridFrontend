@@ -5,28 +5,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import AppLogo from "../../../../components/app_logo/app_logo";
+import AppLogo from "../../../components/app_logo/app_logo";
 
-const freelancerSchema = yup.object().shape({
+// Define Yup validation schema
+const clientSchema = yup.object().shape({
     first_name: yup.string().required("*required"),
     last_name: yup.string().required("*required"),
-
-    date_of_birth: yup
-        .string()
-        .required("*required")
-        .test("age", "You must be 18 years or older", function (value) {
-            const today = new Date();
-            const minDate = new Date(today);
-            minDate.setFullYear(today.getFullYear() - 18); // 18 years ago
-
-            const selectedDate = new Date(value);
-
-            // Check if the selected date is within the allowed range (between 18 and 65)
-            return selectedDate <= minDate;
-        }),
-
     mobile_no: yup.string().matches(/^9[678]\d{8}$/, "Invalid mobile number").required("*required"),
-    address: yup.string().required("*required"),
     city: yup.string().required("*required"),
     email: yup.string().email("Invalid email").required("*required"),
     password: yup
@@ -40,58 +25,46 @@ const freelancerSchema = yup.object().shape({
         .required("Password is required"),
     terms: yup
         .boolean()
-        .oneOf([true])
-        .required("You must accept the terms and conditions"),
+        .oneOf([true]),
 });
 
-function FreelancerRegistration() {
+function ClientRegistration() {
+    // Use React Hook Form with Yup resolver
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(freelancerSchema),
+        resolver: yupResolver(clientSchema),
         mode: "all"
     });
 
+    const navigate = useNavigate();
+
     console.log(errors)
 
-    const saveFreelancerData = useMutation({
+    const saveClientData = useMutation({
         mutationKey: "SAVEDATA",
         mutationFn: (requestData) => {
-            console.log(requestData)
-            return axios.post("http://localhost:3000/api/freelancer", requestData)
+            console.log(requestData);
+            return axios.post("http://localhost:3000/api/client", requestData);
         },
         onSuccess: (data) => {
-            const token = data.data.token;
+            // Assuming the token is in data.token
+            const token = data.data.token; // Access the token from the response
             localStorage.setItem("authToken", token);
-            navigate("/build-your-profile");
+            navigate("/client-dashboard"); // Navigate to the dashboard
         },
         onError: (error) => {
-            console.error("Error saving freelancer data:", error);
-            alert("Failed to save freelancer data. Please try again.");
+            console.error("Error saving client data:", error);
+            alert("Failed to save client data. Please try again.");
         },
-    })
+    });
 
     const onSubmit = (values) => {
-        // Remove the 'terms' field from the form data before submitting
-        const { terms, ...filteredValues } = values;
-
-        // Pass the modified data to the mutation function
-        saveFreelancerData.mutate(filteredValues);
+        saveClientData.mutate(values);
     };
 
-    const today = new Date();
-
-    // Calculate the date 18 years ago
-    const minDate = new Date(today);
-    minDate.setFullYear(today.getFullYear() - 18);
-
-    // Calculate the date 65 years ago
-    const maxDate = new Date(today);
-    maxDate.setFullYear(today.getFullYear() - 65);
-
-    const navigate = useNavigate();
 
     return (
         <>
@@ -105,7 +78,7 @@ function FreelancerRegistration() {
                         <div className="w-[456px] h-auto flex flex-col gap-6 bg-purple-50 rounded-[22px] pt-12 pb-12 pl-12 pr-16">
                             <div>
                                 <p className="font-caprasimo text-purple-700 text-[28px]">Sign up</p>
-                                <p className="font-inter text-purple-700">Find the work you love</p>
+                                <p className="font-inter text-purple-700">Connect with professionals for your next big project</p>
                             </div>
 
                             <div className="flex flex-col gap-4">
@@ -136,15 +109,6 @@ function FreelancerRegistration() {
                                 </div>
 
                                 <div>
-                                    <label className="font-inter text-purple-700 text-[15px] ml-2">Date of birth</label>
-                                    <input type="date" className={`border ${errors.city ? "border-red-500" : "border-purple-700"} 
-                                        bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                        ${errors.city ? "focus:ring-red-500" : "focus:ring-purple-700"}`} {...register("date_of_birth")} />
-
-                                    <p className="mt-1 text-sm text-red-500">{errors?.date_of_birth?.message}</p>
-                                </div>
-
-                                <div>
                                     <label className="font-inter text-purple-700 text-[15px] ml-2">Mobile number</label>
                                     <input
                                         type="mobile_no"
@@ -156,44 +120,28 @@ function FreelancerRegistration() {
                                     {errors.mobile_no && <p className="mt-1 text-sm text-red-500">{errors?.mobile_no?.message}</p>}
                                 </div>
 
-                                <div className="flex flex-col gap-4">
-                                    <div className="flex gap-4">
-                                        <div>
-                                            <label className="font-inter text-purple-700 text-[15px] ml-2">Address</label>
-                                            <input
-                                                type="address"
-                                                {...register("address")}
-                                                className={`border ${errors.address ? "border-red-500" : "border-purple-700"} 
-                                            bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                            ${errors.address ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
-                                            />
-                                            {errors.address && <p className="mt-1 text-sm text-red-500">{errors?.address?.message}</p>}
-                                        </div>
-
-                                        <div>
-                                            <label className="font-inter text-purple-700 text-[15px] ml-2">City</label>
-                                            <select
-                                                className={`border ${errors.city ? "border-red-500" : "border-purple-700"} 
-                                        bg-purple-50 p-2 w-[163px] rounded-xl focus:outline-none focus:ring-2 
+                                <div>
+                                    <label className="font-inter text-purple-700 text-[15px] ml-2">City</label>
+                                    <select
+                                        className={`border ${errors.city ? "border-red-500" : "border-purple-700"} 
+                                        bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
                                         ${errors.city ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
-                                                {...register("city")}
-                                            >
-                                                <option value="">Select a city</option>
-                                                <option value="Kathmandu">Kathmandu</option>
-                                                <option value="Lalitpur">Lalitpur</option>
-                                                <option value="Bhaktapur">Bhaktapur</option>
-                                                <option value="Pokhara">Pokhara</option>
-                                                <option value="Chitwan">Chitwan</option>
-                                                <option value="Lumbini">Lumbini</option>
-                                                <option value="Janakpur">Janakpur</option>
-                                                <option value="Biratnagar">Biratnagar</option>
-                                                <option value="Dharan">Dharan</option>
-                                                <option value="Butwal">Butwal</option>
-                                            </select>
+                                        {...register("city")}
+                                    >
+                                        <option value="">Select a city</option>
+                                        <option value="Kathmandu">Kathmandu</option>
+                                        <option value="Lalitpur">Lalitpur</option>
+                                        <option value="Bhaktapur">Bhaktapur</option>
+                                        <option value="Pokhara">Pokhara</option>
+                                        <option value="Chitwan">Chitwan</option>
+                                        <option value="Lumbini">Lumbini</option>
+                                        <option value="Janakpur">Janakpur</option>
+                                        <option value="Biratnagar">Biratnagar</option>
+                                        <option value="Dharan">Dharan</option>
+                                        <option value="Butwal">Butwal</option>
+                                    </select>
 
-                                            {errors.city && <p className="mt-1 text-sm text-red-500">{errors?.city?.message}</p>}
-                                        </div>
-                                    </div>
+                                    {errors.city && <p className="mt-1 text-sm text-red-500">{errors?.city?.message}</p>}
                                 </div>
 
                                 <div>
@@ -260,4 +208,4 @@ function FreelancerRegistration() {
     );
 }
 
-export default FreelancerRegistration;
+export default ClientRegistration;

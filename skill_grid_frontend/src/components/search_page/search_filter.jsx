@@ -3,7 +3,7 @@ function SearchFilter({ searchFilter, onChange, checked }) {
         <div className="flex items-center gap-4">
             <input
                 type="checkbox"
-                className="h-6 w-6"
+                className="h-6 w-6 cursor-pointer"
                 checked={checked}
                 onChange={onChange}
             />

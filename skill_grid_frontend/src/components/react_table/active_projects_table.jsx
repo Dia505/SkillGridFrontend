@@ -1,7 +1,16 @@
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import PaymentStatusForm from "./payment_status_form";
 
 const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
+    const [updatedPaymentDetails, setUpdatedPaymentDetails] = useState(paymentDetails);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
+    const [showPaymentForm, setShowPaymentForm] = useState(false);
+
+    useEffect(() => {
+        setUpdatedPaymentDetails(paymentDetails);
+    }, [paymentDetails]);
+
     const columns = useMemo(
         () => [
             {
@@ -27,17 +36,16 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
             },
             {
                 header: "Payment",
-                accessorKey: "projectId", 
+                accessorKey: "projectId",
                 cell: ({ row }) => {
                     const projectId = row.original._id;
-                    const paymentData = paymentDetails[projectId];
-                    
+                    const paymentData = updatedPaymentDetails[projectId];
 
-                    if (paymentData && paymentData.amount) {
-                        return <span>Rs. {paymentData.amount}</span>;
-                    } else {
-                        return <span>N/A</span>;
-                    }
+                    return paymentData && paymentData.amount ? (
+                        <span>Rs. {paymentData.amount}</span>
+                    ) : (
+                        <span>N/A</span>
+                    );
                 },
             },
             {
@@ -80,10 +88,15 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
                         }
                     }
 
-                    // Calculate the difference between startDate and endDate in days
-                    const deadlineDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                    const now = new Date();
+                    if (endDate < now) {
+                        return <span>Completed</span>;
+                    }
 
-                    return <span>{isNaN(deadlineDays) ? "N/A" : `${deadlineDays} days`}</span>;
+                    // Calculate remaining days
+                    const deadlineDays = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+
+                    return <span>{`${deadlineDays} days`}</span>;
                 },
             },
             {
@@ -147,10 +160,36 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
                 },
             },
 
+            {
+                header: "Payment status",
+                accessorKey: "projectId",
+                cell: ({ row }) => {
+                    const projectId = row.original._id;
+                    const paymentData = updatedPaymentDetails[projectId];
 
-        ],
-        []
-    );
+                    const handlePaymentStatusClick = () => {
+                        setSelectedProjectId(projectId);  // Set selected project
+                        setShowPaymentForm(true);  // Show the form
+                    };
+
+                    if (!paymentData) {
+                        return <span className="bg-gray-100 py-1 px-3 rounded-2xl text-gray-500">N/A</span>;
+                    }
+
+                    return (
+                        <span
+                            className={`py-1 px-3 rounded-2xl cursor-pointer ${paymentData.payment_status
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-500"
+                                }`}
+                            onClick={handlePaymentStatusClick}
+                        >
+                            {paymentData.payment_status ? "Paid" : "Unpaid"}
+                        </span>
+                    );
+                },
+            }
+        ], [updatedPaymentDetails]);
 
     const table = useReactTable({
         data: activeProjects || [],  // Prevents undefined errors
@@ -164,7 +203,7 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
 
     return (
         <div className="overflow-x-auto">
-            <table className="w-[1000px] rounded-xl bg-white">
+            <table className="rounded-xl bg-white">
                 <thead>
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr key={headerGroup.id}>
@@ -188,6 +227,15 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
                     ))}
                 </tbody>
             </table>
+
+            {showPaymentForm && (
+                <>
+                    <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                    <div className="fixed inset-0 flex justify-center items-center z-20">
+                        <PaymentStatusForm projectId={selectedProjectId} onClose={() => setShowPaymentForm(false)} />
+                    </div>
+                </>
+            )}
         </div>
     );
 };
