@@ -162,7 +162,7 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
 
             {
                 header: "Payment status",
-                accessorKey: "projectId",
+                accessorKey: "project_status",
                 cell: ({ row }) => {
                     const projectId = row.original._id;
                     const paymentData = updatedPaymentDetails[projectId];

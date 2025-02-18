@@ -29,8 +29,6 @@ function BillingAndPayment() {
 
     const navigate = useNavigate();
 
-    console.log("Form data: ", formData);
-
     const {
         register,
         handleSubmit,

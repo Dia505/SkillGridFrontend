@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import EditClientContract from "../../../components/client_contracts/edit_client_contract";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import { useAuth } from "../../../context/auth_context";
@@ -12,6 +12,8 @@ function ClientContracts() {
     const [requestedOffers, setRequestedOffers] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState("All");
     const [paymentDetails, setPaymentDetails] = useState({});
+    const [showEditContractForm, setShowEditContractForm] = useState(false);
+    const [selectedContractId, setSelectedContractId] = useState(null);
 
     useEffect(() => {
         async function fetchContracts() {
@@ -116,6 +118,39 @@ function ClientContracts() {
         fetchContracts();
     }, [userId, authToken]);
 
+    const handleDeleteContract = async (contractId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this contract?");
+
+        if (!confirmDelete) {
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:3000/api/payment/appointment/${contractId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${authToken}` }
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete contract");
+            }
+
+            // Remove the contract from the state after successful deletion
+            setContracts(contracts.filter(contract => contract._id !== contractId));
+            setOngoingContracts(ongoingContracts.filter(contract => contract._id !== contractId));
+            setCompletedContracts(completedContracts.filter(contract => contract._id !== contractId));
+            setRequestedOffers(requestedOffers.filter(contract => contract._id !== contractId));
+
+            setPaymentDetails(prev => {
+                const updatedDetails = { ...prev };
+                delete updatedDetails[contractId];
+                return updatedDetails;
+            });
+
+        } catch (error) {
+            console.error("Error deleting contract:", error);
+        }
+    };
+
     const getFilteredContracts = () => {
         if (selectedFilter === "Ongoing") return ongoingContracts;
         if (selectedFilter === "Completed") return completedContracts;
@@ -150,6 +185,11 @@ function ClientContracts() {
         return ((now - startTime) / (endTime - startTime)) * 100;
     };
 
+    const handleEditContractClick = (contractId) => {
+        setSelectedContractId(contractId);
+        setShowEditContractForm(true);
+    };
+
     return (
         <>
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
@@ -178,8 +218,8 @@ function ClientContracts() {
                         {getFilteredContracts().map((contract, index) => (
                             <div key={index} className="flex flex-col py-10 px-10 bg-purple-100 rounded-xl">
                                 <div className="flex gap-2 justify-end">
-                                    <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]">✏️</button>
-                                    <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]">🗑️</button>
+                                    <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]" onClick={() => handleEditContractClick(contract._id)}>✏️</button>
+                                    <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]" onClick={() => handleDeleteContract(contract._id)}>🗑️</button>
                                 </div>
 
                                 <div className="flex gap-16 justify-center">
@@ -233,6 +273,15 @@ function ClientContracts() {
                         ))}
                     </div>
                 </div>
+
+                {showEditContractForm && (
+                    <>
+                        <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                        <div className="fixed inset-0 flex justify-center items-center z-20">
+                            <EditClientContract projectId={selectedContractId} onClose={() => setShowEditContractForm(false)} />
+                        </div>
+                    </>
+                )}
             </div>
         </>
     )
