@@ -42,7 +42,7 @@ function ClientSideBar({ isSideBarOpen, setIsSideBarOpe }) {
                     )}
 
                     <button className="cursor-pointer hover:bg-grey-50">
-                        <div className='flex items-center gap-5 py-5 px-10'>
+                        <div className='flex items-center gap-5 py-5 px-10' onClick={() => navigate("/client-profile")}>
                             <UserIcon className='h-7' />
                             <p className='font-inter'>Profile</p>
                         </div>
