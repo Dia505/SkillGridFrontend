@@ -2,8 +2,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import AddEducationForm from "../../../components/freelancer_profile/add_education_form";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../context/auth_context";
+import AddEmploymentForm from "../../../components/freelancer_profile/add_employment_form";
 
 function FreelancerProfile() {
     const { authToken, userId } = useAuth();
@@ -13,6 +15,8 @@ function FreelancerProfile() {
     const [service, setService] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [portfolioImages, setPortfolioImages] = useState([]);
+    const [showAddEducationForm, setShowAddEducationForm] = useState(false);
+    const [showAddEmploymentForm, setShowAddEmploymentForm] = useState(false);
 
     const [imageIndexes, setImageIndexes] = useState(() => {
         const initialIndexes = {};
@@ -215,7 +219,7 @@ function FreelancerProfile() {
                                     <div className='flex flex-col pb-5 pl-8 pr-8 gap-5'>
                                         <div className="flex items-center justify-between">
                                             <p className='text-[22px] font-bold'>Education</p>
-                                            <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6">+</button>
+                                            <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6" onClick={() => setShowAddEducationForm(true)}>+</button>
                                         </div>
 
                                         <div className='flex flex-col gap-4'>
@@ -241,8 +245,7 @@ function FreelancerProfile() {
                                                         </div>
                                                         <p className="text-sm text-grey-500">{education.institution_name}</p>
                                                         <p className="text-sm text-grey-500">
-                                                            {new Date(education.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} -
-                                                            {new Date(education.end_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                                            {new Date(education.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} - {new Date(education.end_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                                         </p>
                                                     </div>
                                                 ))
@@ -252,12 +255,23 @@ function FreelancerProfile() {
                                         </div>
                                     </div>
 
+                                    {showAddEducationForm && (
+                                        <>
+                                            <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                                            <div className="fixed inset-0 flex justify-center items-center z-20">
+                                                <AddEducationForm
+                                                    closeForm={() => setShowAddEducationForm(false)}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+
                                     <div className="bg-grey-300 h-0.5 w-full"></div>
 
                                     <div className='flex flex-col py-5 pl-8 pr-8 gap-5'>
                                         <div className="flex items-center justify-between">
                                             <p className='text-[22px] font-bold'>Employment</p>
-                                            <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6">+</button>
+                                            <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6" onClick={() => setShowAddEmploymentForm(true)}>+</button>
                                         </div>
 
                                         <div className='flex flex-col gap-4'>
@@ -282,8 +296,7 @@ function FreelancerProfile() {
                                                             </div>
                                                         </div>
                                                         <p className="text-sm text-grey-500">
-                                                            {new Date(employment.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} -
-                                                            {employment.end_date
+                                                            {new Date(employment.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} - {employment.end_date
                                                                 ? new Date(employment.end_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
                                                                 : 'Present'}
                                                         </p>
@@ -293,10 +306,21 @@ function FreelancerProfile() {
                                                     </div>
                                                 ))
                                             ) : (
-                                                <p className="text-gray-500">No education details available</p>
+                                                <p className="text-gray-500">No employment details available</p>
                                             )}
                                         </div>
                                     </div>
+
+                                    {showAddEmploymentForm && (
+                                        <>
+                                            <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                                            <div className="fixed inset-0 flex justify-center items-center z-20">
+                                                <AddEmploymentForm
+                                                    closeForm={() => setShowAddEmploymentForm(false)}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
 
                                 <div className="bg-grey-300 h-full w-0.5"></div>

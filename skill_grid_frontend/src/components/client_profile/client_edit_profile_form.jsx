@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/auth_context";
+import { toast } from "react-toastify";
 
 function ClientEditProfileForm({ closeForm }) {
     const {
@@ -84,7 +85,15 @@ function ClientEditProfileForm({ closeForm }) {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("Client data updated:", data);
+                toast.success("Profile updated!", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    theme: "colored",
+                });
                 closeForm();
             })
             .catch((err) => console.error("Error updating client data:", err));
