@@ -146,6 +146,48 @@ function FreelancerProfile() {
         return () => clearInterval(interval);
     }, [portfolioImages]);
 
+    const handleDeleteEmployment = async (employmentId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this employment?");
+
+        if (!confirmDelete) {
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:3000/api/employment/${employmentId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${authToken}` }
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete employment");
+            }
+
+        } catch (error) {
+            console.error("Error deleting employment:", error);
+        }
+    };
+
+    const handleDeleteEducation = async (educationId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this education?");
+
+        if (!confirmDelete) {
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:3000/api/education/${educationId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${authToken}` }
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete education");
+            }
+
+        } catch (error) {
+            console.error("Error deleting education:", error);
+        }
+    };
+
     return (
         <>
             <div className="flex bg-purple-50 overflow-auto">
@@ -236,7 +278,7 @@ function FreelancerProfile() {
                                                                     </button>
                                                                 </div>
 
-                                                                <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" >
+                                                                <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" onClick={() => handleDeleteEducation(education._id)}>
                                                                     <button className="text-purple-400">
                                                                         <TrashIcon className="h-4 w-4" />
                                                                     </button>
@@ -288,7 +330,7 @@ function FreelancerProfile() {
                                                                     </button>
                                                                 </div>
 
-                                                                <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" >
+                                                                <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" onClick={() => handleDeleteEmployment(employment._id)}>
                                                                     <button className="text-purple-400">
                                                                         <TrashIcon className="h-4 w-4" />
                                                                     </button>
