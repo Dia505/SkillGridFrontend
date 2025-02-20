@@ -38,7 +38,7 @@ function FreelancerSideBar() {
     const unreadNotificationsCount = notifications.filter(notification => !notification.read).length;
     return (
         <>
-            <div className="h-screen overflow-auto flex flex-col bg-black-400">
+            <div className="h-screen fixed top-0 left-0 flex flex-col bg-black-400">
                 <div className="flex items-center gap-2 bg-black-700 px-10 py-8">
                     <img className="h-[65px]" src="/footer_app_logo.png" />
                     <p className="font-caprasimo text-white text-2xl">SkillGrid.</p>
@@ -81,7 +81,7 @@ function FreelancerSideBar() {
                                 )}
                             </div>
                         </button>
-                        <button className="cursor-pointer hover:bg-black-50">
+                        <button className="cursor-pointer hover:bg-black-50" onClick={() => navigate("/freelancer-profile")}>
                             <div className='flex items-center gap-2 py-5 pl-10'>
                                 <UserIcon className='text-white h-7' />
                                 <p className='text-white font-inter'>Profile</p>

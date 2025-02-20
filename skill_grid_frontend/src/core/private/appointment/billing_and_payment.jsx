@@ -119,6 +119,8 @@ function BillingAndPayment() {
                 draggable: true,
                 theme: "colored",
             });
+
+            navigate("/client-contracts");
         }
         catch (error) {
             console.error("Error during submission:", error);

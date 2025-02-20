@@ -116,7 +116,7 @@ function FreelancerOfferView() {
             <div className="flex bg-purple-50">
                 <FreelancerSideBar />
 
-                <div className="h-screen flex flex-col bg-purple-50 py-16 pl-20 gap-10">
+                <div className="h-screen flex flex-col bg-purple-50 py-16 pl-80 gap-10">
                     <p className="text-3xl font-inter font-bold">Offered project</p>
 
                     {appointment && (

@@ -77,11 +77,13 @@ function PaymentStatusForm({ projectId, onClose }) {
 
                     {project.client_id && (
                         <div className="flex gap-2 items-center">
-                            <img
-                                className="h-16 w-16 rounded-full"
-                                src={`http://localhost:3000/client_images/${project.client_id.profile_picture}`}
-                                alt="client_profile_picture"
-                            />
+                            <div className="w-16 h-16 rounded-full overflow-hidden">
+                                <img
+                                    className="h-full w-full rounded-full object-cover"
+                                    src={`http://localhost:3000/client_images/${project.client_id.profile_picture}`}
+                                    alt="client_profile_picture"
+                                />
+                            </div>
                             <p className="text-white">{project.client_id.first_name} {project.client_id.last_name}</p>
                         </div>
                     )}

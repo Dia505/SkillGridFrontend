@@ -32,14 +32,6 @@ function FreelancerProfileClientView() {
     });
 
     useEffect(() => {
-        if (authToken) {
-            console.log("User is logged in");
-        } else {
-            console.log("User is not logged in");
-        }
-    }, [authToken]);
-
-    useEffect(() => {
         if (!_id || !authToken) return; // ✅ Prevents API call if ID is undefined
 
         async function fetchFreelancer() {
@@ -241,22 +233,13 @@ function FreelancerProfileClientView() {
                                     </div>
                                 </div>
 
-                                {authToken && role == "client" ?
-                                    <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold'
-                                        onClick={() => {
-                                            navigate("/send-an-offer", { state: { freelancerId: _id } });
-                                        }}>
-                                        Book an Appointment
-                                    </button>
-                                    : <div className="flex flex-col items-center gap-2">
-                                        <p className="text-xl font-semibold">Ready to work with {`${freelancer.first_name}`}?</p>
-                                        <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold' onClick={() => navigate("/client-registration")}>Sign up</button>
-                                        <div className="flex gap-2">
-                                            <p className="font-inter font-light text-sm">Already have an account?</p>
-                                            <p className="text-sm font-caprasimo text-purple-700 hover:underline cursor-pointer" onClick={() => navigate("/login")}>Log In</p>
-                                        </div>
-                                    </div>
-                                }
+                                <button className='w-[240px] h-[46px] bg-purple-300 rounded-xl text-white font-bold'
+                                    onClick={() => {
+                                        navigate("/send-an-offer", { state: { freelancerId: _id } });
+                                    }}>
+                                    Book an Appointment
+                                </button>
+
                             </div>
 
                             <div className="w-full h-0.5 bg-grey-500 mt-9"></div>

@@ -25,6 +25,7 @@ const ClientContracts = lazy(() => import("./core/private/client/client_contract
 const FreelancerProjects = lazy(() => import("./core/private/freelancer/freelancer_projects"));
 const LottieScreen = lazy(() => import("./core/public/lottie_screen"));
 const ClientProfile = lazy(() => import("./core/private/client/client_profile"));
+const FreelancerProfile = lazy(() => import("./core/private/freelancer/freelancer_profile"));
 
 const queryClient = new QueryClient();
 
@@ -172,6 +173,12 @@ function App() {
       path: "/client-profile",
       element: (
         <AuthRoute requiredRole={"client"} element={<Suspense><ClientProfile /></Suspense>} />
+      )
+    },
+    {
+      path: "/freelancer-profile",
+      element: (
+        <AuthRoute requiredRole={"freelancer"} element={<Suspense><FreelancerProfile /></Suspense>} />
       )
     },
     // Fallback route for unauthorized access
