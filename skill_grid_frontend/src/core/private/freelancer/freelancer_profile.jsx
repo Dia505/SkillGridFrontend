@@ -3,9 +3,10 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import AddEducationForm from "../../../components/freelancer_profile/add_education_form";
+import AddEmploymentForm from "../../../components/freelancer_profile/add_employment_form";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../context/auth_context";
-import AddEmploymentForm from "../../../components/freelancer_profile/add_employment_form";
+import AddFreelancerServiceForm from "../../../components/freelancer_profile/add_freelancer_service_form";
 
 function FreelancerProfile() {
     const { authToken, userId } = useAuth();
@@ -17,6 +18,7 @@ function FreelancerProfile() {
     const [portfolioImages, setPortfolioImages] = useState([]);
     const [showAddEducationForm, setShowAddEducationForm] = useState(false);
     const [showAddEmploymentForm, setShowAddEmploymentForm] = useState(false);
+    const [showAddServiceForm, setShowAddServiceForm] = useState(false);
 
     const [imageIndexes, setImageIndexes] = useState(() => {
         const initialIndexes = {};
@@ -370,7 +372,7 @@ function FreelancerProfile() {
                                 <div className='flex flex-col pl-8 pt-5 pb-14 gap-6'>
                                     <div className="flex items-center justify-between">
                                         <p className='text-[22px] font-bold'>Services</p>
-                                        <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6">+</button>
+                                        <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6" onClick={() => setShowAddServiceForm(true)}>+</button>
                                     </div>
 
                                     <div className='relative flex items-center'>
@@ -443,6 +445,17 @@ function FreelancerProfile() {
                                         ))}
                                     </div>
                                 </div>
+
+                                {showAddServiceForm && (
+                                    <>
+                                        <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                                        <div className="fixed inset-0 flex justify-center items-center z-20">
+                                            <AddFreelancerServiceForm
+                                                closeForm={() => setShowAddServiceForm(false)}
+                                            />
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     )}
