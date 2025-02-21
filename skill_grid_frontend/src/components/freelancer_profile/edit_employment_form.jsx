@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/auth_context";
 
-function EditEducationForm({ closeForm, educationId }) {
+function EditEmploymentForm({ closeForm, employmentId }) {
     const {
         register,
         handleSubmit,
@@ -15,10 +15,10 @@ function EditEducationForm({ closeForm, educationId }) {
     });
 
     const { authToken } = useAuth();
-    const [education, setEducation] = useState({});
+    const [employment, setEmployment] = useState({});
 
     useEffect(() => {
-        fetch(`http://localhost:3000/api/education/${educationId}`, {
+        fetch(`http://localhost:3000/api/employment/${employmentId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${authToken}`,
@@ -27,26 +27,28 @@ function EditEducationForm({ closeForm, educationId }) {
         })
             .then(res => res.json())
             .then(data => {
-                setEducation(data);
-                setValue("degree_title", data.degree_title);
-                setValue("institution_name", data.institution_name);
+                setEmployment(data);
+                setValue("company_name", data.company_name);
+                setValue("job_title", data.job_title);
                 const formattedStartDate = new Date(data.start_date).toISOString().split('T')[0];
                 setValue("start_date", formattedStartDate)
                 const formattedEndDate = new Date(data.end_date).toISOString().split('T')[0];
                 setValue("end_date", formattedEndDate)
+                setValue("description", data.description || "");
             })
-            .catch(err => console.error("Error fetching education:", err));
-    }, [authToken, educationId]);
+            .catch(err => console.error("Error fetching employment:", err));
+    }, [authToken, employmentId]);
 
     const onSubmit = async (data) => {
         const updatedData = {
-            degree_title: data.degree_title,
-            institution_name: data.institution_name,
+            company_name: data.company_name,
+            job_title: data.job_title,
             start_date: data.start_date,
-            end_date: data.end_date
+            end_date: data.end_date,
+            description: data.description
         };
 
-        await fetch(`http://localhost:3000/api/education/${educationId}`, {
+        await fetch(`http://localhost:3000/api/employment/${employmentId}`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${authToken}`,
@@ -67,11 +69,11 @@ function EditEducationForm({ closeForm, educationId }) {
                 });
                 closeForm();
             })
-            .catch((err) => console.error("Error updating education data:", err));
+            .catch((err) => console.error("Error updating employment data:", err));
     };
 
     const handleCancel = () => {
-        reset(education);
+        reset(employment);
         closeForm();
     };
 
@@ -79,23 +81,23 @@ function EditEducationForm({ closeForm, educationId }) {
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col pt-5 pb-10 px-16 relative bg-purple-50 rounded-2xl gap-2">
-                    <h2 className="text-2xl font-inter font-bold text-purple-700 mt-14">Add education</h2>
+                    <h2 className="text-2xl font-inter font-bold text-purple-700 mt-14">Add employment</h2>
 
                     <div className="flex flex-col gap-3">
                         <div>
-                            <label className="font-inter text-purple-700 text-[15px] ml-2">Degree title</label>
+                            <label className="font-inter text-purple-700 text-[15px] ml-2">Company name</label>
                             <input
-                                type="degree_title"
-                                {...register("degree_title")}
+                                type="company_name"
+                                {...register("company_name")}
                                 className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
                             />
                         </div>
 
                         <div>
-                            <label className="font-inter text-purple-700 text-[15px] ml-2">Institution name</label>
+                            <label className="font-inter text-purple-700 text-[15px] ml-2">Job title</label>
                             <input
-                                type="institution_name"
-                                {...register("institution_name")}
+                                type="job_title"
+                                {...register("job_title")}
                                 className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
                             />
                         </div>
@@ -117,6 +119,16 @@ function EditEducationForm({ closeForm, educationId }) {
 
                             <p className="mt-1 text-sm text-red-500">{errors?.end_date?.message}</p>
                         </div>
+
+                        <div>
+                            <label className="font-inter text-purple-700 text-[15px] ml-2">Description</label>
+                            <input
+                                type="description"
+                                placeholder="Describe your role in the company"
+                                {...register("description")}
+                                className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
+                            />
+                        </div>
                     </div>
 
                     <div className="flex gap-4 mt-5">
@@ -133,4 +145,4 @@ function EditEducationForm({ closeForm, educationId }) {
     )
 }
 
-export default EditEducationForm;
+export default EditEmploymentForm;

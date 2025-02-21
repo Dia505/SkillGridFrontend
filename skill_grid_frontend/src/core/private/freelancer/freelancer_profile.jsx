@@ -9,6 +9,7 @@ import EditEducationForm from "../../../components/freelancer_profile/edit_educa
 import EditFreelancerProfileForm from "../../../components/freelancer_profile/edit_freelancer_profile_form";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../context/auth_context";
+import EditEmploymentForm from "../../../components/freelancer_profile/edit_employment_form";
 
 function FreelancerProfile() {
     const { authToken, userId } = useAuth();
@@ -24,6 +25,8 @@ function FreelancerProfile() {
     const [showEditProfileForm, setShowEditProfileForm] = useState(false);
     const [showEditEducationForm, setShowEditEducationForm] = useState(false);
     const [selectedEducation, setSelectedEducation] = useState(null);
+    const [showEditEmploymentForm, setShowEditEmploymentForm] = useState(false);
+    const [selectedEmployment, setSelectedEmployment] = useState(null);
 
     const [imageIndexes, setImageIndexes] = useState(() => {
         const initialIndexes = {};
@@ -360,7 +363,11 @@ function FreelancerProfile() {
                                                             <div className="flex gap-2">
                                                                 <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" >
                                                                     <button className="text-purple-400">
-                                                                        <PencilIcon className="h-4 w-4" />
+                                                                        <PencilIcon className="h-4 w-4"
+                                                                            onClick={() => {
+                                                                                setSelectedEmployment(employment._id);
+                                                                                setShowEditEmploymentForm(true);
+                                                                            }} />
                                                                     </button>
                                                                 </div>
 
@@ -393,6 +400,18 @@ function FreelancerProfile() {
                                             <div className="fixed inset-0 flex justify-center items-center z-20">
                                                 <AddEmploymentForm
                                                     closeForm={() => setShowAddEmploymentForm(false)}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {showEditEmploymentForm && selectedEmployment && (
+                                        <>
+                                            <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                                            <div className="fixed inset-0 flex justify-center items-center z-20">
+                                                <EditEmploymentForm
+                                                    employmentId={selectedEmployment}
+                                                    closeForm={() => setShowEditEmploymentForm(false)}
                                                 />
                                             </div>
                                         </>
