@@ -96,20 +96,16 @@ function AddEducationForm({ closeForm }) {
 
                         <div>
                             <label className="font-inter text-purple-700 text-[15px] ml-2">Start date</label>
-                            <input type="date" className={`border ${errors.start_date ? "border-red-500" : "border-purple-700"} 
-                                        bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                        ${errors.start_date ? "focus:ring-red-500" : "focus:ring-purple-700"}`} {...register("start_date")} />
-
-                            <p className="mt-1 text-sm text-red-500">{errors?.start_date?.message}</p>
+                            <input type="date" 
+                            className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
+                            {...register("start_date")} />
                         </div>
 
                         <div>
                             <label className="font-inter text-purple-700 text-[15px] ml-2">End date</label>
-                            <input type="date" className={`border ${errors.end_date ? "border-red-500" : "border-purple-700"} 
-                                        bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                        ${errors.end_date ? "focus:ring-red-500" : "focus:ring-purple-700"}`} {...register("end_date")} />
-
-                            <p className="mt-1 text-sm text-red-500">{errors?.end_date?.message}</p>
+                            <input type="date" 
+                            className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
+                            {...register("end_date")} />
                         </div>
                     </div>
 

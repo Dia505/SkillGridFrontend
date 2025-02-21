@@ -69,7 +69,6 @@ function EditFreelancerProfileForm({ closeForm }) {
     };
 
     const onSubmit = async (data) => {
-        console.log("Submitting Data:", data);
         const updatedData = {
             first_name: data.first_name,
             last_name: data.last_name,
@@ -148,16 +147,6 @@ function EditFreelancerProfileForm({ closeForm }) {
         setBackgroundPicture(freelancer.background_picture);
         closeForm();
     };
-
-    const today = new Date();
-
-    // Calculate the date 18 years ago
-    const minDate = new Date(today);
-    minDate.setFullYear(today.getFullYear() - 18);
-
-    // Calculate the date 65 years ago
-    const maxDate = new Date(today);
-    maxDate.setFullYear(today.getFullYear() - 65);
 
     return (
         <>
@@ -340,6 +329,7 @@ function EditFreelancerProfileForm({ closeForm }) {
 
                         <div className="flex gap-4 mt-5">
                             <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400"
+                                type="button"
                                 onClick={handleCancel}>Cancel</button>
                             <button
                                 type="submit"

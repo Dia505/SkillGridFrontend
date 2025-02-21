@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import AddEducationForm from "../../../components/freelancer_profile/add_education_form";
 import AddEmploymentForm from "../../../components/freelancer_profile/add_employment_form";
 import AddFreelancerServiceForm from "../../../components/freelancer_profile/add_freelancer_service_form";
+import EditEducationForm from "../../../components/freelancer_profile/edit_education_form";
 import EditFreelancerProfileForm from "../../../components/freelancer_profile/edit_freelancer_profile_form";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../context/auth_context";
@@ -21,6 +22,8 @@ function FreelancerProfile() {
     const [showAddEmploymentForm, setShowAddEmploymentForm] = useState(false);
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
     const [showEditProfileForm, setShowEditProfileForm] = useState(false);
+    const [showEditEducationForm, setShowEditEducationForm] = useState(false);
+    const [selectedEducation, setSelectedEducation] = useState(null);
 
     const [imageIndexes, setImageIndexes] = useState(() => {
         const initialIndexes = {};
@@ -288,7 +291,10 @@ function FreelancerProfile() {
                                                             <div className="flex gap-2">
                                                                 <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" >
                                                                     <button className="text-purple-400">
-                                                                        <PencilIcon className="h-4 w-4" />
+                                                                        <PencilIcon className="h-4 w-4" onClick={() => {
+                                                                            setSelectedEducation(education._id);
+                                                                            setShowEditEducationForm(true);
+                                                                        }} />
                                                                     </button>
                                                                 </div>
 
@@ -305,9 +311,11 @@ function FreelancerProfile() {
                                                         </p>
                                                     </div>
                                                 ))
-                                            ) : (
-                                                <p className="text-gray-500">No education details available</p>
-                                            )}
+                                            )
+
+                                                : (
+                                                    <p className="text-gray-500">No education details available</p>
+                                                )}
                                         </div>
                                     </div>
 
@@ -317,6 +325,18 @@ function FreelancerProfile() {
                                             <div className="fixed inset-0 flex justify-center items-center z-20">
                                                 <AddEducationForm
                                                     closeForm={() => setShowAddEducationForm(false)}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {showEditEducationForm && selectedEducation && (
+                                        <>
+                                            <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                                            <div className="fixed inset-0 flex justify-center items-center z-20">
+                                                <EditEducationForm
+                                                    educationId={selectedEducation}
+                                                    closeForm={() => setShowEditEducationForm(false)}
                                                 />
                                             </div>
                                         </>
