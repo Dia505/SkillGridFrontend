@@ -199,7 +199,7 @@ function ClientEditProfileForm({ closeForm }) {
                                 onClick={handleCancel}>Cancel</button>
                             <button
                                 type="submit"
-                                className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white">Continue</button>
+                                className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white">Update</button>
                         </div>
                     </div>
                 </div>

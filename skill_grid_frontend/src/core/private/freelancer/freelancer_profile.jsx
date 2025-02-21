@@ -4,9 +4,10 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import AddEducationForm from "../../../components/freelancer_profile/add_education_form";
 import AddEmploymentForm from "../../../components/freelancer_profile/add_employment_form";
+import AddFreelancerServiceForm from "../../../components/freelancer_profile/add_freelancer_service_form";
+import EditFreelancerProfileForm from "../../../components/freelancer_profile/edit_freelancer_profile_form";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../context/auth_context";
-import AddFreelancerServiceForm from "../../../components/freelancer_profile/add_freelancer_service_form";
 
 function FreelancerProfile() {
     const { authToken, userId } = useAuth();
@@ -19,6 +20,7 @@ function FreelancerProfile() {
     const [showAddEducationForm, setShowAddEducationForm] = useState(false);
     const [showAddEmploymentForm, setShowAddEmploymentForm] = useState(false);
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
+    const [showEditProfileForm, setShowEditProfileForm] = useState(false);
 
     const [imageIndexes, setImageIndexes] = useState(() => {
         const initialIndexes = {};
@@ -247,14 +249,24 @@ function FreelancerProfile() {
                                         </div>
                                     </div>
 
-                                    <div className="flex border-2 border-purple-400 rounded-full px-3 py-3 cursor-pointer h-12" >
+                                    <div className="flex border-2 border-purple-400 rounded-full px-3 py-3 cursor-pointer h-12" onClick={() => setShowEditProfileForm(true)}>
                                         <button className="text-purple-400">
                                             <PencilIcon className="h-5 w-5" />
                                         </button>
                                     </div>
                                 </div>
-
                             </div>
+
+                            {showEditProfileForm && (
+                                <>
+                                    <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                                    <div className="fixed inset-0 flex justify-center items-center z-20">
+                                        <EditFreelancerProfileForm
+                                            closeForm={() => setShowEditProfileForm(false)}
+                                        />
+                                    </div>
+                                </>
+                            )}
 
                             <div className="bg-grey-300 h-0.5 w-full"></div>
 
