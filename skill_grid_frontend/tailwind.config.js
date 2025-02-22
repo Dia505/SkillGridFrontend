@@ -59,6 +59,10 @@ export default {
         100: "#A7FFBD",
         600: "#29A82D",
         700: "#43B925"
+      },
+
+      yellow: {
+        700: "#FFCC00"
       }
     },
     extend: {

@@ -1,4 +1,6 @@
+import { StarIcon, CheckIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import EditClientContract from "../../../components/client_contracts/edit_client_contract";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
@@ -14,6 +16,9 @@ function ClientContracts() {
     const [paymentDetails, setPaymentDetails] = useState({});
     const [showEditContractForm, setShowEditContractForm] = useState(false);
     const [selectedContractId, setSelectedContractId] = useState(null);
+    const [reviews, setReviews] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchContracts() {
@@ -109,6 +114,20 @@ function ClientContracts() {
                     }
                 });
                 setPaymentDetails(paymentDetails);
+
+                const fetchReviews = async () => {
+                    try {
+                        const response = await fetch("http://localhost:3000/api/review", {
+                            headers: { "Authorization": `Bearer ${authToken}` }
+                        });
+                        const data = await response.json();
+                        setReviews(data);
+                    } catch (error) {
+                        console.error("Error fetching reviews:", error);
+                    }
+                };
+
+                fetchReviews();
 
             }
             catch (error) {
@@ -267,6 +286,31 @@ function ClientContracts() {
                                                 </span>
                                             </div>
                                         )}
+
+                                        {completedContracts.includes(contract) ? (
+                                            reviews.some(review => review.appointment_id._id === contract._id) ? (
+                                                <div className="flex gap-1">
+                                                    <p className="text-purple-700 font-medium">Review sent</p>
+                                                    <CheckIcon className="h-6 text-green-700"/>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    className="bg-purple-700 py-2 rounded-xl text-white font-semibold mt-5"
+                                                    onClick={() => navigate("/review", {
+                                                        state: {
+                                                            contractId: contract._id,
+                                                            freelancerId: contract.freelancer_service_id.freelancer_id._id
+                                                        }
+                                                    })}
+                                                >
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        Write a review
+                                                        <StarIcon className="h-6 hover:text-yellow-700" />
+                                                    </div>
+                                                </button>
+                                            )
+                                        ) : null}
+
                                     </div>
                                 </div>
                             </div>
