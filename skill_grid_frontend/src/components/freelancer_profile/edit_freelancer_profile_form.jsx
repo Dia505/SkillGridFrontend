@@ -7,7 +7,6 @@ function EditFreelancerProfileForm({ closeForm }) {
     const {
         register,
         handleSubmit,
-        formState: { errors },
         setValue,
         reset
     } = useForm({

@@ -7,7 +7,6 @@ function EditEducationForm({ closeForm, educationId }) {
     const {
         register,
         handleSubmit,
-        formState: { errors },
         setValue,
         reset
     } = useForm({
@@ -105,8 +104,6 @@ function EditEducationForm({ closeForm, educationId }) {
                             <input type="date" 
                             className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700" 
                             {...register("start_date")} />
-
-                            <p className="mt-1 text-sm text-red-500">{errors?.start_date?.message}</p>
                         </div>
 
                         <div>
@@ -114,8 +111,6 @@ function EditEducationForm({ closeForm, educationId }) {
                             <input type="date" 
                             className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
                             {...register("end_date")} />
-
-                            <p className="mt-1 text-sm text-red-500">{errors?.end_date?.message}</p>
                         </div>
                     </div>
 

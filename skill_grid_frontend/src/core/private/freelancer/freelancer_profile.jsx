@@ -6,10 +6,11 @@ import AddEducationForm from "../../../components/freelancer_profile/add_educati
 import AddEmploymentForm from "../../../components/freelancer_profile/add_employment_form";
 import AddFreelancerServiceForm from "../../../components/freelancer_profile/add_freelancer_service_form";
 import EditEducationForm from "../../../components/freelancer_profile/edit_education_form";
+import EditEmploymentForm from "../../../components/freelancer_profile/edit_employment_form";
 import EditFreelancerProfileForm from "../../../components/freelancer_profile/edit_freelancer_profile_form";
+import EditFreelancerServiceForm from "../../../components/freelancer_profile/edit_freelancer_service_form";
 import FreelancerSideBar from "../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../context/auth_context";
-import EditEmploymentForm from "../../../components/freelancer_profile/edit_employment_form";
 
 function FreelancerProfile() {
     const { authToken, userId } = useAuth();
@@ -27,6 +28,8 @@ function FreelancerProfile() {
     const [selectedEducation, setSelectedEducation] = useState(null);
     const [showEditEmploymentForm, setShowEditEmploymentForm] = useState(false);
     const [selectedEmployment, setSelectedEmployment] = useState(null);
+    const [showEditServiceForm, setShowEditServiceForm] = useState(false);
+    const [selectedService, setSelectedService] = useState(null);
 
     const [imageIndexes, setImageIndexes] = useState(() => {
         const initialIndexes = {};
@@ -195,6 +198,56 @@ function FreelancerProfile() {
 
         } catch (error) {
             console.error("Error deleting education:", error);
+        }
+    };
+
+    const handleDeleteService = async (freelancerServiceId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this education?");
+
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+            // Deleting the freelancer service
+            const freelancerServiceResponse = await fetch(`http://localhost:3000/api/freelancer-service/${freelancerServiceId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${authToken}` },
+            });
+
+            if (!freelancerServiceResponse.ok) {
+                throw new Error("Failed to delete service");
+            }
+
+            // Deleting the associated portfolio images
+            const portfolioResponse = await fetch(`http://localhost:3000/api/portfolio/freelancer-service/${freelancerServiceId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${authToken}` },
+            });
+
+            if (!portfolioResponse.ok) {
+                throw new Error('Failed to delete portfolio');
+            }
+
+            // Update the UI state after successful deletion
+            setService((prevService) => {
+                const updatedServices = prevService.filter((s) => s._id !== freelancerServiceId); // Remove the deleted service
+
+                // Adjust the currentIndex if necessary
+                if (updatedServices.length === 0) {
+                    setCurrentIndex(0); // If no services left, reset to index 0 (or a suitable index)
+                } else if (updatedServices.length <= currentIndex) {
+                    setCurrentIndex(updatedServices.length - 1); // If the currentIndex is out of bounds, set it to the last service
+                }
+
+                return updatedServices;
+            });
+
+            setPortfolioImages((prevImages) => prevImages.filter((portfolio) => portfolio.serviceId !== freelancerServiceId)); // Remove the portfolio images
+
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while deleting the service and portfolio');
         }
     };
 
@@ -427,7 +480,7 @@ function FreelancerProfile() {
                                     </div>
 
                                     <div className='relative flex items-center'>
-                                        {service.length > 0 ? (
+                                        {service.length > 0 && currentIndex >= 0 && currentIndex < service.length ? (
                                             <div className="transition-all duration-500 ease-in-out transform">
                                                 <div
                                                     key={currentIndex}
@@ -463,6 +516,22 @@ function FreelancerProfile() {
                                                         )}
                                                     </div>
 
+                                                    <div className="flex gap-2 ml-48">
+                                                        <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" >
+                                                            <button className="text-purple-400">
+                                                                <PencilIcon className="h-4 w-4" onClick={() => {
+                                                                    setSelectedService(service[currentIndex]._id);
+                                                                    setShowEditServiceForm(true);
+                                                                }} />
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="flex border-2 border-purple-400 rounded-full pl-2 cursor-pointer h-9 w-9" onClick={() => handleDeleteService(service[currentIndex]._id)}>
+                                                            <button className="text-purple-400">
+                                                                <TrashIcon className="h-4 w-4" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -503,6 +572,18 @@ function FreelancerProfile() {
                                         <div className="fixed inset-0 flex justify-center items-center z-20">
                                             <AddFreelancerServiceForm
                                                 closeForm={() => setShowAddServiceForm(false)}
+                                            />
+                                        </div>
+                                    </>
+                                )}
+
+                                {showEditServiceForm && selectedService && (
+                                    <>
+                                        <div className="fixed inset-0 bg-grey-500 bg-opacity-50 z-10"></div>
+                                        <div className="fixed inset-0 flex justify-center items-center z-20">
+                                            <EditFreelancerServiceForm
+                                                freelancerServiceId={selectedService}
+                                                closeForm={() => setShowEditServiceForm(false)}
                                             />
                                         </div>
                                     </>
