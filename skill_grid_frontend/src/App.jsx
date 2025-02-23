@@ -23,10 +23,12 @@ const FreelancerNotification = lazy(() => import("./core/private/freelancer/noti
 const FreelancerOfferView = lazy(() => import("./core/private/freelancer/notification/freelancer_offer_view"));
 const ClientContracts = lazy(() => import("./core/private/client/client_contracts"));
 const FreelancerProjects = lazy(() => import("./core/private/freelancer/freelancer_projects"));
-const LottieScreen = lazy(() => import("./core/public/lottie_screen"));
 const ClientProfile = lazy(() => import("./core/private/client/client_profile"));
 const FreelancerProfile = lazy(() => import("./core/private/freelancer/freelancer_profile"));
 const ClientReview = lazy(() => import("./core/private/client/client_review"));
+const EmailForOtpScreen = lazy(() => import("./core/public/forgot_password/email_for_otp_screen"));
+const OtpVerificationScreen = lazy(() => import("./core/public/forgot_password/otp_verification_screen"));
+const ResetPasswordScreen = lazy(() => import("./core/public/forgot_password/reset_password_screen"));
 
 const queryClient = new QueryClient();
 
@@ -82,10 +84,28 @@ function App() {
       errorElement: <>error</>
     },
     {
-      path: "/lottie-screen",
+      path: "/email-for-otp",
       element: (
         <Suspense>
-          <LottieScreen />
+          <EmailForOtpScreen />
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+    {
+      path: "/otp-verification",
+      element: (
+        <Suspense>
+          <OtpVerificationScreen />
+        </Suspense>
+      ),
+      errorElement: <>error</>
+    },
+    {
+      path: "/reset-password",
+      element: (
+        <Suspense>
+          <ResetPasswordScreen />
         </Suspense>
       ),
       errorElement: <>error</>

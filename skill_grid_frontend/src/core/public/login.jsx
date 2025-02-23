@@ -139,7 +139,7 @@ function Login() {
                                         <span className="text-purple-700 font-inter">Remember me</span>
                                     </label>
 
-                                    <p className="text-purple-700 font-inter hover:underline cursor-pointer">Forgot password</p>
+                                    <p className="text-purple-700 font-inter hover:underline cursor-pointer" onClick={() => navigate("/email-for-otp")}>Forgot password</p>
                                 </div>
                             </div>
 
