@@ -98,8 +98,6 @@ function ServiceDetails({ data, updateData }) {
                                 <div className="flex justify-between ml-3">
                                     <p className="text-grey-700 text-lg">Rs. {service.hourly_rate}/hr</p>
                                     <div className="flex gap-2">
-                                        <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]">✏️</button>
-                        
                                         <button
                                             onClick={() => handleDeleteService(index)}
                                             className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]"

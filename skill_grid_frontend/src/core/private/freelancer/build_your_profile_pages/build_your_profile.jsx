@@ -6,8 +6,11 @@ import BioDetails from "./bio_details";
 import JobCategory from "./job_category";
 import JobDetails from "./job_details";
 import ServiceDetails from "./service_details_files/service_details";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const BuildYourProfile = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     job_category: null,
@@ -168,7 +171,17 @@ const BuildYourProfile = () => {
         console.log("No portfolio data to upload.");
       }
 
-      alert("Profile built successfully!");
+      toast.success("Profile built successfully!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        theme: "colored",
+    });
+      navigate("/login");
+      window.location.reload();
 
     } catch (error) {
       console.error("Error submitting profile:", error.response?.data || error.message);

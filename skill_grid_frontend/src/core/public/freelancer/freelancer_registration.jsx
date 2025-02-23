@@ -64,6 +64,7 @@ function FreelancerRegistration() {
             return axios.post("http://localhost:3000/api/freelancer", requestData)
         },
         onSuccess: (data) => {
+            console.log('Navigating to /build-your-profile');
             const token = data.data.token;
             localStorage.setItem("authToken", token);
             navigate("/build-your-profile");
@@ -80,8 +81,6 @@ function FreelancerRegistration() {
 
         // Pass the modified data to the mutation function
         saveFreelancerData.mutate(filteredValues);
-
-        navigate("/build-your-profile");
     };
 
     const today = new Date();
