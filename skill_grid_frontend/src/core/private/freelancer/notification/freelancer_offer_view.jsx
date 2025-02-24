@@ -122,11 +122,13 @@ function FreelancerOfferView() {
                     {appointment && (
                         <div className="flex flex-col gap-5">
                             <div className="flex gap-6">
-                                <img
-                                    className="h-28 w-28 rounded-full"
-                                    src={`http://localhost:3000/client_images/${appointment.client_id.profile_picture}`}
-                                    alt="client_profile_picture"
-                                />
+                                <div className="w-[130px] h-[130px] rounded-full overflow-hidden">
+                                    <img
+                                        className="w-full h-full object-cover"
+                                        src={`http://localhost:3000/client_images/${appointment.client_id.profile_picture}`}
+                                        alt="client_profile_picture"
+                                    />
+                                </div>
 
                                 <div className="flex flex-col gap-0.5">
                                     <p className="text-xl font-bold">{`${appointment.client_id.first_name} ${appointment.client_id.last_name}`}</p>

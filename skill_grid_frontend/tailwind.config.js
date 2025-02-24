@@ -69,7 +69,16 @@ export default {
       fontFamily: {
         caprasimo: ["Caprasimo", "sans-serif"],
         inter: ['Inter', 'sans-serif'],
-      }
+      },
+
+      screens: {
+        '1300': '1300px',
+        '1215': '1215px',
+        '1080': '1080px',
+        '700': '700px',
+        '560': '560px',
+        '500': '500px'
+      },
     },
   },
   plugins: [],

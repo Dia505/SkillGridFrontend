@@ -93,13 +93,13 @@ function Login() {
             <div className="h-screen overflow-auto flex flex-col pt-10 pl-16 bg-purple-700">
                 <AppLogo />
 
-                <div className="flex justify-center gap-60 items-center pt-8">
-                    <div className="flex-shrink-0 w-[500px]">
+                <div className="flex justify-center 1300:gap-60 1215:gap-20 1080:gap-5 items-center pt-8">
+                    <div className="flex-shrink-0 w-[500px] hidden 1080:block">
                         <LoginCarousel carouselData={loginCarouselData} />
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-[456px] h-[621px] flex flex-col gap-8 bg-purple-50 rounded-[22px] pt-16 pl-12 pr-16">
+                        <div className="w-[456px] h-[621px] flex flex-col gap-8 bg-purple-50 rounded-[22px] pt-16 pl-12 pr-16 700:mr-0 500:mr-14">
                             <div>
                                 <p className="font-caprasimo text-purple-700 text-[28px]">Welcome Back!</p>
                                 <p className="font-inter text-purple-700">Log in to your account</p>

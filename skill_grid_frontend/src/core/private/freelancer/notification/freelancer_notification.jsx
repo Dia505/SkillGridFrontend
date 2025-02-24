@@ -1,8 +1,8 @@
-import FreelancerSideBar from "../../../../components/navigation_bar/freelancer_side_bar";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
+import FreelancerSideBar from "../../../../components/navigation_bar/freelancer_side_bar";
 
 const socket = io("http://localhost:3000", {
     transports: ["polling", "websocket"],
@@ -35,10 +35,10 @@ function FreelancerNotification() {
 
     const handleReadNotification = async (id, appointment_id) => {
         await axios.put(
-            `http://localhost:3000/api/notification/${id}/read`, 
-            {},  
-            { 
-                headers: { "Authorization": `Bearer ${token}` } 
+            `http://localhost:3000/api/notification/${id}/read`,
+            {},
+            {
+                headers: { "Authorization": `Bearer ${token}` }
             }
         );
         setNotifications((prev) => prev.filter((notif) => notif._id !== id));
@@ -57,17 +57,19 @@ function FreelancerNotification() {
                         <div className="flex flex-col gap-3 pl-14">
                             {notifications.length > 0 ? (
                                 notifications.map((notification) => (
-                                    <div key={notification._id} 
-                                        className="flex gap-20 p-4 rounded-xl shadow-sm bg-white cursor-pointer" 
+                                    <div key={notification._id}
+                                        className="flex gap-20 p-4 rounded-xl shadow-sm bg-white cursor-pointer"
                                         onClick={() => handleReadNotification(notification._id, notification.appointment_id._id)}
                                     >
 
                                         <div className="flex gap-6 items-center">
-                                            <img
-                                                className="h-20 w-20 rounded-full"
-                                                src={`http://localhost:3000/client_images/${notification.appointment_id.client_id?.profile_picture}`}
-                                                alt="client_profile_picture"
-                                            />
+                                            <div className="w-[80px] h-[80px] rounded-full overflow-hidden">
+                                                <img
+                                                    className="w-full h-full object-cover"
+                                                    src={`http://localhost:3000/client_images/${notification.appointment_id.client_id?.profile_picture}`}
+                                                    alt="client_profile_picture"
+                                                />
+                                            </div>
 
                                             <div className="flex flex-col">
                                                 <p className="text-lg font-semibold">{notification.message}</p>
