@@ -35,11 +35,11 @@ function ClientDashboard() {
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
                 {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
-                <div className="flex flex-col mt-[90px] pt-10 pb-40 pl-56 gap-10">
-                    <div className="w-[1067px] h-[556px] bg-purple-700 rounded-xl flex justify-between pl-20">
+                <div className="flex flex-col mt-[90px] pt-10 pb-40 1175:pl-[15.3vw] 1002:pl-[8vw] 921:pl-[3vw] 800:pl-[14vw] 589:pl-[8vw] 500:pl-[4vw] pr-[15.3vw] gap-10">
+                    <div className="800:w-[69vw] 589:w-[80vw] 500:w-[89vw] 1175:h-[36vw] 900:h-[40vw] 500:h-[40vw] bg-purple-700 rounded-xl flex justify-between 858:pl-20 500:pl-8">
                         <div className="flex flex-col mt-10 gap-8">
-                            <div className="w-[538px]">
-                                <p className="text-[53px] text-purple-50 font-caprasimo">Discover exceptional talent tailored to your needs.</p>
+                            <div className="705:w-[538px] 589:w-[450px]">
+                                <p className="589:text-[3.46vw] 500:text-[4vw] text-purple-50 font-caprasimo">Discover exceptional talent tailored to your needs.</p>
                             </div>
                             <div className="relative">
                                 <input
@@ -55,10 +55,10 @@ function ClientDashboard() {
                             </div>
                         </div>
 
-                        <img className="w-[419px] rounded-xl" src="src/assets/client_dashboard_top_img.png" />
+                        <img className="w-[27vw] rounded-xl hidden 921:block" src="src/assets/client_dashboard_top_img.png" />
                     </div>
 
-                    <div className="flex gap-8">
+                    <div className="flex 800:flex-row 500:flex-col gap-8 921:-mr-28">
                         <AppFeatureDiv
                             bgColor="bg-blue-100"
                             featureImg="src/assets/client_dashboard_feature1.png"
@@ -84,30 +84,30 @@ function ClientDashboard() {
                         <OnGoingCollaborations />
                     )}
 
-                    <div className="w-[1067px] h-[3px] bg-grey-500"></div>
+                    <div className="1472:w-[69vw] h-[3px] 1175:w-[77vw] 1020:w-[85vw] 921:w-[90vw] 800:w-[69vw] 589:w-[80vw] 500:w-[90vw] bg-grey-500"></div>
 
-                    <div className="w-[1067px] h-[400px] bg-blue-400 rounded-2xl flex justify-between pl-10">
+                    <div className="1175:w-[69vw] 921:w-[85vw] 800:w-[75vw] 589:w-[80vw] 500:w-[90vw] 1002:h-[26vw] 589:h-[35vw] 500:h-[40vw] bg-blue-400 rounded-2xl flex justify-between pl-10">
                         <div className="flex flex-col gap-4 pt-12">
-                            <div className="w-[427px]">
-                                <span className="font-caprasimo text-[48px] text-white leading-[1.1]">
+                            <div className="921:w-[25vw] 500:w-[20vw]">
+                                <span className="font-caprasimo 1175:text-[3.12vw] 921:text-[3vw] 500:text-[4vw] text-white leading-[1.1]">
                                     Access a Pool of
                                     <span className="text-blue-700"> Exceptional Talent</span>
                                 </span>
                             </div>
 
-                            <div className="w-[427px]">
-                                <p className="font-inter text-white font-light text-base">Browse comprehensive freelancer profiles with detailed work experience, skills, and client feedback, empowering you to choose the perfect fit for your project.</p>
-                            </div>
+
+                            <p className="font-inter text-white font-light text-base 1175:text-base 921:text-sm hidden 921:block">Browse comprehensive freelancer profiles with detailed work experience, skills, and client feedback, empowering you to choose the perfect fit for your project.</p>
+
                         </div>
 
-                        <img className="w-[560px] rounded-r-2xl" src="src/assets/client_dashboard_exceptional_talent.png" />
+                        <img className="1175:w-[35vw] 589:w-[43vw] 500:w-[50vw] 921:-ml-0 705:-ml-[0vw] 589:-ml-[30vw] 500:-ml-[40vw] rounded-r-2xl" src="src/assets/client_dashboard_exceptional_talent.png" />
                     </div>
 
 
                     <div className="flex flex-col gap-8">
                         <p className="text-3xl font-inter font-light">Service Category</p>
 
-                        <div className="flex gap-10">
+                        <div className="flex 800:flex-row 500:flex-col gap-10">
                             <div className="flex flex-col gap-4">
                                 <ServiceCategoryDiv
                                     serviceImg="src/assets/client_dashboard_technology.jpg"

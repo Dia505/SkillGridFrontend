@@ -151,8 +151,8 @@ function SearchPage() {
                 </p>
                 <div className="w-full h-0.5 bg-grey-500 mt-9"></div>
 
-                <div className="flex">
-                    <div className="w-[426px] h-screen flex flex-col pl-20 pr-20 pt-10 gap-8">
+                <div className="flex 1002:mr-5 1200:pr-0">
+                    <div className="w-[426px] h-screen flex flex-col 1110:pl-20 500:pl-10 1080:pr-20 500:pr-10 pt-10 1002:gap-8 500:gap-5 hidden 1020:block">
                         {/* Location filter */}
                         <select
                             className="border border-grey-600 border-2 text-grey-500 h-[50px] bg-purple-50 p-2 rounded-xl focus:outline-none focus:ring-2"
@@ -208,7 +208,7 @@ function SearchPage() {
                         </div>
                     </div>
 
-                    <div className="w-0.5 h-full bg-grey-500"></div>
+                    <div className="w-0.5 h-full bg-grey-500 hidden 1020:block"></div>
 
                     <div className="flex flex-col pb-20">
                         {filteredResults.length > 0 ? (

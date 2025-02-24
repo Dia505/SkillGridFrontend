@@ -74,8 +74,8 @@ function SearchResult({ freelancer }) {
     const navigate = useNavigate();
 
     return (
-        <div className="flex flex-col pt-8 pl-14 items-center gap-10 cursor-pointer" onClick={() => navigate(`/freelancer-profile/${freelancer._id}`)}>
-            <div className="flex justify-between w-[687px] items-center">
+        <div className="flex flex-col pt-8 md:pl-14 500:pl-5 items-center gap-10 cursor-pointer" onClick={() => navigate(`/freelancer-profile/${freelancer._id}`)}>
+            <div className="flex justify-between md:w-[687px] 500:w-[400px] items-center">
                 <div className="flex gap-5">
                     <div className="w-[70px] h-[70px] rounded-full overflow-hidden bg-purple-700">
                         <img
@@ -116,7 +116,7 @@ function SearchResult({ freelancer }) {
             </div>
 
             {/* Skills Section */}
-            <div className="w-[550px] flex flex-wrap gap-3">
+            <div className="md:w-[550px] flex flex-wrap gap-3 md:pl-0 500:pl-10">
                 {skills.slice(0, maxSkills).map((skill, index) => (
                     <div
                         key={index}
