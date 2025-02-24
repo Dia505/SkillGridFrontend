@@ -71,11 +71,11 @@ function ClientRegistration() {
             <div className="h-screen overflow-auto flex flex-col pt-10 pl-16 pb-20 bg-purple-700">
                 <AppLogo />
 
-                <div className="flex justify-center gap-20">
-                    <img className="w-[416px] h-[299px] self-end" src="src/assets/registration_img1.png" />
+                <div className="flex justify-center 1472:gap-20 1306:gap-10 1306:mr-0 1250:mr-10 1175:mr-20">
+                    <img className="w-[416px] h-[299px] self-end hidden 1175:block" src="src/assets/registration_img1.png" />
 
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-[456px] h-auto flex flex-col gap-6 bg-purple-50 rounded-[22px] pt-12 pb-12 pl-12 pr-16">
+                        <div className="575:w-[456px] 500:w-[380px] h-auto flex flex-col gap-6 bg-purple-50 rounded-[22px] pt-12 pb-12 pl-12 pr-16 800:mt-0 800:mr-0 500:mt-10 500:mr-14">
                             <div>
                                 <p className="font-caprasimo text-purple-700 text-[28px]">Sign up</p>
                                 <p className="font-inter text-purple-700">Connect with professionals for your next big project</p>
@@ -201,7 +201,7 @@ function ClientRegistration() {
                         </div>
                     </form>
 
-                    <img className="w-[360px] h-[312px]" src="src/assets/registration_img2.png" />
+                    <img className="w-[360px] h-[312px] hidden 1175:block" src="src/assets/registration_img2.png" />
                 </div>
             </div>
         </>

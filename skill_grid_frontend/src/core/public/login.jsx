@@ -99,7 +99,7 @@ function Login() {
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-[456px] h-[621px] flex flex-col gap-8 bg-purple-50 rounded-[22px] pt-16 pl-12 pr-16 700:mr-0 500:mr-14">
+                        <div className="575:w-[456px] h-[621px] 500:w-[380px] flex flex-col gap-8 bg-purple-50 rounded-[22px] pt-16 pl-12 pr-16 700:mr-0 500:mr-14">
                             <div>
                                 <p className="font-caprasimo text-purple-700 text-[28px]">Welcome Back!</p>
                                 <p className="font-inter text-purple-700">Log in to your account</p>
@@ -134,12 +134,12 @@ function Login() {
                                     <label className="flex items-center space-x-2">
                                         <input
                                             type="checkbox"
-                                            className="h-5 w-5 appearance-none bg-purple-50 border border-purple-700 rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700"
+                                            className="500:h-5 575:w-5 500:w-6 appearance-none bg-purple-50 border border-purple-700 rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700"
                                         />
-                                        <span className="text-purple-700 font-inter">Remember me</span>
+                                        <span className="text-purple-700 font-inter text-center">Remember me</span>
                                     </label>
 
-                                    <p className="text-purple-700 font-inter hover:underline cursor-pointer" onClick={() => navigate("/email-for-otp")}>Forgot password</p>
+                                    <p className="text-purple-700 font-inter hover:underline cursor-pointer text-center" onClick={() => navigate("/email-for-otp")}>Forgot password</p>
                                 </div>
                             </div>
 

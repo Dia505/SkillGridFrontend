@@ -27,8 +27,8 @@ function JoinClientFreelancer() {
             <div className="h-screen overflow-auto flex flex-col pt-10 pl-16 bg-purple-700">
                 <AppLogo />
 
-                <div className="flex flex-col items-center justify-center pt-6 gap-12">
-                    <p className="font-caprasimo text-purple-50 text-3xl">Join as a client or freelancer</p>
+                <div className="flex flex-col items-center justify-center pt-6 gap-12 700:mr-0 500:mr-14">
+                    <p className="font-caprasimo text-purple-50 text-3xl text-center">Join as a client or freelancer</p>
 
                     <div className="flex flex-col gap-4">
                         <div>
