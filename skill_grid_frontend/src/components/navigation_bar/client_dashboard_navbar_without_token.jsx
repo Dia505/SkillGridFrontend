@@ -19,7 +19,7 @@ function ClientDashboardNavbarWithoutToken() {
                 <button onClick={() => navigate("/")}><AppLogo2/></button>
 
                 <div className="flex gap-5">
-                    <div className="relative">
+                    <div className="relative hidden 900:block">
                         <input
                             type="text"
                             className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl"
@@ -33,11 +33,11 @@ function ClientDashboardNavbarWithoutToken() {
                         </button>
                     </div>
 
-                    <button className="bg-purple-50 w-[90px] text-purple-700 font-caprasimo" onClick={() => navigate("/login")}>
+                    <button className="bg-purple-50 575:w-[90px] text-purple-700 font-caprasimo" onClick={() => navigate("/login")}>
                         Log In
                     </button>
 
-                    <button className="bg-purple-700 w-[150px] rounded-xl text-purple-50 font-caprasimo" onClick={() => navigate("/join-client-freelancer")}>
+                    <button className="bg-purple-700 575:w-[150px] 500:w-[110px] h-10 rounded-xl text-purple-50 font-caprasimo" onClick={() => navigate("/join-client-freelancer")}>
                         Sign Up
                     </button>
                 </div>

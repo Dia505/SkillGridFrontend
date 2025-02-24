@@ -1,13 +1,12 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 import * as yup from "yup";
 import AppLogo from "../../../components/app_logo/app_logo";
-import { useLocation } from 'react-router-dom';
-import { toast } from "react-toastify";
-import axios from "axios";
 
 const resetPasswordSchema = yup.object().shape({
     password: yup
@@ -28,7 +27,7 @@ const resetPasswordSchema = yup.object().shape({
 
 function ResetPasswordScreen() {
     const navigate = useNavigate();
-    const location = useLocation(); 
+    const location = useLocation();
     const { email, otp } = location.state || {};
     console.log("Email:", email);
     console.log("OTP:", otp);
@@ -70,13 +69,14 @@ function ResetPasswordScreen() {
             <div className="h-screen overflow-auto flex flex-col pt-10 pl-16 bg-purple-700">
                 <AppLogo />
 
-                <div className="flex justify-center gap-60 items-center pt-8">
-                    <div className="flex-shrink-0 w-[500px]">
+                <div className="flex justify-center 1300:gap-60 1175:gap-20 1080:gap-10 items-center pt-8">
+                    <div className="w-[500px] hidden 1080:block">
                         <img src="forgot_password.png" />
+                        <p className='font-caprasimo text-purple-50 text-xl text-center'>Your Account's Security Starts with a Strong Password</p>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-[456px] h-[621px] flex gap-7 bg-purple-50 rounded-[22px] pt-16 pl-12 pr-16">
+                        <div className="575:w-[456px] 500:w-[430px] pb-72 flex gap-7 bg-purple-50 rounded-[22px] pt-16 pl-12 pr-16 700:mr-0 500:mr-16">
                             <ArrowLeftIcon className="h-6 text-purple-700 cursor-pointer" onClick={() => navigate("/login")} />
 
                             <div className='flex flex-col gap-8 mt-7'>

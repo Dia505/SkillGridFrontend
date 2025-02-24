@@ -1,4 +1,4 @@
-import { BellIcon, CalendarIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClientNotification from "../../core/private/client/client_notification";
@@ -69,7 +69,7 @@ function ClientDashboardNavbarWithToken() {
             <button onClick={() => navigate("/")} ><AppLogo2 /></button>
 
             <div className="flex gap-8">
-                <div className="relative">
+                <div className="relative hidden 700:block">
                     <input
                         type="text"
                         className="border border-grey-500 bg-purple-50 p-2 w-[260px] rounded-xl"
@@ -82,10 +82,6 @@ function ClientDashboardNavbarWithToken() {
                         <MagnifyingGlassIcon />
                     </button>
                 </div>
-
-                <button className="w-[30px]">
-                    <CalendarIcon />
-                </button>
 
                 <button className="w-[30px]" onClick={() => {setIsNotificationOpen((prev) => !prev); setIsSideBarOpen(false);}}>
                     <BellIcon />
