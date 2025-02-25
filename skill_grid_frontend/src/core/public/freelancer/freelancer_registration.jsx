@@ -113,7 +113,8 @@ function FreelancerRegistration() {
                                     <div>
                                         <label className="font-inter text-purple-700 text-[15px] ml-2">First name</label>
                                         <input
-                                            type="first_name"
+                                            type="text"
+                                            name="first_name"
                                             {...register("first_name")}
                                             className={`border ${errors.first_name ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -125,7 +126,8 @@ function FreelancerRegistration() {
                                     <div>
                                         <label className="font-inter text-purple-700 text-[15px] ml-2">Last name</label>
                                         <input
-                                            type="last_name"
+                                            type="text"
+                                            name="last_name"
                                             {...register("last_name")}
                                             className={`border ${errors.last_name ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -147,7 +149,8 @@ function FreelancerRegistration() {
                                 <div>
                                     <label className="font-inter text-purple-700 text-[15px] ml-2">Mobile number</label>
                                     <input
-                                        type="mobile_no"
+                                        type="text"
+                                        name="mobile_no"
                                         {...register("mobile_no")}
                                         className={`border ${errors.mobile_no ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -161,7 +164,8 @@ function FreelancerRegistration() {
                                         <div>
                                             <label className="font-inter text-purple-700 text-[15px] ml-2">Address</label>
                                             <input
-                                                type="address"
+                                                type="text"
+                                                name="address"
                                                 {...register("address")}
                                                 className={`border ${errors.address ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -199,7 +203,8 @@ function FreelancerRegistration() {
                                 <div>
                                     <label className="font-inter text-purple-700 text-[15px] ml-2">Email address</label>
                                     <input
-                                        type="email"
+                                        type="text"
+                                        name="email"
                                         {...register("email")}
                                         className={`border ${errors.email ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -212,6 +217,7 @@ function FreelancerRegistration() {
                                     <label className="font-inter text-purple-700 text-[15px] ml-2">Password</label>
                                     <input
                                         type="password"
+                                        name="password"
                                         {...register("password")}
                                         className={`border ${errors.password ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 

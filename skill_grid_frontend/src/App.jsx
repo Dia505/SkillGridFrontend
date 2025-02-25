@@ -8,7 +8,6 @@ import { AuthProvider } from './context/auth_context';
 import { InfoProvider } from "./context/info_context";
 
 const ClientRegistration = lazy(() => import("./core/public/client/client_registration"));
-const AdminDashboard = lazy(() => import("./core/private/admin/admin_dashboard"));
 const FreelancerRegistration = lazy(() => import("./core/public/freelancer/freelancer_registration"));
 const Login = lazy(() => import("./core/public/login"));
 const JoinClientFreelancer = lazy(() => import("./core/public/join_client_freelancer"));
@@ -125,12 +124,6 @@ function App() {
       path: "/freelancer-dashboard",
       element: (
         <AuthRoute requiredRole="freelancer" element={<Suspense><FreelancerDashboard /></Suspense>} />
-      )
-    },
-    {
-      path: "/admin-dashboard",
-      element: (
-        <AuthRoute requiredRole="admin" element={<Suspense><AdminDashboard /></Suspense>} />
       )
     },
     {

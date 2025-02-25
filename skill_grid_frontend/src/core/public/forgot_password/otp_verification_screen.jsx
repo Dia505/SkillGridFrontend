@@ -13,9 +13,7 @@ const otpSchema = yup.object().shape({
 
 function OtpVerificationScreen() {
     const location = useLocation();
-    console.log("Location state:", location.state);
     const email = location.state?.email;
-    console.log("Email passed to OTP verification:", email);
     const navigate = useNavigate();
     const {
         register,
@@ -62,6 +60,7 @@ function OtpVerificationScreen() {
                                 <div>
                                     <input
                                         type="text"
+                                        name="otp"
                                         {...register("otp")}
                                         className={`border ${errors.otp ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 -ml-3 w-full rounded-xl focus:outline-none focus:ring-2 

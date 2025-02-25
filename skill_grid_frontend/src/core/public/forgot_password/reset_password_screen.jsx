@@ -90,6 +90,7 @@ function ResetPasswordScreen() {
                                         <label className="font-inter text-purple-700 text-[15px] ml-2">New password</label>
                                         <input
                                             type="password"
+                                            name="password"
                                             {...register("password")}
                                             className={`border ${errors.password ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -102,6 +103,7 @@ function ResetPasswordScreen() {
                                         <label className="font-inter text-purple-700 text-[15px] ml-2">Confirm password</label>
                                         <input
                                             type="password"
+                                            name="confirmPassword"
                                             {...register("confirmPassword")}
                                             className={`border ${errors.confirmPassword ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 

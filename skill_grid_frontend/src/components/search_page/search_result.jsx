@@ -74,7 +74,7 @@ function SearchResult({ freelancer }) {
     const navigate = useNavigate();
 
     return (
-        <div className="flex flex-col pt-8 md:pl-14 500:pl-5 items-center gap-10 cursor-pointer" onClick={() => navigate(`/freelancer-profile/${freelancer._id}`)}>
+        <div className="search-result-item flex flex-col pt-8 md:pl-14 500:pl-5 items-center gap-10 cursor-pointer" onClick={() => navigate(`/freelancer-profile/${freelancer._id}`)}>
             <div className="flex justify-between md:w-[687px] 500:w-[400px] items-center">
                 <div className="flex gap-5">
                     <div className="w-[70px] h-[70px] rounded-full overflow-hidden bg-purple-700">

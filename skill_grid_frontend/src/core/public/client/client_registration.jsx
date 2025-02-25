@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import AppLogo from "../../../components/app_logo/app_logo";
+import { toast } from "react-toastify";
 
 // Define Yup validation schema
 const clientSchema = yup.object().shape({
@@ -50,10 +51,16 @@ function ClientRegistration() {
             return axios.post("http://localhost:3000/api/client", requestData);
         },
         onSuccess: (data) => {
-            // Assuming the token is in data.token
-            const token = data.data.token; // Access the token from the response
-            localStorage.setItem("authToken", token);
-            navigate("/client-dashboard"); // Navigate to the dashboard
+            toast.success("Registration successful!", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                theme: "colored",
+            });
+            navigate("/login");
         },
         onError: (error) => {
             console.error("Error saving client data:", error);
@@ -86,7 +93,8 @@ function ClientRegistration() {
                                     <div>
                                         <label className="font-inter text-purple-700 text-[15px] ml-2">First name</label>
                                         <input
-                                            type="first_name"
+                                            type="text"
+                                            name="first_name"
                                             {...register("first_name")}
                                             className={`border ${errors.first_name ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -98,7 +106,8 @@ function ClientRegistration() {
                                     <div>
                                         <label className="font-inter text-purple-700 text-[15px] ml-2">Last name</label>
                                         <input
-                                            type="last_name"
+                                            type="text"
+                                            name="last_name"
                                             {...register("last_name")}
                                             className={`border ${errors.last_name ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -111,7 +120,8 @@ function ClientRegistration() {
                                 <div>
                                     <label className="font-inter text-purple-700 text-[15px] ml-2">Mobile number</label>
                                     <input
-                                        type="mobile_no"
+                                        type="text"
+                                        name="mobile_no"
                                         {...register("mobile_no")}
                                         className={`border ${errors.mobile_no ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -147,7 +157,8 @@ function ClientRegistration() {
                                 <div>
                                     <label className="font-inter text-purple-700 text-[15px] ml-2">Email address</label>
                                     <input
-                                        type="email"
+                                        type="text"
+                                        name="email"
                                         {...register("email")}
                                         className={`border ${errors.email ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -160,6 +171,7 @@ function ClientRegistration() {
                                     <label className="font-inter text-purple-700 text-[15px] ml-2">Password</label>
                                     <input
                                         type="password"
+                                        name="password"
                                         {...register("password")}
                                         className={`border ${errors.password ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
@@ -176,6 +188,7 @@ function ClientRegistration() {
                                         {...register("terms")}
                                         className={`h-5 w-5 appearance-none bg-purple-50 border ${errors.terms ? "border-red-500" : "border-purple-700"
                                             } rounded focus:outline-none checked:bg-purple-700 checked:border-purple-700 shrink-0`}
+                                        
                                     />
                                     <span className="text-grey-700 font-inter text-[13px] leading-tight">
                                         Yes, I understand and agree to the

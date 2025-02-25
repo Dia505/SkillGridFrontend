@@ -152,10 +152,11 @@ function SearchPage() {
                 <div className="w-full h-0.5 bg-grey-500 mt-9"></div>
 
                 <div className="flex 1002:mr-5 1200:pr-0">
-                    <div className="w-[426px] h-screen flex flex-col 1110:pl-20 500:pl-10 1080:pr-20 500:pr-10 pt-10 1002:gap-8 500:gap-5 hidden 1020:block">
+                    <div className="w-[426px] h-screen flex flex-col 1110:pl-20 500:pl-10 1080:pr-20 500:pr-10 pt-10 hidden 1020:block">
                         {/* Location filter */}
                         <select
-                            className="border border-grey-600 border-2 text-grey-500 h-[50px] bg-purple-50 p-2 rounded-xl focus:outline-none focus:ring-2"
+                            name="location"
+                            className="border border-grey-600 border-2 text-grey-500 h-[50px] w-[190px] bg-purple-50 p-2 rounded-xl focus:outline-none focus:ring-2"
                             onChange={(e) => filterByLocation(e.target.value)}
                         >
                             <option value="">Location</option>
@@ -172,7 +173,7 @@ function SearchPage() {
                         </select>
 
                         {/* Hourly rate filters */}
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-4 mt-8">
                             <p className="text-xl font-medium">Hourly rates</p>
                             <div className="flex flex-col gap-2">
                                 {Object.keys(rateFilter).map((rate) => (
@@ -187,7 +188,7 @@ function SearchPage() {
                         </div>
 
                         {/* Ratings filters */}
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-4 mt-8">
                             <p className="text-xl font-medium">Ratings</p>
                             <div className="flex flex-col gap-2">
                                 {[5, 4, 3, 2, 1].map((star) => (

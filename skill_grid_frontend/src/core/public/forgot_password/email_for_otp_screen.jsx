@@ -56,7 +56,8 @@ function EmailForOtpScreen() {
 
                                 <div>
                                     <input
-                                        type="email"
+                                        type="text"
+                                        name="email"
                                         {...register("email")}
                                         className={`border ${errors.email ? "border-red-500" : "border-purple-700"} 
                                             bg-purple-50 p-2 -ml-3 w-full rounded-xl focus:outline-none focus:ring-2 
