@@ -36,13 +36,13 @@ function ClientProfile() {
                     {showEditClientForm ? (
                         <ClientEditProfileForm closeForm={() => setShowEditClienttForm(false)} />
                     ) : (
-                        <div className="flex border-2 border-grey-300 rounded-xl items-center pr-16 pl-10 py-5">
-                            <div className="w-72 h-72 rounded-full overflow-hidden">
+                        <div className="flex 900:flex-row 500:flex-col border-2 border-grey-300 rounded-xl items-center 900:pr-16 500:pr-3 900:pl-10 py-5">
+                            <div className="900:w-72 900:h-72 500:w-[32vw] 500:h-[32vw] rounded-full overflow-hidden">
                                 <img src={client.profile_picture} className="w-full h-full object-cover" />
                             </div>
 
                             <div className="flex flex-col pl-10 py-6 gap-3">
-                                <div className="flex items-center justify-between">
+                                <div className="flex items-center 900:justify-between 500:gap-[14vw]">
                                     <p className="text-xl font-inter font-bold text-purple-700">Account information</p>
                                     <div className="flex border-2 border-purple-400 rounded-full px-3 py-3 cursor-pointer" onClick={() => setShowEditClienttForm(true)}>
                                         <button className="text-purple-400">

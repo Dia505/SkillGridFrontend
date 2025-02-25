@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context/auth_context";
 import { toast } from "react-toastify";
+import { useAuth } from "../../context/auth_context";
 
 function ClientEditProfileForm({ closeForm }) {
     const {
@@ -101,16 +101,16 @@ function ClientEditProfileForm({ closeForm }) {
 
     const handleCancel = () => {
         reset(client);
-        setImage(client.profile_picture); 
+        setImage(client.profile_picture);
         closeForm();
     };
 
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex border-2 border-grey-300 rounded-xl items-center pr-16 pl-10 py-5">
+                <div className="flex 1002:flex-row 500:flex-col border-2 border-grey-300 rounded-xl items-center 900:pr-16 500:pr-6 900:pl-10 py-5">
                     <div className="flex flex-col gap-4">
-                        <div className="w-72 h-72 rounded-full overflow-hidden">
+                        <div className="1002:w-72 1002:h-72 500:w-[32vw] 500:h-[32vw] rounded-full overflow-hidden">
                             <img src={image} className="w-full h-full object-cover" />
                         </div>
 
@@ -142,7 +142,7 @@ function ClientEditProfileForm({ closeForm }) {
                                 <input
                                     type="first_name"
                                     {...register("first_name")}
-                                    className={"border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
+                                    className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[34vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                                 />
                             </div>
 
@@ -151,7 +151,7 @@ function ClientEditProfileForm({ closeForm }) {
                                 <input
                                     type="last_name"
                                     {...register("last_name")}
-                                    className={"border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
+                                    className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[34vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                                 />
                             </div>
                         </div>
@@ -161,14 +161,14 @@ function ClientEditProfileForm({ closeForm }) {
                             <input
                                 type="mobile_no"
                                 {...register("mobile_no")}
-                                className={"border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
+                                className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[73vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                             />
                         </div>
 
                         <div className="flex flex-col gap-2">
                             <p className="text-grey-500">City</p>
                             <select
-                                className={"border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
+                                className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[73vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                                 {...register("city")}
                             >
                                 <option value="">Select a city</option>
@@ -190,17 +190,25 @@ function ClientEditProfileForm({ closeForm }) {
                             <input
                                 type="password"
                                 {...register("password")}
-                                className={"border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
+                                className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[73vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                             />
                         </div>
 
-                        <div className="flex gap-4 mt-5">
-                            <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400"
-                                onClick={handleCancel}>Cancel</button>
+                        <div className="flex gap-4 mt-5 flex-col sm:flex-row sm:justify-center">
+                            <button
+                                className="border-2 border-purple-400 rounded-3xl px-14 py-2 font-semibold text-purple-400 w-full sm:w-auto"
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </button>
                             <button
                                 type="submit"
-                                className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white">Update</button>
+                                className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-14 py-2 font-semibold text-white w-full sm:w-auto"
+                            >
+                                Update
+                            </button>
                         </div>
+
                     </div>
                 </div>
             </form>

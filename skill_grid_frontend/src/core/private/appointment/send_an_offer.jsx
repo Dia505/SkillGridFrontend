@@ -6,7 +6,7 @@ import * as yup from "yup";
 import Footer from "../../../components/footer";
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
-import { useAuth } from "../../../context/auth_context"
+import { useAuth } from "../../../context/auth_context";
 
 const appointmentSchema = yup.object().shape({
     service_name: yup.string().required(),
@@ -113,12 +113,12 @@ function SendAnOffer() {
 
                 {freelancer && (
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="flex flex-col mt-[90px] px-60 pt-10 pb-20 gap-10 items-center">
+                        <div className="flex flex-col mt-[90px] px-4 md:px-8 lg:px-20 pt-10 pb-20 gap-10 items-center">
 
                             <p className="font-extrabold text-3xl text-purple-700">Send an Offer</p>
 
-                            <div className="flex pl-20 gap-10">
-                                <div className="w-[370px] flex flex-col items-center bg-purple-200 pl-5 pr-5 pt-8 rounded-xl gap-5">
+                            <div className="flex flex-col md:flex-row gap-10 items-center">
+                                <div className="w-full md:w-[370px] flex flex-col items-center bg-purple-200 pl-5 pr-5 pt-8 md:pb-40 500:pb-14 rounded-xl gap-5">
                                     <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
                                         <img
                                             src={`${freelancer.profile_picture}`}
@@ -126,15 +126,15 @@ function SendAnOffer() {
                                         />
                                     </div>
 
-                                    <div className="flex flex-col gap-5">
-                                        <div className="flex flex-col ml-5">
+                                    <div className="flex flex-col gap-5 text-center md:text-left">
+                                        <div className="flex flex-col md:pl-24">
                                             <p className="text-xl font-inter font-bold text-white">{`${freelancer.first_name} ${freelancer.last_name}`}</p>
                                             <p className="text-lg text-white font-light">{`${freelancer.profession}`}</p>
                                             <p className="text-base text-purple-500 font-medium">{`${freelancer.address}, ${freelancer.city}`}</p>
                                             <p className="text-base text-purple-500 font-medium">{`${freelancer.mobile_no}`}</p>
                                         </div>
 
-                                        <div className="flex flex-wrap gap-3">
+                                        <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                                             {freelancer?.skills && (
                                                 <div className="flex flex-wrap gap-2">
                                                     {freelancer.skills.split(",").map((skill, index) => (
@@ -148,15 +148,15 @@ function SendAnOffer() {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col gap-7">
+                                <div className="w-full md:w-auto flex flex-col gap-7">
                                     <div className="flex flex-col gap-4">
                                         <span className="font-inter text-xl font-medium ml-2">Select a service
                                             <span className="text-red-500">*</span>
                                         </span>
                                         <select
                                             className={`border ${errors.service_name ? "border-red-500" : "border-purple-700"} 
-                                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                                ${errors.service_name ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                ${errors.service_name ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                             {...register("service_name")}
                                             onChange={handleServiceChange}
                                         >
@@ -182,8 +182,8 @@ function SendAnOffer() {
                                             type="appointment_purpose"
                                             {...register("appointment_purpose")}
                                             className={`border ${errors.appointment_purpose ? "border-red-500" : "border-purple-700"} 
-                                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                                ${errors.appointment_purpose ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                ${errors.appointment_purpose ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                         />
                                     </div>
 
@@ -196,8 +196,8 @@ function SendAnOffer() {
                                             type="date"
                                             {...register("appointment_date")}
                                             className={`border ${errors.appointment_date ? "border-red-500" : "border-purple-700"} 
-                                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                                ${errors.appointment_date ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                ${errors.appointment_date ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                         />
 
                                         {errors.appointment_date && errors.appointment_date.type === "is-future-date" && (
@@ -211,25 +211,25 @@ function SendAnOffer() {
                                         </span>
 
                                         <div className="flex gap-4">
-                                            <div>
+                                            <div className="w-full md:w-auto">
                                                 <input
                                                     placeholder="Enter a number"
                                                     {...register("project_duration.value")}
                                                     className={`border ${errors.project_duration?.value ? "border-red-500" : "border-purple-700"} 
-                                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                                ${errors.project_duration?.value ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                    bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                    ${errors.project_duration?.value ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                                 />
                                                 {errors.project_duration?.value?.type === "min" && (
                                                     <p className="mt-1 text-sm text-red-500">{errors.project_duration.value.message}</p>
                                                 )}
                                             </div>
 
-                                            <div>
+                                            <div className="w-full md:w-auto">
                                                 <select
                                                     {...register("project_duration.unit")}
                                                     className={`border ${errors.project_duration?.unit ? "border-red-500" : "border-purple-700"} 
-                                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                                ${errors.project_duration?.unit ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
+                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                ${errors.project_duration?.unit ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                                                 >
                                                     <option value="">Select a duration</option>
                                                     <option value="hour">hour</option>
@@ -253,10 +253,9 @@ function SendAnOffer() {
                                 </div>
                             </div>
 
+                            <div className="w-full h-0.5 bg-grey-500 my-4"></div>
 
-                            <div className="w-full h-0.5 bg-grey-500"></div>
-
-                            <label className="flex items-center gap-2 ml-20">
+                            <label className="flex items-center gap-2 ml-2 md:ml-20">
                                 <input
                                     type="checkbox"
                                     {...register("terms")}
@@ -271,17 +270,17 @@ function SendAnOffer() {
                                 </span>
                             </label>
 
-                            <div className="flex gap-4">
-                                <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400"
+                            <div className="flex gap-4 mt-4 justify-center">
+                                <button className="border-2 border-purple-400 rounded-3xl px-10 py-2 font-semibold text-purple-400 w-full sm:w-auto"
                                     onClick={() => navigate(`/freelancer-profile/${freelancer._id}`)}>Cancel</button>
                                 <button
                                     type="submit"
-                                    className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white">Continue</button>
+                                    className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-10 py-2 font-semibold text-white w-full sm:w-auto">Continue</button>
                             </div>
-
                         </div>
                     </form>
                 )}
+
                 <Footer />
             </div >
         </>

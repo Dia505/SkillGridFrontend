@@ -1,4 +1,4 @@
-import { StarIcon, CheckIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, StarIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EditClientContract from "../../../components/client_contracts/edit_client_contract";
@@ -211,107 +211,90 @@ function ClientContracts() {
 
     return (
         <>
-            <div className="h-screen overflow-auto flex flex-col bg-purple-50">
+            <div className="min-h-screen overflow-auto flex flex-col bg-purple-50">
                 {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
-                <div className="flex flex-col mt-[90px] px-32 pt-10 pb-20 gap-10">
+                <div className="flex flex-col mt-[90px] px-5 md:px-16 lg:px-32 pt-10 pb-20 gap-10">
                     <p className="font-extrabold text-3xl text-purple-700">Contracts</p>
 
                     <div className="flex flex-col gap-2">
-                        <div className="flex gap-8">
+                        <div className="flex flex-wrap gap-4 md:gap-8">
                             {["All", "Ongoing", "Completed", "Requested offers"].map(filter => (
                                 <p
                                     key={filter}
-                                    className={`cursor-pointer hover:text-purple-400 hover:font-medium ${selectedFilter === filter ? "text-purple-400 underline font-bold" : "text-grey-500"
-                                        }`}
+                                    className={`cursor-pointer hover:text-purple-400 hover:font-medium ${selectedFilter === filter ? "text-purple-400 underline font-bold" : "text-grey-500"}`}
                                     onClick={() => setSelectedFilter(filter)}
                                 >
-                                    {filter.charAt(0).toUpperCase() + filter.slice(1)}
+                                    {filter}
                                 </p>
                             ))}
                         </div>
                         <div className="bg-grey-500 w-full h-0.5"></div>
                     </div>
 
-                    <div className="flex flex-col gap-5 px-56">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                         {getFilteredContracts().map((contract, index) => (
-                            <div key={index} className="flex flex-col py-10 px-10 bg-purple-100 rounded-xl">
+                            <div key={index} className="flex flex-col py-8 px-6 bg-purple-100 rounded-xl">
                                 <div className="flex gap-2 justify-end">
-                                    <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]" onClick={() => handleEditContractClick(contract._id)}>✏️</button>
-                                    <button className="border-2 border-purple-700 w-[30px] h-[30px] rounded-full text-[14px]" onClick={() => handleDeleteContract(contract._id)}>🗑️</button>
+                                    <button className="border-2 border-purple-700 w-8 h-8 rounded-full" onClick={() => handleEditContractClick(contract._id)}>✏️</button>
+                                    <button className="border-2 border-purple-700 w-8 h-8 rounded-full" onClick={() => handleDeleteContract(contract._id)}>🗑️</button>
                                 </div>
 
-                                <div className="flex gap-16 justify-center">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <div className="w-[100px] h-[100px] rounded-full overflow-hidden">
-                                            <img src={`http://localhost:3000/freelancer_images/${contract.freelancer_service_id.freelancer_id.profile_picture}`} className="w-full h-full object-cover" alt="Freelancer" />
+                                <div className="flex flex-col items-center text-center gap-3">
+                                    <div className="w-24 h-24 rounded-full overflow-hidden">
+                                        <img src={`http://localhost:3000/freelancer_images/${contract.freelancer_service_id.freelancer_id.profile_picture}`} className="w-full h-full object-cover" alt="Freelancer" />
+                                    </div>
+                                    <p className="text-purple-700 text-lg font-bold">{contract.freelancer_service_id.freelancer_id.first_name} {contract.freelancer_service_id.freelancer_id.last_name}</p>
+                                    <p className="text-purple-700">{contract.freelancer_service_id.freelancer_id.profession}</p>
+                                </div>
+
+                                <div className="border-t border-grey-500 my-4"></div>
+
+                                <div className="flex flex-col gap-2">
+                                    <p className="text-purple-700 font-semibold">Project details</p>
+                                    <span className="text-purple-700 font-medium">Project: <span className="text-black-700">{contract.appointment_purpose}</span></span>
+                                    <span className="text-purple-700 font-medium">Deadline: <span className="text-black-700">{new Date(contract.project_end_date).toLocaleDateString()}</span></span>
+
+                                    {ongoingContracts.includes(contract) && (
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-full bg-grey-100 rounded-full h-2.5">
+                                                <div className="bg-blue-500 h-2.5 rounded-full" style={{ width: `${getProgress(contract)}%` }}></div>
+                                            </div>
+                                            <p className="text-sm font-medium">{Math.round(getProgress(contract))}%</p>
                                         </div>
-                                        <p className="text-white text-xl font-bold">{contract.freelancer_service_id.freelancer_id.first_name} {contract.freelancer_service_id.freelancer_id.last_name}</p>
-                                        <p className="text-white">{contract.freelancer_service_id.freelancer_id.profession}</p>
-                                    </div>
+                                    )}
 
-                                    <div className="w-0.5 h-full bg-grey-500"></div>
+                                    {paymentDetails[contract._id] && (
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-purple-700 font-medium">Amount: <span className="text-black-700">Rs. {paymentDetails[contract._id].amount}</span></span>
+                                            <span className="text-purple-700 font-medium">Payment method: <span className="text-black-700">{paymentDetails[contract._id].payment_method}</span></span>
+                                            <span className="text-purple-700 font-medium">Payment status: <span className={paymentDetails[contract._id].payment_status ? "text-green-600" : "text-red-500"}>{paymentDetails[contract._id].payment_status ? " Paid" : " Unpaid"}</span></span>
+                                        </div>
+                                    )}
 
-                                    <div className="flex flex-col gap-2">
-                                        <p className="text-purple-700 font-caprasimo text-lg">Project details</p>
-                                        <span className="text-purple-700 font-medium">
-                                            Project: <span className="text-black-700">{contract.appointment_purpose}</span>
-                                        </span>
-                                        <span className="text-purple-700 font-medium">
-                                            Deadline: <span className="text-black-700">{new Date(contract.project_end_date).toLocaleDateString()}</span>
-                                        </span>
-                                        {ongoingContracts.includes(contract) && (
-                                            <div className="flex gap-2">
-                                                <div className="w-full bg-grey-100 rounded-full h-2.5 mt-2">
-                                                    <div className="bg-blue-500 h-2.5 rounded-full" style={{ width: `${getProgress(contract)}%` }}></div>
-                                                </div>
-
-                                                <p className="text-sm font-medium">{Math.round(getProgress(contract))}%</p>
+                                    {completedContracts.includes(contract) ? (
+                                        reviews.some(review => review.appointment_id._id === contract._id) ? (
+                                            <div className="flex gap-1 text-purple-700 font-medium">
+                                                <p>Review sent</p>
+                                                <CheckIcon className="h-5 text-green-700" />
                                             </div>
-                                        )}
-
-                                        {paymentDetails[contract._id] && (
-                                            <div className="flex flex-col gap-2">
-                                                <span className="text-purple-700 font-medium">
-                                                    Amount: <span className="text-black-700">Rs. {paymentDetails[contract._id].amount}</span>
-                                                </span>
-                                                <span className="text-purple-700 font-medium">
-                                                    Payment method: <span className="text-black-700">{paymentDetails[contract._id].payment_method}</span>
-                                                </span>
-                                                <span className="text-purple-700 font-medium">
-                                                    Payment status:
-                                                    <span className={paymentDetails[contract._id].payment_status ? "text-green-600" : "text-red-500"}>
-                                                        {paymentDetails[contract._id].payment_status ? " Paid" : " Unpaid"}
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        {completedContracts.includes(contract) ? (
-                                            reviews.some(review => review.appointment_id._id === contract._id) ? (
-                                                <div className="flex gap-1">
-                                                    <p className="text-purple-700 font-medium">Review sent</p>
-                                                    <CheckIcon className="h-6 text-green-700"/>
+                                        ) : (
+                                            <button
+                                                className="bg-purple-700 py-2 px-4 rounded-xl text-white font-semibold mt-5 w-full"
+                                                onClick={() => navigate("/review", {
+                                                    state: {
+                                                        contractId: contract._id,
+                                                        freelancerId: contract.freelancer_service_id.freelancer_id._id
+                                                    }
+                                                })}
+                                            >
+                                                <div className="flex items-center justify-center gap-2">
+                                                    Write a review
+                                                    <StarIcon className="h-6 hover:text-yellow-700" />
                                                 </div>
-                                            ) : (
-                                                <button
-                                                    className="bg-purple-700 py-2 rounded-xl text-white font-semibold mt-5"
-                                                    onClick={() => navigate("/review", {
-                                                        state: {
-                                                            contractId: contract._id,
-                                                            freelancerId: contract.freelancer_service_id.freelancer_id._id
-                                                        }
-                                                    })}
-                                                >
-                                                    <div className="flex items-center justify-center gap-2">
-                                                        Write a review
-                                                        <StarIcon className="h-6 hover:text-yellow-700" />
-                                                    </div>
-                                                </button>
-                                            )
-                                        ) : null}
-
-                                    </div>
+                                            </button>
+                                        )
+                                    ) : null}
                                 </div>
                             </div>
                         ))}
@@ -328,6 +311,7 @@ function ClientContracts() {
                 )}
             </div>
         </>
+
     )
 }
 

@@ -132,12 +132,12 @@ function BillingAndPayment() {
             <div className="h-screen overflow-auto flex flex-col bg-purple-50">
                 {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
-                <div className="flex flex-col mt-[90px] px-60 pt-10 pb-20 gap-10 items-center">
+                <div className="flex flex-col mt-[90px] 800:px-60 500:pr-20 pt-10 pb-20 gap-10 items-center">
                     <p className="font-extrabold text-3xl text-purple-700">Billing and Payment</p>
 
                     {freelancer && (
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="flex pl-20 gap-10">
+                            <div className="flex 800:flex-row 500:flex-col pl-20 gap-10">
                                 <div className="w-[380px] flex flex-col bg-gradient-to-b from-purple-200 to-purple-50 border-2 border-purple-200 pl-5 pr-5 py-8 rounded-xl gap-5">
                                     <div className="w-[110px] h-[110px] rounded-full overflow-hidden ml-28">
                                         <img

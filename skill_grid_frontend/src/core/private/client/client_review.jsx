@@ -114,7 +114,7 @@ function ClientReview() {
 
                 <div className="flex flex-col mt-[90px] px-32 pt-10 pb-20 gap-10 justify-center items-center">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="flex flex-col items-center justify-center bg-purple-400 py-8 rounded-3xl gap-8 w-[800px]">
+                        <div className="flex flex-col items-center justify-center bg-purple-400 py-8 rounded-3xl gap-8 900:w-[800px] 500:w-[89vw]">
                             <p className="font-extrabold text-2xl text-purple-50">Write a review</p>
 
                             <div className="flex flex-col gap-4 items-center">
@@ -137,7 +137,7 @@ function ClientReview() {
                                     <StarRating onRate={(value) => setRating(value)} />
                                 </div>
 
-                                <div className="flex flex-col w-[435px]">
+                                <div className="flex flex-col md:w-[435px] 500:w-[56vw]">
                                     <textarea
                                         type="review"
                                         placeholder="Share your thoughts....."
