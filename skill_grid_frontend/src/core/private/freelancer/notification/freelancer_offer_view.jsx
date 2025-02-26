@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import FreelancerSideBar from "../../../../components/navigation_bar/freelancer_side_bar";
 import { useAuth } from "../../../../context/auth_context";
+import { useNavigate } from "react-router-dom";
 
 function FreelancerOfferView() {
     const { authToken } = useAuth();
     const [appointment, setAppointment] = useState(null);
     const [payment, setPayment] = useState(null);
+    const navigate = useNavigate();
 
     const { appointment_id } = useParams();
 
@@ -81,6 +83,7 @@ function FreelancerOfferView() {
                 draggable: true,
                 theme: "colored",
             });
+            navigate("/freelancer-projects")
         }
         catch (error) {
             console.error("Error accepting Appointment:", error);
@@ -102,6 +105,7 @@ function FreelancerOfferView() {
                     "Content-Type": "application/json",
                 },
             });
+            navigate("/freelancer-dashboard")
 
             if (!response.ok) throw new Error("Error deleting appointment");
 
@@ -116,7 +120,7 @@ function FreelancerOfferView() {
             <div className="flex bg-purple-50">
                 <FreelancerSideBar />
 
-                <div className="h-screen flex flex-col bg-purple-50 py-16 pl-80 gap-10">
+                <div className="h-screen flex flex-col bg-purple-50 py-16 1200:pl-80 560:pl-10 500:pl-5 560:pr-10 500:pr-5 gap-10">
                     <p className="text-3xl font-inter font-bold">Offered project</p>
 
                     {appointment && (

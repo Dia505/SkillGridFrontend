@@ -112,7 +112,7 @@ function OnGoingCollaborations() {
             {loading ? (
                 <p>Loading...</p> // Show loading message while fetching data
             ) : collaborations.length === 0 ? (
-                <div className="flex flex-col gap-2 ml-80">
+                <div className="flex flex-col gap-2 921:ml-80 500:ml-[10vw]">
                     <img className="w-[350px] h-[370px]" src="src/assets/client_dashboard_no_collaborations.png" />
                     <div className="w-[350px]">
                         <p className="font-inter font-light text-center">You haven't started any collaborations yet. Start working with top freelancers and bring your ideas to life!</p>

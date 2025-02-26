@@ -120,7 +120,7 @@ function BillingAndPayment() {
                 theme: "colored",
             });
 
-            navigate("/client-contracts");
+            navigate("/client-contracts", { state: { filter: "Requested offers" } });
         }
         catch (error) {
             console.error("Error during submission:", error);

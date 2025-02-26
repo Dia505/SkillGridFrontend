@@ -1,4 +1,4 @@
-import { ArrowLeftOnRectangleIcon, BellIcon, CalendarIcon, FolderIcon, Squares2X2Icon, UserIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftOnRectangleIcon, BellIcon, FolderIcon, Squares2X2Icon, UserIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth_context';
@@ -61,12 +61,6 @@ function FreelancerSideBar() {
                             <div className='flex items-center gap-2 py-5 pl-10'>
                                 <FolderIcon className='text-white h-7' />
                                 <p className='text-white font-inter'>Projects</p>
-                            </div>
-                        </button>
-                        <button className="cursor-pointer hover:bg-black-50">
-                            <div className='flex items-center gap-2 py-5 pl-10'>
-                                <CalendarIcon className='text-white h-7' />
-                                <p className='text-white font-inter'>Calendar</p>
                             </div>
                         </button>
                         <button className="cursor-pointer hover:bg-black-50" onClick={() => navigate("/freelancer-notification")}>

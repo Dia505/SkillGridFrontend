@@ -66,7 +66,7 @@ function AddServiceForm({ closeForm, updateServiceDetails }) {
     };
 
     return (
-        <div className="flex flex-col relative bg-purple-50 rounded-2xl w-[747px] h-[655px] pl-16 pt-2">
+        <div className="flex flex-col relative bg-purple-50 rounded-2xl 900:w-[747px] 900:h-[655px] 900:pl-16 500:pl-6 500:pr-4 500:pb-24 pt-2">
             <button
                 onClick={closeForm}
                 className="text-grey-400 font-light text-[40px] absolute right-7">

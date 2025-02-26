@@ -42,7 +42,7 @@ function ServiceDetails({ data, updateData }) {
     };
 
     return (
-        <div className="ml-24 mr-40 mt-4">
+        <div className="900:ml-24 900:mr-40 500:mr-14 mt-4">
             <h2 className="text-2xl font-caprasimo text-purple-700">Highlight your services</h2>
             <p className="text-purple-700 text-lg mt-2">Specify the services you specialize in to attract the right clients.</p>
 

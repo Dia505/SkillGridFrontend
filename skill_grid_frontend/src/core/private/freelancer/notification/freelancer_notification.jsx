@@ -50,19 +50,19 @@ function FreelancerNotification() {
             <div className="flex bg-purple-50">
                 <FreelancerSideBar />
 
-                <div className="h-screen bg-purple-50 py-10 pl-80">
+                <div className="h-screen bg-purple-50 py-10 1200:pl-80 560:pl-10 500:pl-5 560:pr-10 500:pr-5">
                     <div className="flex flex-col gap-8">
                         <p className="text-2xl font-inter">Notifications</p>
 
-                        <div className="flex flex-col gap-3 pl-14">
+                        <div className="flex flex-col gap-3 900:pl-14">
                             {notifications.length > 0 ? (
                                 notifications.map((notification) => (
                                     <div key={notification._id}
-                                        className="flex gap-20 p-4 rounded-xl shadow-sm bg-white cursor-pointer"
+                                        className="flex md:flex-row flex-col 800:gap-20 p-4 rounded-xl shadow-sm bg-white cursor-pointer"
                                         onClick={() => handleReadNotification(notification._id, notification.appointment_id._id)}
                                     >
 
-                                        <div className="flex gap-6 items-center">
+                                        <div className="flex 600:gap-6 500: gap-3 items-center">
                                             <div className="w-[80px] h-[80px] rounded-full overflow-hidden">
                                                 <img
                                                     className="w-full h-full object-cover"
@@ -77,7 +77,7 @@ function FreelancerNotification() {
                                             </div>
                                         </div>
 
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 md:ml-0 644:ml-[430px] 500:ml-[65vw]">
                                             <p className="text-sm font-bold">{new Date(notification.notification_date).toLocaleDateString("en-GB", {
                                                 day: "numeric",
                                                 month: "short",

@@ -32,12 +32,12 @@ function JobDetails({ data, updateData }) {
     }, [formData, updateData]); 
 
     return (
-        <div className="ml-24 mr-40 mt-4">
+        <div className="900:ml-24 900:mr-40 500:mr-14 mt-4">
             <h2 className="text-2xl font-caprasimo text-purple-700">Describe your job</h2>
             <p className="text-purple-700 text-lg mt-2">Share the details of your work, skills, and what clients can expect.</p>
 
             <form>
-                <div className="flex flex-col gap-4 w-[435px] mt-7">
+                <div className="flex flex-col gap-4 900:w-[435px] 500:w-[370px] mt-7">
                     <div>
                         <label className="font-inter text-purple-700 text-[15px] ml-2">Title of your profession</label>
                         <input

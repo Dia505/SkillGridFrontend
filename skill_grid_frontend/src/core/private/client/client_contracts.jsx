@@ -5,6 +5,7 @@ import EditClientContract from "../../../components/client_contracts/edit_client
 import ClientDashboardNavbarWithToken from "../../../components/navigation_bar/client_dashboard_navbar_with_token";
 import ClientDashboardNavbarWithoutToken from "../../../components/navigation_bar/client_dashboard_navbar_without_token";
 import { useAuth } from "../../../context/auth_context";
+import { useLocation } from 'react-router-dom';
 
 function ClientContracts() {
     const { authToken, role, userId } = useAuth();
@@ -12,11 +13,15 @@ function ClientContracts() {
     const [ongoingContracts, setOngoingContracts] = useState([]);
     const [completedContracts, setCompletedContracts] = useState([]);
     const [requestedOffers, setRequestedOffers] = useState([]);
-    const [selectedFilter, setSelectedFilter] = useState("All");
     const [paymentDetails, setPaymentDetails] = useState({});
     const [showEditContractForm, setShowEditContractForm] = useState(false);
     const [selectedContractId, setSelectedContractId] = useState(null);
     const [reviews, setReviews] = useState([]);
+
+    const { state } = useLocation();
+    const initialFilter = state?.filter || "All";  
+
+    const [selectedFilter, setSelectedFilter] = useState(initialFilter);
 
     const navigate = useNavigate();
 

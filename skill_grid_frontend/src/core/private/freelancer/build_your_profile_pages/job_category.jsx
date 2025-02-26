@@ -24,7 +24,7 @@ const JobCategoryForm = ({ data, updateData }) => {
   };
 
   return (
-    <div className="ml-24 mr-40 mt-4">
+    <div className="900:ml-24 900:mr-40 500:mr-14 mt-4">
       <h2 className="text-2xl font-caprasimo text-purple-700">Select your job category</h2>
 
       {/* Category Icons Grid */}

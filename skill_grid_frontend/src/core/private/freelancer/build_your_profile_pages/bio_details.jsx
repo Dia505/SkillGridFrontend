@@ -29,12 +29,12 @@ function BioDetails({ data, updateData }) {
 
     return (
         <>
-            <div className="ml-24 mr-40 mt-4">
+            <div className="900:ml-24 900:mr-40 500:mr-14 mt-4">
                 <h2 className="text-2xl font-caprasimo text-purple-700">Great! Now write a bio about yourself</h2>
                 <p className="text-purple-700 text-lg mt-2">Help potential clients get to know you at a glance. Share your expertise, experience, and what sets you apart.</p>
 
                 <form>
-                    <div className="w-[435px] mt-7">
+                    <div className="900:w-[435px] 500:w-[370px] mt-7">
                         <label className="font-inter text-purple-700 text-[15px] ml-2">Bio</label>
                         <textarea
                             type="bio"
