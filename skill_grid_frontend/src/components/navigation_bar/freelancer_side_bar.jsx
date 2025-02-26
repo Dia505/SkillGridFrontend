@@ -38,7 +38,7 @@ function FreelancerSideBar() {
     const unreadNotificationsCount = notifications.filter(notification => !notification.read).length;
     return (
         <>
-            <div className="h-screen fixed top-0 left-0 flex flex-col bg-black-400">
+            <div className="h-screen fixed top-0 left-0 flex flex-col bg-black-400 hidden 1200:block">
                 <div className="flex items-center gap-2 bg-black-700 px-10 py-8">
                     <img className="h-[65px]" src="/footer_app_logo.png" />
                     <p className="font-caprasimo text-white text-2xl">SkillGrid.</p>

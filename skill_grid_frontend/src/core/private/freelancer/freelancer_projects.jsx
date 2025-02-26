@@ -122,7 +122,7 @@ function FreelancerProjects() {
             <div className="flex bg-purple-50">
                 <FreelancerSideBar />
 
-                <div className="h-screen bg-purple-50 py-10 pl-80">
+                <div className="h-screen bg-purple-50 py-10 1200:pl-80 560:pl-10 500:pl-5 560:pr-10 500:pr-5">
                     <div className="flex flex-col gap-6">
                         <p className="text-2xl font-inter font-bold">Projects</p>
 

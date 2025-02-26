@@ -158,6 +158,7 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
                         </div>
                     );
                 },
+                className: "hidden 858:table-cell",
             },
 
             {
@@ -188,6 +189,7 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
                         </span>
                     );
                 },
+                className: "hidden 858:table-cell"
             }
         ], [updatedPaymentDetails]);
 
@@ -208,7 +210,7 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map(column => (
-                                <th key={column.id} className="px-4 py-2 text-left text-grey-500 font-medium">
+                                <th key={column.id} className={`px-4 py-2 text-left text-grey-500 font-medium ${column.column.columnDef.className}`}>
                                     {flexRender(column.column.columnDef.header, column.getContext())}
                                 </th>
                             ))}
@@ -219,7 +221,7 @@ const ActiveProjectsTable = ({ activeProjects = [], paymentDetails = {} }) => {
                     {table.getRowModel().rows.map(row => (
                         <tr key={row.id} className="hover:bg-grey-50">
                             {row.getVisibleCells().map(cell => (
-                                <td key={cell.id} className="px-4 py-2">
+                                <td key={cell.id} className={`px-4 py-2 ${cell.column.columnDef.className}`}>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
                             ))}

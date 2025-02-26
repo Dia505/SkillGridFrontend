@@ -112,7 +112,7 @@ function FreelancerDashboard() {
                     return;
                 }
 
-                const avgRating = reviews.reduce((acc, review) => acc + (review.rating || 0), 0) / reviews.length;
+                const avgRating = Math.round(reviews.reduce((acc, review) => acc + (review.rating || 0), 0) / reviews.length);
                 setAvgRatings(avgRating); // Store directly as a number
             } catch (error) {
                 console.error("Error fetching freelancer ratings:", error);
@@ -183,9 +183,9 @@ function FreelancerDashboard() {
 
     return (
         <div className="flex bg-purple-50">
-            <FreelancerSideBar />
+            <FreelancerSideBar/>
 
-            <div className="h-screen flex bg-purple-50 py-10 pl-80">
+            <div className="h-screen flex bg-purple-50 py-10 1200:pl-80 560:pl-10 500:pl-5 560:pr-10 500:pr-5">
                 <div className="flex flex-col gap-6">
                     <p className="text-xl font-inter">Dashboard</p>
 
@@ -195,7 +195,7 @@ function FreelancerDashboard() {
                                 Welcome back, {freelancer.first_name} 👋
                             </p>
 
-                            <div className="flex gap-3">
+                            <div className="grid 858:grid-cols-3 grid-cols-2 gap-3 justify-center 858:w-full w-[85vw]">
                                 <div className="flex flex-col bg-purple-100 items-center gap-3 py-8 px-8 rounded-xl shadow-md">
                                     <p className="text-3xl">🚀</p>
                                     <p className="text-3xl font-semibold font-inter">{completedProjectsCount}</p>
