@@ -55,8 +55,11 @@ function ClientEditProfileForm({ closeForm }) {
             last_name: data.last_name,
             mobile_no: data.mobile_no,
             city: data.city,
-            password: data.password,
         };
+
+        if (data.password && data.password !== client.password) {
+            updatedData.password = data.password;
+        }
 
         if (image !== client.profile_picture) {
             const formData = new FormData();

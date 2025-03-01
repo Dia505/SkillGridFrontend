@@ -75,12 +75,15 @@ function EditFreelancerProfileForm({ closeForm }) {
             mobile_no: data.mobile_no,
             address: data.address,
             city: data.city,
-            password: data.password,
             profession: data.profession,
             years_of_experience: data.years_of_experience,
             skills: data.skills,
             bio: data.bio,
         };
+
+        if (data.password && data.password !== freelancer.password) {
+            updatedData.password = data.password;
+        }
 
         if (profilePicture !== freelancer.profile_picture) {
             const formData = new FormData();
