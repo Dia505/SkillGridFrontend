@@ -140,7 +140,7 @@ function ClientEditProfileForm({ closeForm }) {
                             <div className="flex flex-col gap-2">
                                 <p className="text-grey-500">First name</p>
                                 <input
-                                    type="first_name"
+                                    name="first_name"
                                     {...register("first_name")}
                                     className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[34vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                                 />
@@ -149,7 +149,7 @@ function ClientEditProfileForm({ closeForm }) {
                             <div className="flex flex-col gap-2">
                                 <p className="text-grey-500">Last name</p>
                                 <input
-                                    type="last_name"
+                                    name="last_name"
                                     {...register("last_name")}
                                     className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[34vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                                 />
@@ -159,7 +159,7 @@ function ClientEditProfileForm({ closeForm }) {
                         <div className="flex flex-col gap-2">
                             <p className="text-grey-500">Mobile number</p>
                             <input
-                                type="mobile_no"
+                                name="mobile_no"
                                 {...register("mobile_no")}
                                 className={"border border-purple-700 bg-purple-50 p-2 589:w-full 500:w-[73vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                             />

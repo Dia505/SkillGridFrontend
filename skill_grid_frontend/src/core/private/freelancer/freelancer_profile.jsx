@@ -333,7 +333,7 @@ function FreelancerProfile() {
                                 <div className="flex flex-col gap-3 pr-10">
                                     <div className='flex flex-col pb-5 pl-8 pr-8 gap-5'>
                                         <div className="flex items-center justify-between">
-                                            <p className='text-[22px] font-bold'>Education</p>
+                                            <p className='text-2xl font-bold'>Education</p>
                                             <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6" onClick={() => setShowAddEducationForm(true)}>+</button>
                                         </div>
 

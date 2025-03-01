@@ -86,7 +86,7 @@ function EditClientContract({ projectId, onClose }) {
                 });
             }
 
-            toast.success("Payment status updated!", {
+            toast.success("Contract updated!", {
                 position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -114,6 +114,7 @@ function EditClientContract({ projectId, onClose }) {
                     <p className="font-inter text-purple-50 text-lg font-medium ml-2">Reason for appointment</p>
                     <input
                         type="text"
+                        name="appointment_purpose"
                         {...register("appointment_purpose")}
                         className={"border border-purple-700 bg-purple-50 text-sm p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"}
                     />
