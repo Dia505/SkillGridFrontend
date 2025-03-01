@@ -127,7 +127,7 @@ function AddFreelancerServiceForm({ closeForm }) {
 
     return (
         <>
-            <div className="flex flex-col relative bg-purple-50 rounded-2xl w-[747px] h-[655px] pl-16 pt-2">
+            <div className="flex flex-col relative bg-purple-50 rounded-2xl 800:w-[747px] 800:h-[655px] w-[70vw] 800:pb-0 pb-20 pl-16 pt-2">
                 <button
                     onClick={closeForm}
                     className="text-grey-400 font-light text-[40px] absolute right-7">
@@ -138,25 +138,25 @@ function AddFreelancerServiceForm({ closeForm }) {
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col gap-4 w-[435px] mt-7 w-[330px]">
-                        <div>
+                        <div className="flex flex-col">
                             <label className="font-inter text-purple-700 text-[15px] ml-2">Service name</label>
                             <input
                                 type="text"
                                 {...register("service_name")}
                                 className={`border ${errors.service_name ? "border-red-500" : "border-purple-700"} 
-                                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                                bg-purple-50 p-2 745:w-full w-[50vw] rounded-xl focus:outline-none focus:ring-2 
                                                 ${errors.service_name ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                             />
                             {errors.service_name && <p className="mt-1 text-sm text-red-500">{errors.service_name.message}</p>}
                         </div>
 
-                        <div>
+                        <div className="flex flex-col">
                             <label className="font-inter text-purple-700 text-[15px] ml-2">Hourly rate</label>
                             <input
                                 type="text"
                                 {...register("hourly_rate")}
                                 className={`border ${errors.hourly_rate ? "border-red-500" : "border-purple-700"} 
-                                                bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
+                                                bg-purple-50 p-2 745:w-full w-[50vw] rounded-xl focus:outline-none focus:ring-2 
                                                 ${errors.hourly_rate ? "focus:ring-red-500" : "focus:ring-purple-700"}`}
                             />
                             {errors.hourly_rate && <p className="mt-1 text-sm text-red-500">{errors.hourly_rate.message}</p>}

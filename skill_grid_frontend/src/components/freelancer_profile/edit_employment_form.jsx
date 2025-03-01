@@ -79,7 +79,7 @@ function EditEmploymentForm({ closeForm, employmentId }) {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-col pt-5 pb-10 px-16 relative bg-purple-50 rounded-2xl gap-2">
+                <div className="flex flex-col pt-5 pb-10 px-16 relative bg-purple-50 rounded-2xl gap-2 620:w-full w-[90vw]">
                     <h2 className="text-2xl font-inter font-bold text-purple-700 mt-14">Add employment</h2>
 
                     <div className="flex flex-col gap-3">
@@ -126,7 +126,7 @@ function EditEmploymentForm({ closeForm, employmentId }) {
                         </div>
                     </div>
 
-                    <div className="flex gap-4 mt-5">
+                    <div className="flex 600:flex-row flex-col gap-4 mt-5">
                         <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400"
                             type="button"
                             onClick={handleCancel}>Cancel</button>

@@ -256,11 +256,11 @@ function FreelancerProfile() {
             <div className="flex bg-purple-50 overflow-auto">
                 <FreelancerSideBar />
 
-                <div className="min-h-screen flex flex-col bg-purple-50 py-14 pl-80 pr-16 gap-5">
+                <div className="min-h-screen flex flex-col bg-purple-50 py-14 pl-80 745:pr-16 gap-5 1200:-ml-0 745:-ml-72 -ml-[310px]">
                     <p className="text-2xl font-inter font-bold">Profile</p>
 
                     {freelancer && (
-                        <div className="flex flex-col border-2 border-grey-300 rounded-xl items-center pr-14 pl-10 py-5">
+                        <div className="flex flex-col border-2 1415:w-[75vw] 1300:w-[73vw] 1200:w-[70vw] w-[93vw] border-grey-300 rounded-xl items-center pr-14 pl-10 py-5">
                             <div className="w-full h-[180px] overflow-hidden rounded-t-xl relative">
                                 <img
                                     src={`http://localhost:3000/freelancer_images/${freelancer.background_picture}`}
@@ -269,9 +269,9 @@ function FreelancerProfile() {
                                 />
                             </div>
 
-                            <div className="flex bg-purple-50 pl-16 pt-5 pb-8 gap-28">
+                            <div className="flex bg-purple-50 pl-10 pt-5 pb-8 875:gap-28 gap-10">
                                 <div className='flex gap-6'>
-                                    <div className="w-24 h-24 rounded-full overflow-hidden">
+                                    <div className="1300:w-24 1300:h-24 1200:w-[7vw] 1200:h-[7vw] 990:w-24 990:h-24 745:w-[10vw] 745:h-[10vw] w-24 h-24 rounded-full overflow-hidden">
                                         <img
                                             src={`${freelancer.profile_picture}`}
                                             className="w-full h-full object-cover"
@@ -289,13 +289,13 @@ function FreelancerProfile() {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-20">
-                                    <div className="flex flex-col gap-3">
+                                <div className="flex 1300:gap-20 1200:gap-0 990:gap-20">
+                                    <div className="flex flex-col gap-3 hidden 745:block">
                                         <div className="flex flex-wrap gap-3">
                                             {freelancer?.skills && (
                                                 <div className="flex flex-wrap gap-2">
                                                     {freelancer.skills.split(",").map((skill, index) => (
-                                                        <span key={index} className="bg-purple-100 text-grey-700 px-4 py-2 rounded-full text-sm">
+                                                        <span key={index} className="bg-purple-100 text-grey-700 800:px-4 800:py-2 py-1 px-2 rounded-full text-sm">
                                                             {skill.trim()}
                                                         </span>
                                                     ))}
@@ -308,7 +308,7 @@ function FreelancerProfile() {
                                         </div>
                                     </div>
 
-                                    <div className="flex border-2 border-purple-400 rounded-full px-3 py-3 cursor-pointer h-12" onClick={() => setShowEditProfileForm(true)}>
+                                    <div className="flex border-2 border-purple-400 rounded-full px-3 py-3 cursor-pointer h-12 hidden 800:block" onClick={() => setShowEditProfileForm(true)}>
                                         <button className="text-purple-400">
                                             <PencilIcon className="h-5 w-5" />
                                         </button>
@@ -329,8 +329,8 @@ function FreelancerProfile() {
 
                             <div className="bg-grey-300 h-0.5 w-full"></div>
 
-                            <div className="flex pt-8">
-                                <div className="flex flex-col gap-3 pr-10">
+                            <div className="flex 1110:flex-row flex-col pt-8">
+                                <div className="flex flex-col gap-3 1140:pr-10 600:pr-2 pl-12 pr-8">
                                     <div className='flex flex-col pb-5 pl-8 pr-8 gap-5'>
                                         <div className="flex items-center justify-between">
                                             <p className='text-2xl font-bold'>Education</p>
@@ -398,7 +398,7 @@ function FreelancerProfile() {
                                         </>
                                     )}
 
-                                    <div className="bg-grey-300 h-0.5 w-full"></div>
+                                    <div className="bg-grey-300 h-0.5 w-full "></div>
 
                                     <div className='flex flex-col py-5 pl-8 pr-8 gap-5'>
                                         <div className="flex items-center justify-between">
@@ -479,12 +479,12 @@ function FreelancerProfile() {
                                         <button className="text-purple-400 text-3xl font-bold border-2 rounded-full h-10 w-10 leading-none pb-6" onClick={() => setShowAddServiceForm(true)}>+</button>
                                     </div>
 
-                                    <div className='relative flex items-center'>
+                                    <div className='relative flex items-center '>
                                         {service.length > 0 && currentIndex >= 0 && currentIndex < service.length ? (
                                             <div className="transition-all duration-500 ease-in-out transform">
                                                 <div
                                                     key={currentIndex}
-                                                    className='w-[580px] h-[350px] flex flex-col gap-6 rounded-xl border-2 border-grey-500 ml-10 py-8 pl-8'
+                                                    className='1425:w-[580px] 1425:h-[350px] 1300:w-[40vw] 1300:h-[25vw] 1200:w-full 1200:h-full 720:w-[580px] 720:h-[350px] w-[70vw] 720:ml-10 1200:-ml-4 flex flex-col gap-6 rounded-xl border-2 border-grey-500 ml-10 py-8 pl-8'
                                                 >
                                                     <div className='flex justify-between items-center'>
                                                         <p className='text-purple-400 text-lg font-bold font-inter'>
@@ -495,7 +495,7 @@ function FreelancerProfile() {
                                                         </div>
                                                     </div>
 
-                                                    <div className="w-[330px] h-[180px] rounded-xl overflow-hidden relative ml-20">
+                                                    <div className="720:w-[330px] h-[180px] w-[50vw] rounded-xl overflow-hidden relative 1300:ml-20 1300:mr-0 1200:-ml-1 1200:mr-5 720:ml-20 ml-5">
                                                         {portfolioImages.length > 0 ? (
                                                             portfolioImages.map((portfolio) => {
                                                                 if (portfolio.serviceId === service[currentIndex]._id) {
@@ -539,7 +539,7 @@ function FreelancerProfile() {
                                             <p className="text-gray-500">No service details available</p>
                                         )}
                                         <button
-                                            className="absolute left-20 border border-purple-700 rounded-full"
+                                            className="absolute left-20 border border-purple-700 rounded-full 1425:-ml-14 1200:-ml-20 hidden 1360:block 1200:hidden md:block"
                                             onClick={prevService}
                                         >
                                             <ChevronLeftIcon className='h-8 text-purple-700' />
@@ -547,7 +547,7 @@ function FreelancerProfile() {
 
                                         {/* Next Button */}
                                         <button
-                                            className="absolute right-16 border border-purple-700 rounded-full"
+                                            className="absolute right-16 border border-purple-700 rounded-full hidden 1360:block 1200:hidden md:block"
                                             onClick={nextService}
                                         >
                                             <ChevronRightIcon className='h-8 text-purple-700' />

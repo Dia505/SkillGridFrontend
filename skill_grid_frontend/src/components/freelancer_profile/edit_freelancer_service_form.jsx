@@ -148,26 +148,26 @@ function EditFreelancerServiceForm({ closeForm, freelancerServiceId }) {
 
     return (
         <>
-            <div className="flex flex-col relative bg-purple-50 rounded-2xl w-[747px] h-[655px] pl-16 pt-2">
+            <div className="flex flex-col relative bg-purple-50 rounded-2xl 800:w-[747px] 800:h-[655px] w-[74vw] 800:pb-0 pb-14 pl-16 pt-2">
                 <h2 className="text-2xl font-inter font-bold text-purple-700 mt-14">Update the service</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col gap-4 w-[435px] mt-7 w-[330px]">
-                        <div>
+                        <div className="flex flex-col">
                             <label className="font-inter text-purple-700 text-[15px] ml-2">Service name</label>
                             <input
                                 type="service_name"
                                 {...register("service_name")}
-                                className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
+                                className="border border-purple-700 bg-purple-50 p-2 745:w-full w-[50vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
                             />
                         </div>
 
-                        <div>
+                        <div className="flex flex-col">
                             <label className="font-inter text-purple-700 text-[15px] ml-2">Hourly rate</label>
                             <input
                                 type="hourly_rate"
                                 {...register("hourly_rate")}
-                                className="border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
+                                className="border border-purple-700 bg-purple-50 p-2 745:w-full w-[50vw] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"
                             />
                         </div>
 
@@ -191,18 +191,18 @@ function EditFreelancerServiceForm({ closeForm, freelancerServiceId }) {
                         />
 
                         {portfolioFiles.length > 0 && (
-                            <div className="w-[500px] flex gap-4 mt-4">
+                            <div className="w-[500px] flex 644:gap-4 gap-2 mt-4">
                                 {portfolioFiles.map((file, index) => (
                                     <div key={index} className="relative">
                                         <img
                                             src={file}
                                             alt={`Uploaded Preview ${index + 1}`}
-                                            className="w-[126px] h-[126px] object-cover rounded-md"
+                                            className="745:w-[126px] w-[18vw] h-[18vw] 745:h-[126px] object-cover rounded-md"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => removeImage(index)}
-                                            className="absolute top-2 right-1 bg-purple-50 text-[13px] border rounded-full w-5 h-5 flex justify-center"
+                                            className="absolute top-2 745:right-1 left-3 bg-purple-50 text-[13px] border rounded-full w-5 h-5 flex justify-center"
                                         >
                                             ✕
                                         </button>
@@ -211,13 +211,13 @@ function EditFreelancerServiceForm({ closeForm, freelancerServiceId }) {
                             </div>
                         )}
 
-                        <div className="flex gap-4 mt-5">
-                            <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400"
+                        <div className="flex 745:flex-row flex-col gap-4 mt-5">
+                            <button className="border-2 border-purple-400 rounded-3xl px-20 py-2 font-semibold text-purple-400 745:w-full w-[50vw]"
                                 type="button"
                                 onClick={handleCancel}>Cancel</button>
                             <button
                                 type="submit"
-                                className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white">Update</button>
+                                className="border-2 border-purple-400 bg-purple-400 rounded-3xl px-20 py-2 font-semibold text-white 745:w-full w-[50vw]">Update</button>
                         </div>
 
                     </div>
