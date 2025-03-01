@@ -198,7 +198,7 @@ function FreelancerProfileClientView() {
                 {authToken && role == "client" ? <ClientDashboardNavbarWithToken /> : <ClientDashboardNavbarWithoutToken />}
 
                 {freelancer && (
-                    <div className="flex flex-col mt-[90px] pl-40 pr-40 pt-10 pb-20 gap-16">
+                    <div className="flex flex-col mt-[90px] 1215:pl-40 1215:pr-40 500:px-10 pt-10 pb-20 gap-16">
                         <div className="flex flex-col border-2 border-grey-500 rounded-xl">
                             <div className="w-full h-[180px] overflow-hidden rounded-t-xl relative">
                                 <img
@@ -208,9 +208,9 @@ function FreelancerProfileClientView() {
                                 />
                             </div>
 
-                            <div className="flex bg-purple-50 pl-16 pr-16 pt-5 justify-between items-center">
-                                <div className='flex gap-6'>
-                                    <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
+                            <div className="flex bg-purple-50 pl-16 560:pr-16 500:pr-6 pt-5 justify-between items-center">
+                                <div className='flex gap-6 745:-ml-0 500:-ml-10'>
+                                    <div className="745:w-[110px] 745:h-[110px] 500:w-[18vw] 500:h-[15vw] 644:w-[15vw] rounded-full overflow-hidden">
                                         <img
                                             src={`${freelancer.profile_picture}`}
                                             className="w-full h-full object-cover"
@@ -218,8 +218,8 @@ function FreelancerProfileClientView() {
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <p className="text-[22px] font-bold">{`${freelancer.first_name} ${freelancer.last_name}`}</p>
-                                        <p className="text-xl">{`${freelancer.profession}`}</p>
+                                        <p className="575:text-[22px] 500:text-lg font-bold">{`${freelancer.first_name} ${freelancer.last_name}`}</p>
+                                        <p className="575:text-xl">{`${freelancer.profession}`}</p>
 
                                         <div className="flex gap-2">
                                             <PhoneIcon className="h-5 text-grey-400" />
@@ -245,7 +245,7 @@ function FreelancerProfileClientView() {
                             <div className="w-full h-0.5 bg-grey-500 mt-9"></div>
 
                             <div className="flex">
-                                <div className='flex flex-col pt-5'>
+                                <div className='flex flex-col pt-5 hidden md:block'>
                                     <div className='flex gap-14 pb-5 pl-8 pr-14'>
                                         <div className='flex items-center gap-2'>
                                             <img className='h-10' src="/freelancer_profile_bookings.png" />
@@ -287,7 +287,7 @@ function FreelancerProfileClientView() {
                                         </div>
                                     </div>
 
-                                    <div className="w-full h-0.5 bg-grey-500"></div>
+                                    <div className="w-full h-0.5 bg-grey-500 hidden md:block"></div>
 
                                     <div className='flex flex-col pt-5 pb-5 pl-8 pr-8 gap-2'>
                                         <p className='text-[22px] font-bold'>Employment</p>
@@ -324,15 +324,15 @@ function FreelancerProfileClientView() {
 
                                     <div className="w-full h-0.5 bg-grey-500"></div>
 
-                                    <div className='flex flex-col pl-8 pt-5 pb-14 gap-4'>
+                                    <div className='flex flex-col pl-8 pt-5 pb-14 gap-4 560:pr-0 500:pr-4'>
                                         <p className='text-[22px] font-bold'>Services</p>
 
-                                        <div className='relative flex items-center'>
+                                        <div className='relative flex items-center 1508:ml-0 md:-ml-14 500:-ml-14'>
                                             {service.length > 0 ? (
                                                 <div className="transition-all duration-500 ease-in-out transform">
                                                     <div
                                                         key={currentIndex}
-                                                        className='w-[580px] h-[350px] flex flex-col gap-6 rounded-xl border-2 border-grey-500 ml-28 py-10 pl-8'
+                                                        className='1380:w-[38vw] 1215:w-[30vw] md:w-[38vw] h-[350px] flex flex-col gap-6 rounded-xl border-2 border-grey-500 1508:ml-28 1215:ml-24 1110:ml-28 858:ml-24 md:ml-12 621:ml-28 500:ml-10 py-10 pl-8 500:pr-8 md:pr-0'
                                                     >
                                                         <div className='flex justify-between items-center'>
                                                             <p className='text-purple-400 text-xl font-bold font-inter'>
@@ -343,7 +343,7 @@ function FreelancerProfileClientView() {
                                                             </div>
                                                         </div>
 
-                                                        <div className="w-[350px] h-[200px] rounded-xl overflow-hidden relative ml-20">
+                                                        <div className="1380:w-[350px] 1380:h-[200px] 500:h-[30vw] rounded-xl overflow-hidden relative 1380:ml-20 1380:mr-0 md:mr-8">
                                                             {portfolioImages.length > 0 ? (
                                                                 portfolioImages.map((portfolio) => {
                                                                     if (portfolio.serviceId === service[currentIndex]._id) {
@@ -371,7 +371,7 @@ function FreelancerProfileClientView() {
                                                 <p className="text-gray-500">No service details available</p>
                                             )}
                                             <button
-                                                className="absolute left-12 border border-purple-700 rounded-full"
+                                                className="absolute left-12 border border-purple-700 rounded-full hidden 990:block md:hidden 721:block"
                                                 onClick={prevService}
                                             >
                                                 <ChevronLeftIcon className='h-8 text-purple-700' />
@@ -379,7 +379,7 @@ function FreelancerProfileClientView() {
 
                                             {/* Next Button */}
                                             <button
-                                                className="absolute right-16 border border-purple-700 rounded-full"
+                                                className="absolute right-16 border border-purple-700 rounded-full hidden 990:block md:hidden 721:block"
                                                 onClick={nextService}
                                             >
                                                 <ChevronRightIcon className='h-8 text-purple-700' />
@@ -447,8 +447,8 @@ function FreelancerProfileClientView() {
 
                         <div className='flex bg-purple-700 h-[270px] rounded-xl justify-between items-center px-10'>
                             <div className='flex flex-col gap-4'>
-                                <p className='text-2xl font-bold text-white font-inter'>Find Talent That Fits Your Vision</p>
-                                <div className='w-[600px]'>
+                                <p className='840:text-2xl 500:text-4xl font-bold text-white font-inter'>Find Talent That Fits Your Vision</p>
+                                <div className='1306:w-[600px] w-[40vw] hidden 840:block'>
                                     <p className='text-white font-inter text-lg font-light'>Explore in-depth profiles featuring work
                                         experience, education, services, and client reviews — all designed to help you
                                         make informed decisions and
@@ -456,7 +456,7 @@ function FreelancerProfileClientView() {
                                 </div>
                             </div>
 
-                            <img className='h-64' src="/freelancer_profile_static_img.png" />
+                            <img className='560:h-64 h-[40vw]' src="/freelancer_profile_static_img.png" />
                         </div>
                     </div>
                 )}
