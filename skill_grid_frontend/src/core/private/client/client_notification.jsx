@@ -77,11 +77,13 @@ function ClientNotification({ isNotificationOpen, setIsNotificationOpen }) {
                             >
 
                                 <div className="flex gap-4 items-center">
-                                    <img
-                                        className="h-14 w-14 rounded-full"
-                                        src={`http://localhost:3000/freelancer_images/${notification.appointment_id.freelancer_service_id.freelancer_id.profile_picture}`}
-                                        alt="freelancer_profile_picture"
-                                    />
+                                    <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
+                                        <img
+                                            className="h-full w-full object-cover"
+                                            src={`http://localhost:3000/freelancer_images/${notification.appointment_id.freelancer_service_id.freelancer_id.profile_picture}`}
+                                            alt="freelancer_profile_picture"
+                                        />
+                                    </div>
 
                                     <div className="flex flex-col">
                                         <p className="font-semibold">{notification.message}</p>

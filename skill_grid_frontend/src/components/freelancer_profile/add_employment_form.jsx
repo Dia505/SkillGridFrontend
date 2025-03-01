@@ -8,7 +8,6 @@ const employmentSchema = yup.object().shape({
     company_name: yup.string().required("*required"),
     job_title: yup.string().required("*required"),
     start_date: yup.string().required("*required"),
-    end_date: yup.string().required("*required"),
 });
 
 function AddEmploymentForm({ closeForm }) {
@@ -28,9 +27,12 @@ function AddEmploymentForm({ closeForm }) {
             company_name: data.company_name,
             job_title: data.job_title,
             start_date: data.start_date,
-            end_date: data.end_date,
             freelancer_id: userId,
         };
+
+        if (data.end_date) {
+            employmentData.end_date = data.end_date;
+        }
 
         if (data.description.trim()) {
             employmentData.description = data.description;
@@ -108,11 +110,7 @@ function AddEmploymentForm({ closeForm }) {
 
                         <div>
                             <label className="font-inter text-purple-700 text-[15px] ml-2">End date</label>
-                            <input type="date" className={`border ${errors.end_date ? "border-red-500" : "border-purple-700"} 
-                                        bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 
-                                        ${errors.end_date ? "focus:ring-red-500" : "focus:ring-purple-700"}`} {...register("end_date")} />
-
-                            <p className="mt-1 text-sm text-red-500">{errors?.end_date?.message}</p>
+                            <input type="date" className={"border border-purple-700 bg-purple-50 p-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-700"} {...register("end_date")} />
                         </div>
 
                         <div>
