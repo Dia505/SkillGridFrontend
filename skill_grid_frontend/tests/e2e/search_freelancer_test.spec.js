@@ -6,8 +6,8 @@ test('Freelancer Search Functionality', async ({ page }) => {
   await page.goto(`http://localhost:5173/search-freelancer/${searchQuery}`);
 
   const searchResults = page.locator('.search-result-item'); 
-  await expect(searchResults).toHaveCount(1);
-  await expect(searchResults.nth(0)).toHaveText("Peter ThompsonMobile app developerKalanki, KathmanduFrom Rs. 3000/hrfluttermongodbcassandrajavascript+1 more");
+  await expect(searchResults).toHaveCount(2);
+  await expect(searchResults.nth(0)).toHaveText("Peter  ThompsonMobile app developerKalanki, KathmanduFrom Rs. 3000/hrFlutterMongoDBCassandraJavaScript+1 more");
 });
 
 test('Freelancer Search Filtering by Location', async ({ page }) => {
@@ -46,10 +46,10 @@ test('Freelancer Search Filtering by Hourly Rate Range', async ({ page }) => {
 
   const searchResults = page.locator('.search-result-item');
 
-  await expect(searchResults).toHaveCount(2); 
+  await expect(searchResults).toHaveCount(3); 
 
   const firstResultText = await searchResults.nth(0).textContent();
-  expect(firstResultText).toContain("Billie SummerPhotographerKupondole, LalitpurFrom Rs. 2000/hrevent photographyphotoshopmagazine photoshoot");
+  expect(firstResultText).toContain("Nima SherpaPhotographer/VideographerBouddha, KathmanduFrom Rs. 4500/hrwedding photographyevent photographyphotoshopimage editing+2 more");
 });
 
 
