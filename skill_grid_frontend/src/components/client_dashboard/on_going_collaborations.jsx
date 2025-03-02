@@ -67,40 +67,47 @@ function OnGoingCollaborations() {
     }, [userId, token]);
 
     const calculateProgress = (collab) => {
+        const now = new Date();
         let startTime, endTime, remainingTime;
-
+    
         if (collab.appointment_time) {
             startTime = new Date(collab.appointment_date);
             const [hours, minutes] = collab.appointment_time.split(":").map(Number);
             startTime.setHours(hours, minutes, 0, 0);
-
+    
             const { unit, value } = collab.project_duration || {};
             endTime = new Date(startTime);
-
+    
+            // Adjust endTime based on the project duration unit
             if (unit === "hour") endTime.setHours(startTime.getHours() + value);
             else if (unit === "day") endTime.setDate(startTime.getDate() + value);
             else if (unit === "week") endTime.setDate(startTime.getDate() + value * 7);
             else if (unit === "month") endTime.setMonth(startTime.getMonth() + value);
-
-            //calculating remaining times
+    
+            // Calculating remaining time in hours
             const remainingMilliseconds = endTime - new Date();
-            remainingTime = Math.max(remainingMilliseconds / (1000 * 60 * 60), 0);
+            remainingTime = Math.max(remainingMilliseconds / (1000 * 60 * 60), 0); // Convert to hours
         } else {
             startTime = new Date(collab.appointment_date);
             endTime = new Date(collab.project_end_date);
-
-            //calculating remaining days
+    
+            // Calculating remaining time in days
             const remainingMilliseconds = endTime - new Date();
-            remainingTime = Math.max(remainingMilliseconds / (1000 * 60 * 60 * 24), 0);
+            remainingTime = Math.max(remainingMilliseconds / (1000 * 60 * 60 * 24), 0); // Convert to days
         }
-
-        const today = new Date();
-        const totalDuration = endTime - startTime;
-        const elapsed = today - startTime;
-        const progress = totalDuration > 0 ? Math.min((elapsed / totalDuration) * 100, 100) : 0;
-
+    
+        // Calculate the progress
+        const totalDuration = endTime - startTime; // Total duration in milliseconds
+        const elapsedTime = now - startTime; // Elapsed time in milliseconds
+    
+        // Calculate the progress percentage, making sure it's between 0 and 100
+        let progress = (elapsedTime / totalDuration) * 100;
+        progress = Math.max(0, Math.min(100, progress)); // Clamp progress between 0% and 100%
+    
         return { remainingTime, progress };
     };
+    
+
 
     // Show nothing if user is not logged in
     if (!userId || !token) return null;

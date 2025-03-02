@@ -26,7 +26,7 @@ test('Freelancer Search Filtering by Location', async ({ page }) => {
   
   await expect(searchResults).toHaveCount(1); 
 
-  await expect(searchResults.nth(0)).toHaveText("Nima SherpaphotographerBouddha, KathmanduFrom Rs. 6300/hrwedding photographyevent photographyphotoshopimage editing+2 more");
+  await expect(searchResults.nth(0)).toHaveText("Nima SherpaPhotographer/VideographerBouddha, KathmanduFrom Rs. 4500/hrwedding photographyevent photographyphotoshopimage editing+2 more");
 });
 
 test('Freelancer Search Filtering by Hourly Rate Range', async ({ page }) => {
@@ -49,7 +49,7 @@ test('Freelancer Search Filtering by Hourly Rate Range', async ({ page }) => {
   await expect(searchResults).toHaveCount(2); 
 
   const firstResultText = await searchResults.nth(0).textContent();
-  expect(firstResultText).toContain("Billie SummerPhotographer/VideographerKupondole, LalitpurFrom Rs. 2000/hrevent photography and videographyvideo editingphotoshopmagazine photoshoot");
+  expect(firstResultText).toContain("Billie SummerPhotographerKupondole, LalitpurFrom Rs. 2000/hrevent photographyphotoshopmagazine photoshoot");
 });
 
 
